@@ -26,7 +26,9 @@ dist-ssr
 *.sln
 *.sw?
 
-.claude/
+# Local agent settings; the skills in .claude/skills are shared (same as ../Slash)
+.claude/settings.local.json
+.claude/worktrees/
 
 /target/
 recording_*
@@ -45,3 +47,16 @@ result
 
 # Python bytecode (scripts/)
 __pycache__/
+
+# Slash Voice
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+# Cargo build output inside src-tauri
+/src-tauri/target/
+# Design-tool working files
+.impeccable/review/
+.impeccable/questions/

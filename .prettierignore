@@ -19,3 +19,7 @@ src-tauri/src/catalog/catalog.json
 # Misc
 .DS_Store
 *.log
+
+# Copied from ../Slash and kept byte-for-byte (skills-lock.json records their hashes)
+.claude/
+.specify/

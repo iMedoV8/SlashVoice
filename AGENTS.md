@@ -1,246 +1,139 @@
-# AGENTS.md
-
-This file provides guidance to AI coding assistants working with code in this repository.
-
-## Development Commands
-
-**Prerequisites:**
+# Slash Voice — rules for agents working in this repository
+
+Slash Voice is a dictation app for Mac and Windows: hold a key, speak, and the text appears where the cursor is, transcribed on the device. It is for the founder and his friends first, and is built so it can launch later. What makes it its own product is planned, not built: it learns from past dictations, gets technical words right, and helps developers talk to coding agents.
+
+It is built on a renamed copy of [Handy](https://github.com/cjpais/Handy) (MIT). Today the app is Handy with the Slash Voice name and placeholder artwork; none of our own features exist yet. The design and the decisions are in `docs/2026-11-11-slash-voice-design.md`, the research behind them is in `research/`, and the current state is in `HANDOFF.md`. If code and documents disagree, or two documents disagree, or this repository and `../Slash` disagree, stop and report it. Do not pick one silently.
+
+**Security, privacy and performance are requirements, not clean-up work.** The gates are in [RULES.md](RULES.md) and they bind every change.
+
+## This is one of three repositories
+
+| Repository         | What it is                                                                                                                                     |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `../Slash`         | The product: a desktop workspace where a team and their coding agents share threads. It holds the brand, the glossary and the decision record. |
+| `../Slash-Website` | The marketing website.                                                                                                                         |
+| This one           | Slash Voice.                                                                                                                                   |
+
+These are read from the product folder. They are never copied here and never changed from here:
+
+| What                                                                 | Where                                                       |
+| -------------------------------------------------------------------- | ----------------------------------------------------------- |
+| Product purpose, audience, voice, brand commitments                  | `../Slash/PRODUCT.md`                                       |
+| Colours, typefaces, shapes, the logo, what the founder has ruled out | `../Slash/DESIGN.md`                                        |
+| Words to use, in English and Arabic                                  | `../Slash/docs/01-glossary.md`, `../Slash/docs/06-ux.md` §8 |
+| Decisions (`D-` numbers)                                             | `../Slash/docs/README.md`                                   |
+| How the founder works                                                | `../Slash/HANDOFF.md` §1 and §2                             |
 
-- [Rust](https://rustup.rs/) (latest stable)
-- [Bun](https://bun.sh/) package manager
+**Not reconciled yet, report it when it matters.** `../Slash/AGENTS.md` records voice as a part of the Slash engine (whisper.cpp through a Rust binding, ADR-019, milestone M6) and the Mac app as Swift (ADR-003). Slash Voice is a separate app on Tauri for both systems, built on Handy's engine. No decision record in `../Slash/docs/README.md` covers that yet, and whether Slash Voice decisions take `D-` numbers there is not decided. Ask before assuming either.
 
-**Core Development:**
+## Tech stack
 
-```bash
-# Install dependencies
-bun install
+"Decided" means the founder chose it and it is recorded in the design document. "Comes with Handy" means it is what the copied code uses; changing it is a decision. "Proposed" and "Open" are not settled: do not build on them as if they were.
 
-# Run in development mode
-bun run tauri dev
-# If cmake error on macOS:
-CMAKE_POLICY_VERSION_MINIMUM=3.5 bun run tauri dev
-
-# Build for production
-bun run tauri build
+| Part                               | Choice                                                                                       | Status                                        | Source                     |
+| ---------------------------------- | -------------------------------------------------------------------------------------------- | --------------------------------------------- | -------------------------- |
+| Starting point                     | A renamed copy of Handy; its repository is the git remote `upstream`                         | Decided                                       | design §3, decision 9      |
+| App shell                          | Tauri 2, one build for Mac and Windows                                                       | Decided                                       | design §3, decision 9      |
+| Backend                            | Rust                                                                                         | Comes with Handy                              | `docs/handy-code-guide.md` |
+| Screens                            | React 18, TypeScript, Tailwind 4, Zustand, Vite                                              | Comes with Handy                              | `docs/handy-code-guide.md` |
+| Look                               | The Slash brand: colours, typefaces and logo from `../Slash/DESIGN.md`                       | Decided 2026-11-12; not designed or built yet | `DESIGN.md`                |
+| Design tool                        | Pencil (`.pen`), with the `impeccable` skill                                                 | Decided 2026-11-12                            | `DESIGN.md`                |
+| Speech engine                      | `transcribe-cpp` in its own worker process; Metal on Apple Silicon, Vulkan on Windows        | Comes with Handy                              | `research/handy-study.md`  |
+| Speech models                      | English: `parakeet-unified-en-0.6b`. Arabic with English: `cohere-transcribe-arabic-07-2026` | To verify, on the founder's own recordings    | `research/handy-study.md`  |
+| Rewrite model                      | Local first, cloud optional; only text is ever sent                                          | Direction decided; the model is open          | design §3, decision 7      |
+| Our own features                   | A separate Rust module and a separate screens folder, apart from Handy's files               | Proposed                                      | design §4                  |
+| Storage                            | SQLite on the device, no sync                                                                | Comes with Handy                              | design §4                  |
+| Text                               | `src/i18n/locales/<language>/translation.json`, 26 languages; no text literals in components | Comes with Handy                              | `docs/handy-code-guide.md` |
+| Package manager and runner         | Bun; Rust stable through rustup                                                              | Comes with Handy                              | `BUILD.md`                 |
+| Pipeline                           | GitHub Actions, `checks.yml`                                                                 | Proposed; the repository is not on GitHub yet | `RULES.md` §6              |
+| Self-update, signing, notarisation | Off and none                                                                                 | Open                                          | design §7                  |
+| Requirement IDs and task list      | Not written                                                                                  | Open                                          | below                      |
 
-# Frontend only development
-bun run dev        # Start Vite dev server
-bun run build      # Build frontend (TypeScript + Vite)
-bun run preview    # Preview built frontend
-```
+## Build order
 
-**Linting and Formatting (run before committing):**
+1. **Milestone 1.** Rename, build and run on Mac: done 2026-11-12. Still to do: the Windows build, and replacing Handy's screens and pink theme with the Slash brand.
+2. **The look.** Designed in Pencil first, shown to the founder as stills, built only after he approves them.
+3. **Features**, in the order of design §6: technical vocabulary and correction memory, repo-aware names, voice slash commands, point-and-speak, rewrite in the founder's style, live preview, spoken agent status.
 
-```bash
-bun run lint              # ESLint for frontend
-bun run lint:fix          # ESLint with auto-fix
-bun run format            # Prettier + cargo fmt
-bun run format:check      # Check formatting without changes
-bun run format:frontend   # Prettier only
-bun run format:backend    # cargo fmt only
-```
+There is no requirements document and no task list yet. Writing them (requirement IDs and one task per feature, in `docs/`) is the first spec-kit work, and their ID prefixes are the founder's to choose. Until they exist, a spec links to the numbered decisions and sections of the design document.
 
-**Model Setup (Required for Development):**
+Every task needs the founder's go-ahead. Do not start a task whose dependencies are not done.
 
-```bash
-mkdir -p src-tauri/resources/models
-curl -L -o src-tauri/resources/models/silero-vad-v6.2-F32.gguf https://huggingface.co/handy-computer/silero-vad-v6.2-gguf/resolve/main/silero-vad-v6.2-F32.gguf
-```
+## How a task is built: spec-kit
 
-For detailed platform-specific build setup, see [BUILD.md](BUILD.md).
+Every task is built through spec-kit. No code is written without a spec, a plan and a task list that the founder has seen. The skills are in `.claude/skills/speckit-*`; the principles are in `.specify/memory/constitution.md`.
 
-## Architecture Overview
+| Step | Command              | What it produces                                                                                                 |
+| ---- | -------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| 1    | `/speckit-specify`   | `specs/NNN-<name>/spec.md`. One task is one feature folder.                                                      |
+| 2    | `/speckit-clarify`   | Open questions answered by the founder, not guessed.                                                             |
+| 3    | `/speckit-plan`      | `plan.md`: structure, data, and which security and privacy rules and which performance targets the task touches. |
+| 4    | `/speckit-tasks`     | `tasks.md`, tests listed before the code they check.                                                             |
+| 5    | `/speckit-analyze`   | Consistency check. Fix findings before step 6.                                                                   |
+| 6    | `/speckit-implement` | The code, tests first.                                                                                           |
 
-Handy is a cross-platform desktop speech-to-text application built with Tauri 2.x (Rust backend + React/TypeScript frontend).
+A spec links to decisions and document sections. It never restates or replaces them.
 
-### Backend Structure (src-tauri/src/)
+## Before you write code
 
-- `lib.rs` - Main entry point, Tauri setup, manager initialization
-- `managers/` - Core business logic:
-  - `audio.rs` - Audio recording and device management
-  - `model.rs` - Model downloading and management
-  - `transcription.rs` - Speech-to-text processing pipeline
-  - `history.rs` - Transcription history storage
-- `audio_toolkit/` - Low-level audio processing:
-  - `audio/` - Recording sink (VAD, levels, live streaming feed), output devices, WAV I/O
-  - `vad/` - Voice Activity Detection (Silero VAD)
-- `commands/` - Tauri command handlers for frontend communication
-- `cli.rs` - CLI argument definitions (clap derive)
-- `shortcut.rs` - Global keyboard shortcut handling
-- `settings.rs` - Application settings management
-- `notices.rs` - Reports background errors to the user (see [Error notices](#error-notices))
-- `overlay.rs` - Recording overlay window (platform-specific)
-- `signal_handle.rs` - `send_transcription_input()` reusable function
-- `utils.rs` - Platform detection helpers
+1. Read the design document and the section of `research/handy-study.md` that covers the part you touch.
+2. Read `docs/handy-code-guide.md` before changing any of Handy's files.
+3. Use the words in `../Slash/docs/01-glossary.md` exactly, in code and in text.
+4. If something is unclear or contradictory, ask. Do not guess.
 
-### Frontend Structure (src/)
+## How to work
 
-- `App.tsx` - Main component with onboarding flow
-- `components/` - React UI components:
-  - `settings/` - Settings UI
-  - `model-selector/` - Model management interface
-  - `onboarding/` - First-run experience
-  - `overlay/` - Recording overlay UI
-  - `update-checker/` - App update notifications
-  - `shared/`, `ui/`, `icons/`, `footer/` - Shared components
-- `hooks/useSettings.ts` - Settings state management hook
-- `stores/settingsStore.ts` - Zustand store for settings
-- `bindings.ts` - Auto-generated Tauri type bindings (via tauri-specta)
-- `overlay/` - Recording overlay window entry point
-- `lib/notices.ts` - Maps each notice code to its text
-- `stores/noticeStore.ts` - The one place notices are handled: what's active and what's on screen
-- `components/notices/NoticePanel.tsx` - The one place notices are drawn, as a toast or the full list
-- `lib/types.ts` - Shared TypeScript type definitions
+- Tests first. Show each test failing before the code that makes it pass.
+- Build only what your task covers. No extra features, no drive-by refactors.
+- Never delete, weaken or skip an existing test, Handy's included. If one looks wrong, report it.
+- Keep changes inside the paths your task names. Touching one of Handy's files needs a reason in the pull request.
+- One task, one pull request, on branch `task/<task-id>-<short-name>`.
+- Never invent customers, numbers, testimonials or prices. Say what is unverified.
 
-### Key Architecture Patterns
+## Rules of this repository (do not break these)
 
-**Manager Pattern:** Core functionality organized into managers (Audio, Model, Transcription) initialized at startup and managed via Tauri state.
+- **Audio stays on the device.** Speech is transcribed locally. No audio leaves the machine unless the user has chosen a cloud option that says so plainly.
+- **Only text goes to a rewrite model**, and only when the user has turned that on.
+- **No telemetry, tracker or analytics** unless a decision record names it.
+- **Visible names are Slash Voice; internal names stay Handy's.** The product name, the identifier (`com.slashvoice.app`), the program name (`slash-voice`), window and tray text, translations, icons and logos are ours. The crate name `handy`, `HANDY_*` environment variables, component names such as `HandyHand`, and code comments are left alone on purpose, so merges from `upstream` stay easy.
+- **Never ship Handy's name, logo, icon or mascot**, and never imply Handy endorses Slash Voice. Keep Handy's copyright notice (`LICENSE`) and the "Built on Handy" credit on the About screen.
+- **Self-update stays off** (`SLASH_VOICE_HAS_RELEASE_FEED` in `src-tauri/src/settings.rs`) until Slash Voice has its own release feed and signing key. Never point the updater at Handy's releases.
+- **New Slash Voice features go in their own module**, not spread through Handy's files. Keep changes to Handy's files small.
+- **All user-facing text goes in the locale files.** The linter rejects text literals in components. A screen is done only when it works in English and in Arabic, right-to-left.
+- **Mac and Windows together.** Once the Windows build exists, an interface change is not done until it builds and looks right on both.
+- **A wrong name is worse than no name.** A correction to a spoken word is applied only when the match is confident.
+- **A rewrite never drops** a negation, "only", a number or code.
 
-**Command-Event Architecture:** Frontend → Backend via Tauri commands; Backend → Frontend via events.
+## Working principles
 
-**Pipeline Processing:** Audio → VAD → Whisper/Parakeet → Text output → Clipboard/Paste
+These hold on every task, whether or not a skill is invoked.
 
-**State Flow:** Zustand → Tauri Command → Rust State → Persistence (tauri-plugin-store)
+- **Design deep modules.** Put a lot of behaviour behind a small interface. Test through the interface only. Do not add an abstraction until two real uses exist.
+- **No fix before a failing reproduction.** For any bug or slowdown, first build one fast, repeatable command that fails on the exact symptom. Write the regression test before the fix. For performance, measure a baseline before changing anything. Remove all debug output before finishing.
+- **Review on two separate axes.** Standards: does the change follow these rules and `RULES.md`? Spec: does it do what the spec says, nothing missing and nothing extra? Report the two separately.
+- **Think like an attacker on every change.** What can a hostile audio file, a hostile model download, a hostile repository whose names we index, or text on the screen do with this code? Fail closed: when a check cannot run, deny.
+- **Research from primary sources.** Official documentation and source code, with a link for every claim. Say plainly what was not verified.
+- **Ask about decisions, look up facts.** Put each decision to the founder with a recommended answer first. Never ask for something you could read yourself.
+- **Pull request body.** Summary, evidence (before and after: screenshots, then test output), merge danger (reversible or not, and what could break), plus the fields in `RULES.md`.
 
-### Technology Stack
+## Orchestrator and helper
 
-**Core Libraries:**
+The same as in the product repository (`../Slash/AGENTS.md`, D-215): Claude Code orchestrates and plans; Codex is a helper through the `codex-delegate` skill and never claims, commits, pushes or merges.
 
-- `transcribe-cpp` - Local speech recognition (Whisper, Parakeet, Moonshine, SenseVoice, etc.; GGML/GGUF) with GPU acceleration
-- `handy-recorder` - Microphone capture: device selection, resampling to 16 kHz, failure detection
-- `transcribe-cpp` (Silero VAD v6, CPU-only, in-process) / `earshot` - Voice Activity Detection
-- `rdev` - Global keyboard shortcuts
-- `rodio` - Audio playback for feedback sounds
+## Commands
 
-### Application Flow
+On this Mac, add `/opt/homebrew/opt/rustup/bin` to `PATH` first.
 
-1. **Initialization:** App starts minimized to tray, loads settings, initializes managers
-2. **Model Setup:** First-run downloads preferred Whisper model (Small/Medium/Turbo/Large)
-3. **Recording:** Global shortcut triggers audio recording with VAD filtering
-4. **Processing:** Audio sent to Whisper model for transcription
-5. **Output:** Text pasted to active application via system clipboard
+- `bun run check` — lint, formatting, translation checks, screens build, Rust formatting and Rust tests (what the pipeline runs)
+- `bun run security` — secret scan of the repository
+- `bun run tauri dev` — run the app in development
+- `bun run tauri build --bundles app` — build the Mac app
+- `bun run tauri icon branding/app-icon.svg` — regenerate the app icons from the artwork in `branding/`
 
-### Settings System
+Not built yet: dependency vulnerability and licence checks, benchmarks, and end-to-end tests with the `e2e` framework.
 
-Settings are stored using Tauri's store plugin with reactive updates:
+More commands and how Handy's code is organised: `docs/handy-code-guide.md`.
 
-- Keyboard shortcuts (configurable, supports push-to-talk)
-- Audio devices (microphone/output selection)
-- Model preferences (Small/Medium/Turbo/Large Whisper variants)
-- Audio feedback and translation options
+## When you finish
 
-### Single Instance Architecture
-
-The app enforces single instance behavior — launching when already running brings the settings window to front rather than creating a new process. Remote control flags (`--toggle-transcription`, etc.) work by launching a second instance that sends args to the running instance via `tauri_plugin_single_instance`, then exits.
-
-## Error notices
-
-`notices::raise` is the one way to report a failure that happens while the user isn't looking at the settings window. Don't add a new event, toast or overlay state for one. A new error should take a few lines and need no new UI.
-
-**Adding a new error:**
-
-1. Add a `NoticeCode` in `src-tauri/src/notices.rs`, with its level in `NoticeCode::level` and its title in `NoticeCode::tray_title`. **Error** means nothing came out, or Handy can't do its job. **Warning** means the user got a result, but not the one they set up.
-2. Add the title as `errors.<name>Title` in `src/i18n/locales/en/translation.json`, in Title Case and using the app's terms, then add the key to the other locales (`bun run check:translations` fails otherwise). The `Title` suffix is what makes `build.rs` give the tray `strings.<name>_title`. A dictation title has to fit the overlay pill, at most 215px of 12px text.
-3. Map the code to its title and optional explanation in `NOTICE_DISPLAY` in `src/lib/notices.ts`. TypeScript won't compile until you do.
-4. Call `notices::raise` where the failure happens, and regenerate `bindings.ts` by running the app in debug:
-
-```rust
-notices::raise(
-    app,
-    Notice::new(NoticeCode::PasteFailed, NoticeSource::Dictation),
-);
-```
-
-**Rules:**
-
-- Rust sends codes, never display strings. Use `with_detail` for what only Rust knows, such as a model name or a raw error.
-- Handy keeps one notice per `NoticeSource`, and a newer one replaces it. A notice ends when its source next succeeds or when the user dismisses it in the footer. When a source next succeeds, call `notices::clear` before raising anything about that session, or the clear wipes the session's own notice.
-- A message from the frontend goes through `notify` in `stores/noticeStore.ts`, the app's only toast. Without a `key` it's a click's result and ends with its pop-up, such as a failed copy. With one it stays in the footer until dismissed or cleared, such as a file Handy can't read. It's text the frontend already translated, so it needs no `NoticeCode`, and it doesn't show in the tray.
-- A dictation notice replaces the overlay, so call `raise` instead of hiding the overlay. If a newer session owns the overlay by then, call `raise_without_overlay`.
-- A raised notice pops up in the window as a toast. Its X dismisses the notice; otherwise the toast times out and the notice stays in the tray and footer, where the user can bring it back up. During onboarding it pops up below the top bar, and the footer lists it once onboarding ends. Only dictation notices show on the overlay.
-
-## Internationalization (i18n)
-
-All user-facing strings must use i18next translations. ESLint enforces this (no hardcoded strings in JSX).
-
-**Adding new text:**
-
-1. Add key to `src/i18n/locales/en/translation.json`
-2. Use in component: `const { t } = useTranslation(); t('key.path')`
-
-**File structure:**
-
-```
-src/i18n/
-├── index.ts           # i18n setup
-├── languages.ts       # Language metadata
-└── locales/
-    ├── en/translation.json  # English (source)
-    ├── de/, es/, fr/, ja/, ru/, zh/, ...
-    └── ...
-```
-
-For translation contribution guidelines, see [CONTRIBUTING_TRANSLATIONS.md](CONTRIBUTING_TRANSLATIONS.md).
-
-## Code Style
-
-**Rust:**
-
-- Run `cargo fmt` and `cargo clippy` before committing
-- Handle errors explicitly (avoid unwrap in production)
-- Use descriptive names, add doc comments for public APIs
-
-**TypeScript/React:**
-
-- Strict TypeScript, avoid `any` types
-- Functional components with hooks
-- Tailwind CSS for styling
-- Path aliases: `@/` → `./src/`
-
-## CLI Parameters
-
-Handy supports command-line parameters on all platforms for integration with scripts, window managers, and autostart configurations.
-
-**Implementation:** `cli.rs` (definitions), `main.rs` (parsing), `lib.rs` (applying), `signal_handle.rs` (shared logic)
-
-| Flag                     | Description                                                |
-| ------------------------ | ---------------------------------------------------------- |
-| `--toggle-transcription` | Toggle recording on/off on a running instance              |
-| `--toggle-post-process`  | Toggle recording with post-processing on/off               |
-| `--cancel`               | Cancel the current operation on a running instance         |
-| `--start-hidden`         | Launch without showing the main window (tray icon visible) |
-| `--no-tray`              | Launch without system tray (closing window quits the app)  |
-| `--debug`                | Enable debug mode with verbose (Trace) logging             |
-
-**Key design decisions:**
-
-- CLI flags are runtime-only overrides — they do NOT modify persisted settings
-- Remote control flags work via `tauri_plugin_single_instance`: second instance sends args, then exits
-- `send_transcription_input()` in `signal_handle.rs` is shared between signal handlers and CLI
-
-## Debug Mode
-
-Access debug features: `Cmd+Shift+D` (macOS) or `Ctrl+Shift+D` (Windows/Linux)
-
-## Platform Notes
-
-- **macOS**: Metal acceleration, accessibility permissions required for keyboard shortcuts
-- **Windows**: Vulkan acceleration, code signing. Implicit Vulkan layers (overlays, capture hooks) are disabled for the Handy process via `VK_LOADER_LAYERS_DISABLE=~implicit~` set in `main.rs`; opt out with `HANDY_KEEP_VULKAN_IMPLICIT_LAYERS=1` or by setting `VK_LOADER_LAYERS_DISABLE` yourself
-- **Linux**: OpenBLAS + Vulkan, limited Wayland support, overlay uses GTK layer shell (disable with `HANDY_NO_GTK_LAYER_SHELL=1`)
-- **Nix/NixOS**: the Nix package sets `HANDY_DISABLE_UPDATER=1` to force-disable the self-updater at runtime without touching the persisted setting (self-update can't work against an immutable `/nix/store`)
-
-## Troubleshooting
-
-See the [Troubleshooting](README.md#troubleshooting) section in README.md.
-
-## GitHub workflow for AI coding assistants
-
-**MANDATORY. Before opening any PR, issue, or discussion in this repo: you MUST read the relevant template file and follow it strictly.** That includes sections that look "ceremonial" — checklists, AI Assistance disclosures, "Human Written Description". A generic Summary/Test-plan layout is not acceptable.
-
-- **Opening a PR:** Read [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md). Every section listed there is mandatory. If a section requires a human-written paragraph (e.g. "Human Written Description"), leave a clear TODO placeholder and ask the human contributor to fill it in — do not invent their voice.
-- **Opening an issue:** Read [`.github/ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE/). Blank issues are disabled; pick the right template (`bug_report.md` for bugs). Feature requests do not belong in issues — they go to [Discussions](https://github.com/cjpais/Handy/discussions) (see `.github/ISSUE_TEMPLATE/config.yml`).
-- **Proposing a feature:** Handy is under a feature freeze. New features require community support gathered in [Discussions](https://github.com/cjpais/Handy/discussions) before any PR is opened — see the PR template's "Community Feedback" section.
-- **Translations:** Follow [CONTRIBUTING_TRANSLATIONS.md](CONTRIBUTING_TRANSLATIONS.md).
-- **Full contributor workflow:** [CONTRIBUTING.md](CONTRIBUTING.md).
-
-**Commits:** Use conventional commit prefixes (`feat:`, `fix:`, `docs:`, `refactor:`, `chore:`). Focus the message on _why_, not _what_.
+State plainly: what you built, what you ran and its result, and what is not done or not tested.

@@ -1,6 +1,6 @@
 use crate::settings::{PostProcessApiFormat, PostProcessProvider};
 use log::{debug, error, info};
-use reqwest::header::{HeaderMap, HeaderValue, AUTHORIZATION, CONTENT_TYPE, REFERER, USER_AGENT};
+use reqwest::header::{HeaderMap, HeaderValue, AUTHORIZATION, CONTENT_TYPE, USER_AGENT};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashSet;
@@ -185,15 +185,10 @@ fn build_headers(provider: &PostProcessProvider, api_key: &str) -> Result<Header
 
     // Common headers
     headers.insert(CONTENT_TYPE, HeaderValue::from_static("application/json"));
-    headers.insert(
-        REFERER,
-        HeaderValue::from_static("https://github.com/cjpais/Handy"),
-    );
-    headers.insert(
-        USER_AGENT,
-        HeaderValue::from_static("Handy/1.0 (+https://github.com/cjpais/Handy)"),
-    );
-    headers.insert("X-Title", HeaderValue::from_static("Handy"));
+    // Slash Voice identifies as itself, not as Handy, and has no site to send
+    // as a referer yet.
+    headers.insert(USER_AGENT, HeaderValue::from_static("SlashVoice/0.1"));
+    headers.insert("X-Title", HeaderValue::from_static("Slash Voice"));
 
     // Provider-specific auth headers
     if !api_key.is_empty() {

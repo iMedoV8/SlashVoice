@@ -1446,9 +1446,18 @@ fn self_update_possible() -> bool {
 pub fn update_checks_forced_disabled() -> bool {
     use std::sync::OnceLock;
     static IS_UPDATER_DISABLED: OnceLock<bool> = OnceLock::new();
-    *IS_UPDATER_DISABLED
-        .get_or_init(|| utils::env_flag_enabled("HANDY_DISABLE_UPDATER") || !self_update_possible())
+    *IS_UPDATER_DISABLED.get_or_init(|| {
+        !SLASH_VOICE_HAS_RELEASE_FEED
+            || utils::env_flag_enabled("HANDY_DISABLE_UPDATER")
+            || !self_update_possible()
+    })
 }
+
+/// Slash Voice has no release feed or signing key of its own yet. Until it
+/// does, self-update stays off so the app can never fetch Handy's releases and
+/// replace itself with them. Flip this once `plugins.updater` in
+/// `tauri.conf.json` points at a Slash Voice feed with a Slash Voice key.
+const SLASH_VOICE_HAS_RELEASE_FEED: bool = false;
 
 /// Effective updater state: the user's stored preference, overridden to `false`
 /// while `HANDY_DISABLE_UPDATER` is set. Callers deciding whether to actually
