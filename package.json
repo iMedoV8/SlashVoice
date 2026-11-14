@@ -24,11 +24,15 @@
     "build:cjk-font": "bun scripts/build-cjk-font.ts",
     "check:cjk-font": "bun scripts/build-cjk-font.ts --check",
     "postinstall": "bun scripts/check-nix-deps.ts",
-    "check:screens": "bun run lint && prettier --check . && bun run check:translations && bun run check:model-languages && bun run check:catalog && bun run test:keyboard && bun run build",
+    "test:look": "bun test tests-look",
+    "check:screens": "bun run lint && prettier --check . && bun run check:translations && bun run check:model-languages && bun run check:catalog && bun run test:keyboard && bun run test:look && bun run build",
     "check": "bun run check:screens && cd src-tauri && cargo fmt -- --check && cargo test",
     "security": "gitleaks git --no-banner --redact ."
   },
   "dependencies": {
+    "@fontsource-variable/jetbrains-mono": "5.3.0",
+    "@fontsource-variable/onest": "5.3.1",
+    "@fontsource/ibm-plex-sans-arabic": "5.3.0",
     "@handy-computer/models": "0.2.3",
     "@tailwindcss/vite": "^4.1.16",
     "@tauri-apps/api": "^2.11.0",

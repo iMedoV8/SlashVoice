@@ -6,9 +6,16 @@ Slash Voice has no look of its own yet. The founder decided on 2026-11-12 that i
 
 ## Where the app stands today
 
-- The screens are Handy's: its layout, its pink accent and its type.
-- The artwork in the app is the first build's (`branding/`): the slash with two sound arcs, with the arcs in purple. The founder kept the mark and ruled out the purple (see "Decided" below). The app still ships the purple version until the new colours are built.
-- The tile beside the logo on the first onboarding screen is a placeholder. The Slash brand rules out mascots and childish shapes, and the redrawn welcome screen has no tile.
+Built on branch `task/001-slash-look` (2026-11-15), not merged yet:
+
+- The Slash palette in dark and light, Onest, JetBrains Mono and IBM Plex Sans Arabic bundled, Slash corners. Values in `specs/001-slash-look/contracts/look-tokens.md`, checked by `tests-look/`.
+- Logo option B, the slash-with-arcs app icon (dark ground everywhere; the light one is kept as artwork only), and the four menu-bar states.
+- The welcome, permissions and General screens rebuilt to their stills; every other screen inherits the palette and type.
+- Handy's pink, its mascot on the welcome screen, and the purple of the first build are gone.
+
+Known leftovers: the later onboarding steps still show the placeholder tile, and macOS draws menu-bar icons as templates, so the attention mark shows in the menu-bar colour there (its triangle shape still sets it apart); the amber shows on Windows.
+
+**Contrast findings.** Two of the brand's own light values fall short of 4.5 to 1: tertiary text `#767676` on the light window (about 4.2) and white on the accent (about 3.5). They are used as the brand defines them; changing them is a decision for `../Slash/DESIGN.md`.
 
 ## What is taken from the Slash brand
 

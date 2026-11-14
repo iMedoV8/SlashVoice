@@ -11,21 +11,18 @@ export const SettingsGroup: React.FC<SettingsGroupProps> = ({
   description,
   children,
 }) => {
+  // Slash settings (still 06): a plain label over rows divided by hairlines.
   return (
-    <div className="space-y-2">
+    <div className="space-y-1">
       {title && (
-        <div className="px-4">
-          <h2 className="text-xs font-medium text-ink-3 uppercase tracking-wide">
-            {title}
-          </h2>
+        <div className="px-1">
+          <h2 className="m-0 text-xs font-medium text-ink-3">{title}</h2>
           {description && (
-            <p className="text-xs text-ink-3 mt-1">{description}</p>
+            <p className="mt-1 mb-0 text-xs text-ink-3">{description}</p>
           )}
         </div>
       )}
-      <div className="bg-background border border-line rounded-lg overflow-visible">
-        <div className="divide-y divide-line">{children}</div>
-      </div>
+      <div className="overflow-visible divide-y divide-line">{children}</div>
     </div>
   );
 };

@@ -25,6 +25,12 @@
   --color-ink-3: var(--color-ink-3);
   --color-line: var(--color-line);
   --color-line-strong: var(--color-line-strong);
+  /* Slash Voice roles (specs/001-slash-look) */
+  --color-accent: var(--color-accent);
+  --color-on-accent: var(--color-on-accent);
+  --color-selected: var(--color-selected);
+  --color-sunken: var(--color-sunken);
+  --color-info: var(--color-info);
 }
 
 /* Noto Sans CJK subset (see src/lib/utils/cjkFont.ts): Windows' CJK fonts
@@ -39,28 +45,36 @@
 /* Onboarding's scale in px (rem steps land on fractions at a 15px root).
    Names avoid Tailwind's defaults, which Settings still uses. */
 @theme {
+  /* Slash typefaces, bundled (src/main.tsx). Onest has no Arabic letters, so
+     Arabic falls through to IBM Plex Sans Arabic; Chinese, Japanese and Korean
+     to Handy's bundled subset, then the system. */
   --font-display:
-    ui-rounded, "SF Pro Rounded", system-ui, -apple-system,
-    "Segoe UI Variable Display", "Segoe UI", sans-serif;
+    "Onest Variable", "IBM Plex Sans Arabic", "Handy CJK Subset", system-ui,
+    -apple-system, "Segoe UI Variable Text", "Segoe UI", sans-serif;
   --font-ui:
-    system-ui, -apple-system, "Segoe UI Variable Text", "Segoe UI", Roboto,
-    "Noto Sans", sans-serif;
+    "Onest Variable", "IBM Plex Sans Arabic", "Handy CJK Subset", system-ui,
+    -apple-system, "Segoe UI Variable Text", "Segoe UI", sans-serif;
+  --font-sans: var(--font-ui);
+  --font-mono:
+    "JetBrains Mono Variable", ui-monospace, "SF Mono", Menlo, Consolas,
+    monospace;
   --font-cjk-subset:
     "Handy CJK Subset", -apple-system, "Segoe UI Variable Text", "Segoe UI",
     system-ui, sans-serif;
 
-  --text-title: 26px; /* screen titles */
-  --text-name: 15px; /* the model name on Model's Full card */
-  --text-row: 17px; /* row titles */
-  --text-body: 15px; /* body, subtitles */
-  --text-small: 13px; /* buttons, secondary text, hints */
+  --text-title: 24px; /* a screen's one heading */
+  --text-name: 12.5px; /* the model name on Model's Full card */
+  --text-row: 13px; /* row titles */
+  --text-body: 13px; /* body, subtitles */
+  --text-small: 12.5px; /* buttons, secondary text, hints */
   --text-label: 12px; /* labels */
   --text-tag: 11px; /* tags, column codes, small grade chips */
 
-  --radius-panel: 16px; /* panels, the selected card */
-  --radius-card: 12px;
-  --radius-control: 10px; /* buttons, fields, table rows */
-  --radius-chip: 6px; /* grade chips */
+  --radius-dialog: 16px; /* dialogs */
+  --radius-panel: 12px; /* panels, the selected card */
+  --radius-card: 10px;
+  --radius-control: 8px; /* buttons, fields, table rows */
+  --radius-chip: 7px; /* chips, tabs */
 
   /* Onboarding's side gutter. */
   --spacing-gutter: 64px;
@@ -204,6 +218,13 @@
 
   /* Without this, Windows draws a <select> popup white under light text. */
   color-scheme: light dark;
+}
+
+/* Slash body text: 13 on 1.55. The root stays at 15px so Handy's rem-based
+   spacing is unchanged. */
+body {
+  font-size: 13px;
+  line-height: 1.55;
 }
 
 :root[data-theme="light"] {

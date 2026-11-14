@@ -20,36 +20,33 @@ export const Button: React.FC<ButtonProps> = ({
   size = "md",
   ...props
 }) => {
+  // Slash buttons (DESIGN.md, Components): the accent fills only the one
+  // primary button; secondary is a raised tint with a hairline; quiet buttons
+  // are text only; destructive actions are quiet, never red-filled.
   const baseClasses =
-    "font-medium rounded-lg border focus:outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer";
+    "font-semibold rounded-control border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-logo-primary/40 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer";
 
   const variantClasses = {
     primary:
-      "text-white bg-background-ui border-background-ui hover:bg-background-ui/80 hover:border-background-ui/80 focus:ring-1 focus:ring-background-ui",
-    "primary-soft":
-      "text-text bg-logo-primary/20 border-transparent hover:bg-logo-primary/20 focus:ring-1 focus:ring-logo-primary",
-    secondary:
-      "bg-wash border-line hover:bg-logo-primary/20 hover:border-logo-primary focus:outline-none",
+      "text-on-accent bg-accent border-accent hover:bg-accent/90 hover:border-accent/90",
+    "primary-soft": "text-text bg-wash border-line hover:bg-selected",
+    secondary: "text-text bg-wash border-line hover:bg-selected",
     // For screens where secondary's grey fill reads as disabled (onboarding)
-    outline:
-      "text-text bg-background border-line-strong hover:border-plum focus-visible:ring-1 focus-visible:ring-logo-primary",
-    // Secondary's neutral resting look, but hover/focus use the semantic
-    // --color-warning token (theme.css) instead of the pink accent — for
-    // buttons sitting on warning surfaces like SecureInputWarning
+    outline: "text-text bg-transparent border-line-strong hover:bg-wash",
+    // Secondary's resting look; hover uses the warning tint, for buttons
+    // sitting on warning surfaces like SecureInputWarning
     warning:
-      "text-text bg-wash border-line hover:bg-warning-wash hover:border-warning focus:ring-1 focus:ring-warning",
-    danger:
-      "text-background bg-error border-error hover:bg-error/80 hover:border-error/80 focus:ring-1 focus:ring-error",
+      "text-text bg-wash border-line hover:bg-warning-wash hover:border-warning",
+    danger: "text-error bg-error-wash border-error/40 hover:border-error",
     "danger-ghost":
       "text-error border-transparent hover:bg-error-wash focus:bg-error-wash",
-    ghost:
-      "text-current border-transparent hover:bg-wash hover:border-logo-primary focus:bg-line",
+    ghost: "text-current border-transparent hover:bg-wash focus:bg-wash",
   };
 
   const sizeClasses = {
     sm: "px-2 py-1 text-xs",
-    md: "px-4 py-[5px] text-sm",
-    lg: "px-4 py-2 text-base",
+    md: "px-3 py-[5px] text-[12.5px]",
+    lg: "px-[14px] py-[7px] text-[13px]",
   };
 
   return (

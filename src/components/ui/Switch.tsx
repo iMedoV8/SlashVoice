@@ -32,7 +32,8 @@ export const Switch: React.FC<SwitchProps> = ({
         disabled={disabled}
         onChange={(e) => onChange(e.target.checked)}
       />
-      <div className="relative w-11 h-6 bg-line peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-logo-primary rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-line-strong after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-background-ui peer-disabled:opacity-50"></div>
+      {/* Slash switch (still 06): 30 by 18; on is the accent, off a raised tint. */}
+      <div className="relative h-[18px] w-[30px] shrink-0 rounded-full bg-selected transition-colors peer-checked:bg-accent peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-logo-primary/40 peer-disabled:opacity-50 after:absolute after:start-[2px] after:top-[2px] after:size-[14px] after:rounded-full after:bg-ink-2 after:transition-all after:content-[''] peer-checked:after:translate-x-[12px] peer-checked:after:bg-white rtl:peer-checked:after:-translate-x-[12px]"></div>
     </label>
   );
 };

@@ -37,13 +37,13 @@ const PermissionRow: React.FC<PermissionRowProps> = ({
   const { t } = useTranslation();
   const waiting = status === "waiting";
   return (
-    <div className="grid grid-cols-[46px_1fr_minmax(112px,auto)] items-center gap-[18px] py-[18px] [&+&]:border-t [&+&]:border-line">
+    <div className="grid grid-cols-[32px_1fr_minmax(96px,auto)] items-center gap-[14px] py-[16px] [&+&]:border-t [&+&]:border-line">
       {/* A label, not a key: neutral, and "Allowed" alone shows the grant. */}
-      <span className="grid size-[46px] place-items-center rounded-[11px] bg-wash text-ink-2">
+      <span className="grid size-[32px] place-items-center rounded-control bg-wash text-text">
         {icon}
       </span>
       <div>
-        <b className="block font-display text-row font-[650] leading-[1.3]">
+        <b className="block font-display text-row font-semibold leading-[1.3]">
           {title}
         </b>
         <p
@@ -167,9 +167,9 @@ export const Permissions: React.FC<PermissionsProps> = ({
           />
         }
       >
-        <div className="flex w-full flex-col rounded-panel border border-line-strong px-[22px] py-[4px] text-start">
+        <div className="flex w-full flex-col rounded-panel border border-line px-[18px] text-start">
           <PermissionRow
-            icon={<Mic size={20} aria-hidden="true" />}
+            icon={<Mic size={16} aria-hidden="true" />}
             title={t("onboarding.permissions.microphone.name")}
             why={t("onboarding.permissions.microphone.why")}
             status={permissions.microphone}
@@ -187,7 +187,7 @@ export const Permissions: React.FC<PermissionsProps> = ({
           />
           {isMac && (
             <PermissionRow
-              icon={<Keyboard size={20} aria-hidden="true" />}
+              icon={<Keyboard size={16} aria-hidden="true" />}
               title={t("onboarding.permissions.accessibility.name")}
               why={t("onboarding.permissions.accessibility.why")}
               status={permissions.accessibility}

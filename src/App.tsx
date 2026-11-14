@@ -332,10 +332,14 @@ function App() {
           />
           {/* Scrollable content area */}
           <div className="flex-1 flex flex-col overflow-hidden">
+            {/* Slash page header (still 06): the section's name over a hairline. */}
+            <header className="flex h-[44px] shrink-0 items-center border-b border-line px-5 text-[13px] font-semibold text-text">
+              {t(SECTIONS_CONFIG[currentSection].labelKey)}
+            </header>
             <div ref={settingsScrollRef} className="flex-1 overflow-y-auto">
               {/* Models fills the window: its table scrolls, not the page. */}
               <div
-                className={`flex flex-col items-center p-4 gap-4 ${currentSection === "models" ? "h-full" : ""}`}
+                className={`flex flex-col items-center px-5 py-4 gap-4 ${currentSection === "models" ? "h-full" : ""}`}
               >
                 <SecureInputWarning />
                 {renderSettingsContent(

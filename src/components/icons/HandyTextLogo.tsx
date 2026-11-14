@@ -1,43 +1,46 @@
-// Slash Voice placeholder wordmark. The component keeps its upstream name so
-// imports stay untouched and upstream fixes merge cleanly.
-// The brand name is not translated, so it lives outside the JSX.
-const BRAND_NAME = "Slash Voice";
+// The Slash Voice logo, option B (founder, 2026-11-13; design/stills/01):
+// the Slash logo unchanged ("/" in the accent at 800, "Slash" at 700), with
+// "Voice" beside it at 400 in the secondary text colour. Set in Onest as live
+// text, not drawn. The component keeps its upstream name so imports stay
+// untouched and upstream fixes merge cleanly.
+// The brand name is not translated, so its parts live outside the JSX.
+const SLASH = "/";
+const WORD = "Slash";
+const SECOND_WORD = "Voice";
 
 const HandyTextLogo = ({
-  width,
-  height,
-  className,
+  size = 15,
+  className = "",
 }: {
-  width?: number;
-  height?: number;
+  /** Font size in px; every gap scales with it. */
+  size?: number;
   className?: string;
-}) => {
-  return (
-    <svg
-      width={width}
-      height={height}
-      className={className}
-      viewBox="0 0 930 328"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      role="img"
-      aria-label="Slash Voice"
+}) => (
+  <span
+    role="img"
+    aria-label={`${WORD} ${SECOND_WORD}`}
+    dir="ltr"
+    className={`inline-flex items-baseline whitespace-nowrap font-ui leading-none select-none ${className}`}
+    style={{ fontSize: size, letterSpacing: `${-size * 0.02}px` }}
+  >
+    <span
+      aria-hidden="true"
+      className="font-extrabold text-accent"
+      style={{ marginInlineEnd: size * 0.07 }}
     >
-      <path d="M118 40 L172 40 L96 288 L42 288 Z" className="logo-primary" />
-      <text
-        x="212"
-        y="218"
-        className="logo-stroke"
-        fontFamily="system-ui, -apple-system, 'Segoe UI', sans-serif"
-        fontSize="148"
-        fontWeight="700"
-        textLength="690"
-        lengthAdjust="spacingAndGlyphs"
-      >
-        {BRAND_NAME}
-      </text>
-    </svg>
-  );
-};
+      {SLASH}
+    </span>
+    <span aria-hidden="true" className="font-bold text-text">
+      {WORD}
+    </span>
+    <span
+      aria-hidden="true"
+      className="font-normal text-ink-2"
+      style={{ marginInlineStart: size * 0.18 }}
+    >
+      {SECOND_WORD}
+    </span>
+  </span>
+);
 
 export default HandyTextLogo;

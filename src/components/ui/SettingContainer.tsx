@@ -32,9 +32,10 @@ export const SettingContainer: React.FC<SettingContainerProps> = ({
     />
   );
 
+  // Slash rows (still 06): flush with the group label, 38 high, no boxes.
   const containerClasses = grouped
-    ? "px-4 p-2"
-    : "px-4 p-2 rounded-lg border border-line";
+    ? "px-1 py-2"
+    : "px-3 py-2 rounded-card border border-line";
 
   if (layout === "stacked") {
     if (descriptionMode === "tooltip") {
@@ -42,7 +43,7 @@ export const SettingContainer: React.FC<SettingContainerProps> = ({
         <div className={containerClasses}>
           <div className="flex items-center gap-2 mb-2">
             <h3
-              className={`text-sm font-medium ${disabled ? "opacity-50" : ""}`}
+              className={`text-[13px] font-normal text-text ${disabled ? "opacity-50" : ""}`}
             >
               {title}
             </h3>
@@ -56,10 +57,14 @@ export const SettingContainer: React.FC<SettingContainerProps> = ({
     return (
       <div className={containerClasses}>
         <div className="mb-2">
-          <h3 className={`text-sm font-medium ${disabled ? "opacity-50" : ""}`}>
+          <h3
+            className={`text-[13px] font-normal text-text ${disabled ? "opacity-50" : ""}`}
+          >
             {title}
           </h3>
-          <p className={`text-sm ${disabled ? "opacity-50" : ""}`}>
+          <p
+            className={`text-[12.5px] text-ink-2 ${disabled ? "opacity-50" : ""}`}
+          >
             {description}
           </p>
         </div>
@@ -71,8 +76,8 @@ export const SettingContainer: React.FC<SettingContainerProps> = ({
   // Horizontal layout (default)
   const horizontalContainerClasses = `${
     grouped
-      ? "flex items-center justify-between min-h-12 px-4 p-2"
-      : "flex items-center justify-between min-h-12 px-4 p-2 rounded-lg border border-line"
+      ? "flex items-center justify-between min-h-[38px] px-1 py-[6px]"
+      : "flex items-center justify-between min-h-[38px] px-3 py-[6px] rounded-card border border-line"
   }${grow ? " gap-4" : ""}`;
   const titleClasses = grow ? "max-w-2/3 shrink-0" : "max-w-2/3";
   const controlClasses = grow
@@ -85,7 +90,7 @@ export const SettingContainer: React.FC<SettingContainerProps> = ({
         <div className={titleClasses}>
           <div className="flex items-center gap-2">
             <h3
-              className={`text-sm font-medium ${disabled ? "opacity-50" : ""}`}
+              className={`text-[13px] font-normal text-text ${disabled ? "opacity-50" : ""}`}
             >
               {title}
             </h3>
@@ -100,10 +105,14 @@ export const SettingContainer: React.FC<SettingContainerProps> = ({
   return (
     <div className={horizontalContainerClasses}>
       <div className={titleClasses}>
-        <h3 className={`text-sm font-medium ${disabled ? "opacity-50" : ""}`}>
+        <h3
+          className={`text-[13px] font-normal text-text ${disabled ? "opacity-50" : ""}`}
+        >
           {title}
         </h3>
-        <p className={`text-sm ${disabled ? "opacity-50" : ""}`}>
+        <p
+          className={`text-[12.5px] text-ink-2 ${disabled ? "opacity-50" : ""}`}
+        >
           {description}
         </p>
       </div>

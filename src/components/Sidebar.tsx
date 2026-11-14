@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Cog, FlaskConical, History, Info, Sparkles, Cpu } from "lucide-react";
+import { getVersion } from "@tauri-apps/api/app";
+import {
+  Cog,
+  Cpu,
+  FlaskConical,
+  History,
+  Info,
+  SlidersHorizontal,
+  Sparkles,
+} from "lucide-react";
 import HandyTextLogo from "./icons/HandyTextLogo";
-import HandyHand from "./icons/HandyHand";
 import { useSettings } from "../hooks/useSettings";
 import {
   GeneralSettings,
@@ -34,7 +42,7 @@ interface SectionConfig {
 export const SECTIONS_CONFIG = {
   general: {
     labelKey: "sidebar.general",
-    icon: HandyHand,
+    icon: SlidersHorizontal,
     component: GeneralSettings,
     enabled: () => true,
   },
@@ -88,39 +96,55 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const { t } = useTranslation();
   const { settings } = useSettings();
 
+  const [version, setVersion] = useState("");
+  useEffect(() => {
+    getVersion()
+      .then(setVersion)
+      .catch(() => setVersion(""));
+  }, []);
+
   const availableSections = Object.entries(SECTIONS_CONFIG)
     .filter(([_, config]) => config.enabled(settings))
     .map(([id, config]) => ({ id: id as SidebarSection, ...config }));
 
+  // Slash navigation column (still 06): the logo, quiet rows, the selected row
+  // in the selected tint, the version at the foot.
   return (
-    <div className="flex flex-col w-40 h-full border-e border-line items-center px-2">
-      <HandyTextLogo width={120} className="m-4" />
-      <div className="flex flex-col w-full items-center gap-1 pt-2 border-t border-line">
+    <nav className="flex h-full w-[196px] shrink-0 flex-col justify-between border-e border-line px-2 py-3">
+      <div className="flex flex-col gap-[2px]">
+        <HandyTextLogo size={15} className="px-2 pt-1 pb-3" />
         {availableSections.map((section) => {
           const Icon = section.icon;
           const isActive = activeSection === section.id;
 
           return (
-            <div
+            <button
+              type="button"
               key={section.id}
-              className={`flex gap-2 items-center p-2 w-full rounded-lg cursor-pointer transition-colors ${
+              aria-current={isActive ? "page" : undefined}
+              className={`flex h-[30px] w-full cursor-pointer items-center gap-[9px] rounded-control px-2 text-start transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-logo-primary/40 ${
                 isActive
-                  ? "bg-logo-primary/80"
-                  : "hover:bg-line hover:opacity-100 opacity-85"
+                  ? "bg-selected font-medium text-text"
+                  : "text-ink-2 hover:bg-wash hover:text-text"
               }`}
               onClick={() => onSectionChange(section.id)}
             >
-              <Icon width={24} height={24} className="shrink-0" />
-              <p
-                className="text-sm font-medium truncate"
+              <Icon width={14} height={14} size={14} className="shrink-0" />
+              <span
+                className="truncate text-[13px]"
                 title={t(section.labelKey)}
               >
                 {t(section.labelKey)}
-              </p>
-            </div>
+              </span>
+            </button>
           );
         })}
       </div>
-    </div>
+      {version && (
+        <span className="px-2 font-mono text-[11.5px] text-ink-3">
+          {`v${version}`}
+        </span>
+      )}
+    </nav>
   );
 };

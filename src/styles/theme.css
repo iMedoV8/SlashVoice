@@ -1,35 +1,58 @@
-/* Handy Colors: every color the app uses comes from here. Pick by job:
- * greys (ink-2, ink-3, line-strong, line, wash) for text, edges and fills;
- * logo-primary / background-ui for brand and primary actions; plum for keys
- * and picks (onboarding); moss / warning / error (+ -wash) for status.
- * demo-*, wordmark and mascot are illustration, not UI.
+/* Slash Voice colours: every colour the app uses comes from here.
+ * The values are the Slash brand's (../Slash/DESIGN.md), listed in
+ * specs/001-slash-look/contracts/look-tokens.md and checked by tests-look/.
+ * Token names are Handy's, kept so its components need no renaming. Pick by job:
+ * text, ink-2, ink-3 for the three text steps; line, line-strong for edges;
+ * wash, selected, sunken for surfaces (tints of the window, never a new colour);
+ * accent only for the one primary button, a switch that is on, a selected radio
+ * and the logo's slash; moss / warning / error / info (+ -wash) for state.
+ * logo-primary, plum and background-ui were Handy's pink and plum: they are the
+ * text colour now, so the hovers, rings and fills that used them turn neutral.
+ * Running work (recording, transcribing, progress) is never red or the accent.
  */
 
 :root {
-  /* Palette source of truth. Each themed color is defined once as a
+  /* Palette source of truth. Each themed colour is defined once as a
      light/dark pair; the active tokens below and the `data-theme` overrides
-     in App.css reference these, so a hex value lives in exactly one place. */
-  --light-color-text: #0f0f0f;
-  --light-color-background: #fbfbfb;
-  --light-color-logo-primary: #faa2ca;
-  --light-color-logo-stroke: #382731;
+     reference these, so a value lives in exactly one place. */
+  --light-color-text: #1a1a1a;
+  --light-color-background: #f5f5f3;
+  --light-color-ink-2: #5c5c5c;
+  --light-color-ink-3: #767676;
+  --light-color-line: #00000017;
+  --light-color-line-strong: #0000002e;
+  --light-color-wash: #0000000f;
+  --light-color-selected: #00000017;
+  --light-color-sunken: #0000000d;
+  --light-color-accent: #f0532b;
+  --light-color-on-accent: #ffffff;
 
-  --dark-color-text: #fbfbfb;
-  --dark-color-background: #2c2b29;
-  --dark-color-logo-primary: #f28cbb;
+  --dark-color-text: #ececec;
+  --dark-color-background: #121212;
+  --dark-color-ink-2: #a6a6a6;
+  --dark-color-ink-3: #858585;
+  --dark-color-line: #ffffff1f;
+  --dark-color-line-strong: #ffffff38;
+  --dark-color-wash: #ffffff16;
+  --dark-color-selected: #ffffff1f;
+  --dark-color-sunken: #00000045;
+  --dark-color-accent: #f0532b;
+  --dark-color-on-accent: #1b0a04;
 
-  /* Status colors. Each has a -wash tint below. */
-  --light-color-warning: #d97706;
-  --light-color-error: #dc2626;
-  --dark-color-warning: #fbbf24;
-  --dark-color-error: #f87171;
+  /* State colours. Each has a -wash tint below. */
+  --light-color-moss: #1a7f4b;
+  --light-color-error: #c62828;
+  --light-color-warning: #9a6700;
+  --light-color-info: #1f6feb;
+  --dark-color-moss: #4cc38a;
+  --dark-color-error: #e5484d;
+  --dark-color-warning: #e2a336;
+  --dark-color-info: #5b9dff;
 
-  /* Success. Pink already means "recording", so it gets its own hue. */
-  --light-color-moss: #2f7d5b;
-  --dark-color-moss: #86c9a4;
-
-  /* Plum: the ink for keycaps and picked items. */
-  --light-color-plum: var(--light-color-logo-stroke);
+  /* Handy's highlight and key-cap ink: neutral now. */
+  --light-color-logo-primary: var(--light-color-text);
+  --dark-color-logo-primary: var(--dark-color-text);
+  --light-color-plum: var(--light-color-text);
   --dark-color-plum: var(--dark-color-text);
 
   /* Demo's drawn app window. */
@@ -40,58 +63,33 @@
     var(--dark-color-background)
   );
 
-  /* Demo's laptop: lid, base gradient and wallpaper. */
-  --light-color-demo-lid: #1f1e21;
-  --dark-color-demo-lid: #0f0e10;
-  --light-color-demo-alu-hi: #ececee;
-  --dark-color-demo-alu-hi: #5a585d;
-  --light-color-demo-alu-lo: #cdccd1;
-  --dark-color-demo-alu-lo: #3b3a3e;
-  --light-demo-wallpaper:
-    radial-gradient(
-      110% 80% at 90% 105%,
-      color-mix(in srgb, var(--light-color-logo-primary) 50%, #fbfbfb) 0%,
-      transparent 60%
-    ),
-    radial-gradient(
-      90% 80% at 5% -5%,
-      color-mix(in srgb, #c7b9ef 55%, #fbfbfb) 0%,
-      transparent 62%
-    ),
-    color-mix(in srgb, #e9e1f3 60%, #fbfbfb);
-  --dark-demo-wallpaper:
-    radial-gradient(
-      110% 80% at 90% 105%,
-      color-mix(in srgb, var(--dark-color-logo-primary) 26%, #1b1719) 0%,
-      transparent 60%
-    ),
-    radial-gradient(
-      90% 80% at 5% -5%,
-      color-mix(in srgb, #7c68c0 38%, #1b1719) 0%,
-      transparent 62%
-    ),
-    #1f1a1e;
+  /* Demo's laptop: lid, base and wallpaper. Flat: the brand has no gradients. */
+  --light-color-demo-lid: #1f1f1f;
+  --dark-color-demo-lid: #0d0d0d;
+  --light-color-demo-alu-hi: #dcdcda;
+  --dark-color-demo-alu-hi: #4a4a4a;
+  --light-color-demo-alu-lo: #dcdcda;
+  --dark-color-demo-alu-lo: #4a4a4a;
+  --light-demo-wallpaper: #e4e4e1;
+  --dark-demo-wallpaper: #1c1c1c;
 
-  /* The wordmark. Dark mode outlines it in white to cut down on pinks. */
-  --light-color-wordmark: var(--light-color-logo-primary);
-  --light-color-wordmark-stroke: var(--light-color-logo-stroke);
-  --dark-color-wordmark: var(--dark-color-logo-primary);
+  /* The wordmark: the slash in the accent, the word in the text colour. */
+  --light-color-wordmark: var(--light-color-accent);
+  --light-color-wordmark-stroke: var(--light-color-text);
+  --dark-color-wordmark: var(--dark-color-accent);
   --dark-color-wordmark-stroke: var(--dark-color-text);
 
-  /* Mascot outline and face; dark mode uses the background, not muddy plum. */
-  --light-color-mascot-line: var(--light-color-logo-stroke);
+  /* Outline of the placeholder tile on a later onboarding step. */
+  --light-color-mascot-line: var(--light-color-text);
   --dark-color-mascot-line: var(--dark-color-background);
 
-  /* Demo's recording pill ring and shadow. */
+  /* Demo's recording pill ring and shadow; neutral. */
   --light-demo-pill-shadow:
-    0 0 0 1px color-mix(in srgb, var(--color-background-ui) 16%, transparent),
-    0 10px 26px -10px rgba(0, 0, 0, 0.35);
+    0 0 0 1px var(--light-color-line), 0 10px 26px -10px rgba(0, 0, 0, 0.35);
   --dark-demo-pill-shadow:
-    0 0 0 1px
-      color-mix(in srgb, var(--dark-color-logo-primary) 20%, transparent),
-    0 10px 26px -10px rgba(0, 0, 0, 0.6);
+    0 0 0 1px var(--dark-color-line), 0 10px 26px -10px rgba(0, 0, 0, 0.6);
 
-  /* Status tints for the box behind a status color. */
+  /* State tints for the box behind a state colour. */
   --light-color-moss-wash: color-mix(
     in srgb,
     var(--light-color-moss) 12%,
@@ -123,18 +121,30 @@
     var(--dark-color-background)
   );
 
-  /* Tokens that do not change between light and dark */
-  --color-background-ui: #da5893;
+  /* Tokens that do not change between light and dark. Handy's primary fill
+     (progress bars, spinners, step marks) is the text colour: running work is
+     never the accent. */
+  --color-background-ui: var(--color-text);
   --color-mid-gray: #808080;
 
-  /* Active palette — defaults to light, follows the OS via the media query
+  /* Active palette: defaults to light, follows the OS via the media query
      below, or is forced by `data-theme` (see the overrides below). */
   --color-text: var(--light-color-text);
   --color-background: var(--light-color-background);
+  --color-ink-2: var(--light-color-ink-2);
+  --color-ink-3: var(--light-color-ink-3);
+  --color-line: var(--light-color-line);
+  --color-line-strong: var(--light-color-line-strong);
+  --color-wash: var(--light-color-wash);
+  --color-selected: var(--light-color-selected);
+  --color-sunken: var(--light-color-sunken);
+  --color-accent: var(--light-color-accent);
+  --color-on-accent: var(--light-color-on-accent);
   --color-logo-primary: var(--light-color-logo-primary);
   --color-warning: var(--light-color-warning);
   --color-error: var(--light-color-error);
   --color-moss: var(--light-color-moss);
+  --color-info: var(--light-color-info);
   --color-plum: var(--light-color-plum);
   --demo-pill-shadow: var(--light-demo-pill-shadow);
   --color-demo-window: var(--light-color-demo-window);
@@ -149,16 +159,6 @@
   --color-warning-wash: var(--light-color-warning-wash);
   --color-error-wash: var(--light-color-error-wash);
 
-  /* Grey steps: secondary text, hints/icons, control edges, dividers, hover fill. */
-  --color-ink-2: color-mix(in srgb, var(--color-text) 60%, transparent);
-  --color-ink-3: var(--color-mid-gray);
-  --color-line-strong: color-mix(
-    in srgb,
-    var(--color-mid-gray) 80%,
-    transparent
-  );
-  --color-line: color-mix(in srgb, var(--color-mid-gray) 20%, transparent);
-  --color-wash: color-mix(in srgb, var(--color-mid-gray) 10%, transparent);
   /* Edge of a picked card or option. */
   --color-plum-pick: color-mix(in srgb, var(--color-plum) 60%, transparent);
   /* The far end of a capture slot's breathing edge (KeySlot). */
@@ -169,10 +169,20 @@
   :root {
     --color-text: var(--dark-color-text);
     --color-background: var(--dark-color-background);
+    --color-ink-2: var(--dark-color-ink-2);
+    --color-ink-3: var(--dark-color-ink-3);
+    --color-line: var(--dark-color-line);
+    --color-line-strong: var(--dark-color-line-strong);
+    --color-wash: var(--dark-color-wash);
+    --color-selected: var(--dark-color-selected);
+    --color-sunken: var(--dark-color-sunken);
+    --color-accent: var(--dark-color-accent);
+    --color-on-accent: var(--dark-color-on-accent);
     --color-logo-primary: var(--dark-color-logo-primary);
     --color-warning: var(--dark-color-warning);
     --color-error: var(--dark-color-error);
     --color-moss: var(--dark-color-moss);
+    --color-info: var(--dark-color-info);
     --color-plum: var(--dark-color-plum);
     --demo-pill-shadow: var(--dark-demo-pill-shadow);
     --color-demo-window: var(--dark-color-demo-window);
@@ -193,19 +203,29 @@
  * Explicit theme override, driven by the `theme` setting via
  * `document.documentElement.dataset.theme`. When set, the higher-specificity
  * attribute selectors win over the `prefers-color-scheme` media query above,
- * so a user can keep Handy light or dark regardless of the OS setting.
+ * so a user can keep the app light or dark regardless of the OS setting.
  * `system` (or no attribute) leaves the OS in charge.
  *
- * Lives here (not in App.css) so every window that imports the shared palette —
- * the settings window and the recording overlay alike — honours the override.
+ * Lives here (not in App.css) so every window that imports the shared palette,
+ * the settings window and the recording overlay alike, honours the override.
  */
 :root[data-theme="light"] {
   --color-text: var(--light-color-text);
   --color-background: var(--light-color-background);
+  --color-ink-2: var(--light-color-ink-2);
+  --color-ink-3: var(--light-color-ink-3);
+  --color-line: var(--light-color-line);
+  --color-line-strong: var(--light-color-line-strong);
+  --color-wash: var(--light-color-wash);
+  --color-selected: var(--light-color-selected);
+  --color-sunken: var(--light-color-sunken);
+  --color-accent: var(--light-color-accent);
+  --color-on-accent: var(--light-color-on-accent);
   --color-logo-primary: var(--light-color-logo-primary);
   --color-warning: var(--light-color-warning);
   --color-error: var(--light-color-error);
   --color-moss: var(--light-color-moss);
+  --color-info: var(--light-color-info);
   --color-plum: var(--light-color-plum);
   --demo-pill-shadow: var(--light-demo-pill-shadow);
   --color-demo-window: var(--light-color-demo-window);
@@ -224,10 +244,20 @@
 :root[data-theme="dark"] {
   --color-text: var(--dark-color-text);
   --color-background: var(--dark-color-background);
+  --color-ink-2: var(--dark-color-ink-2);
+  --color-ink-3: var(--dark-color-ink-3);
+  --color-line: var(--dark-color-line);
+  --color-line-strong: var(--dark-color-line-strong);
+  --color-wash: var(--dark-color-wash);
+  --color-selected: var(--dark-color-selected);
+  --color-sunken: var(--dark-color-sunken);
+  --color-accent: var(--dark-color-accent);
+  --color-on-accent: var(--dark-color-on-accent);
   --color-logo-primary: var(--dark-color-logo-primary);
   --color-warning: var(--dark-color-warning);
   --color-error: var(--dark-color-error);
   --color-moss: var(--dark-color-moss);
+  --color-info: var(--dark-color-info);
   --color-plum: var(--dark-color-plum);
   --demo-pill-shadow: var(--dark-demo-pill-shadow);
   --color-demo-window: var(--dark-color-demo-window);

@@ -1,5 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+// Slash typefaces, bundled into the app: nothing is fetched (RULES.md §3).
+import "@fontsource-variable/onest";
+import "@fontsource-variable/jetbrains-mono";
+import "@fontsource/ibm-plex-sans-arabic/arabic-400.css";
+import "@fontsource/ibm-plex-sans-arabic/arabic-500.css";
+import "@fontsource/ibm-plex-sans-arabic/arabic-600.css";
+import "@fontsource/ibm-plex-sans-arabic/arabic-700.css";
 import { platform } from "@tauri-apps/plugin-os";
 import App from "./App";
 import { installCompatShims } from "./lib/compat";
