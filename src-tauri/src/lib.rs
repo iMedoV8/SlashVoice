@@ -162,7 +162,7 @@ fn apply_startup_activation_policy(app: &mut tauri::App, headless_mode: bool) {
     let should_hide = settings.start_hidden || cli_args.start_hidden;
     let tray_available = settings.show_tray_icon && !cli_args.no_tray;
 
-    if should_hide && tray_available {
+    if hides_dock_icon(should_hide && tray_available) {
         log::info!("Starting hidden with tray available: launching as Accessory (no Dock icon)");
         app.set_activation_policy(tauri::ActivationPolicy::Accessory);
     }
@@ -438,6 +438,34 @@ where
             eprintln!("error: headless transcription panicked: {message}");
             1
         }
+    }
+}
+
+/// Slash Voice keeps its Dock icon at all times on macOS (founder,
+/// 2026-11-15; specs/002-keep-in-dock). Handy hid it whenever the window was
+/// hidden and a tray icon existed, which made the app look gone when a
+/// menu-bar manager hid the tray icon. The Dock click (`RunEvent::Reopen`)
+/// reopens the window.
+const KEEP_DOCK_ICON: bool = true;
+
+/// Whether hiding the window to the tray should also remove the Dock icon.
+#[cfg_attr(not(target_os = "macos"), allow(dead_code))]
+fn hides_dock_icon(window_hidden_to_tray: bool) -> bool {
+    !KEEP_DOCK_ICON && window_hidden_to_tray
+}
+
+#[cfg(test)]
+mod dock_icon_tests {
+    use super::hides_dock_icon;
+
+    #[test]
+    fn keeps_dock_icon_when_window_hides_to_tray() {
+        assert!(!hides_dock_icon(true));
+    }
+
+    #[test]
+    fn keeps_dock_icon_without_a_tray() {
+        assert!(!hides_dock_icon(false));
     }
 }
 
@@ -1154,7 +1182,7 @@ pub fn run(cli_args: CliArgs) {
                     let settings = get_settings(window.app_handle());
                     let tray_visible =
                         settings.show_tray_icon && !window.app_handle().state::<CliArgs>().no_tray;
-                    if tray_visible {
+                    if hides_dock_icon(tray_visible) {
                         // Tray is available: hide the dock icon, app lives in the tray
                         let res = window
                             .app_handle()
