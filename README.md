@@ -70,9 +70,9 @@ bun run tauri build
 
 ## Known limits
 
-- **Speech models are published by Handy's author.** They are downloaded from his Hugging Face repositories, and from Handy's own server when that fails. Slash Voice hosts none of them yet.
-- **Linux is not supported.** Handy's Linux code and packaging files are still in the repository and are untested here.
-- **The settings screen does not yet match its design.** The colours and typefaces are ours; the layout is still close to Handy's. The new look is drawn and waiting to be built ([design/README.md](design/README.md)).
+- **Slash Voice does not host the speech models yet.** They are downloaded from Hugging Face repositories published by the author of the app it is built on, and from that project's own server when Hugging Face fails.
+- **Linux is not supported.** The Linux code and packaging files that came with the code base are still in the repository and are untested here.
+- **The settings screen does not yet match its design.** The colours and typefaces are ours; the layout is not yet. The new look is drawn and waiting to be built ([design/README.md](design/README.md)).
 - **No signed builds, no self-update.** No Intel Mac build and no Windows ARM build.
 
 ## Contributing

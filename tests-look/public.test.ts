@@ -25,6 +25,14 @@ describe("the front page is ours", () => {
     expect(readme).toContain("https://github.com/cjpais/Handy");
   });
 
+  test("the readme names Handy only in its closing credit", () => {
+    const lines = read("README.md").split("\n");
+    const credit = lines.indexOf("## Built on Handy");
+    expect(credit).toBeGreaterThan(0);
+    const early = lines.slice(0, credit).filter((l) => /handy/i.test(l));
+    expect(early).toEqual([]);
+  });
+
   test("the readme carries no Handy community or sponsor link", () => {
     expect(read("README.md")).not.toMatch(
       /discord|handy\.computer\/donate|sponsor-images/i,
