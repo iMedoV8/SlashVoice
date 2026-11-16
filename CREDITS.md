@@ -20,6 +20,10 @@ Each package carries the licence text of its typeface.
 
 [Lucide](https://lucide.dev), ISC licence.
 
+## The silence detector, bundled in the app
+
+[Silero VAD](https://github.com/snakers4/silero-vad), MIT licence, Copyright (c) 2020-present Silero Team. The file in the app is a converted copy published as `handy-computer/silero-vad-v6.2-gguf`.
+
 ## Speech models
 
 Slash Voice ships no speech model. Models are downloaded when you choose them, and each has its own licence. Their licences have not all been read in full by this project yet; that is required before a model is offered in a published installer ([RULES.md](RULES.md) §3).

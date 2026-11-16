@@ -93,9 +93,9 @@ If a check cannot run on your machine, say so in the pull request. Do not report
 | Lint, formatting, translation checks, screens build | Linux   |
 | Rust formatting and tests                           | Linux   |
 
-Not in the gate yet: the Mac and Windows builds, and the Rust linter. Clippy with warnings as errors finds 18 problems in Handy's own code under the current Rust, so gating on it means changing Handy's files first.
+Not in the gate on every pull request: the Mac and Windows builds (they run only when `release.yml` changes or a release is built), and the Rust linter. Clippy with warnings as errors finds 18 problems in Handy's own code under the current Rust, so gating on it means changing Handy's files first.
 
-Handy's own workflows were removed when the repository was published: they build and release Handy with signing keys this repository does not have. A release workflow of our own is not written yet.
+Handy's own workflows were removed when the repository was published: they build and release Handy with signing keys this repository does not have. Our own release workflow is `release.yml`: started by hand, it builds the Windows and Mac installers into a draft pre-release, and it also builds on any pull request that changes it.
 
 Never merge with a red or skipped required check. Never bypass a hook or a check to get a change in.
 
