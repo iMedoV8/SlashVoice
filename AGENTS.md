@@ -29,26 +29,26 @@ Rules for those who do have the private folders:
 
 "Decided" means the founder chose it. "Comes with Handy" means it is what the copied code uses; changing it is a decision. "Proposed" and "Open" are not settled: do not build on them as if they were.
 
-| Part                               | Choice                                                                                       | Status                                                                          |
-| ---------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| Starting point                     | A renamed copy of Handy; its repository is the git remote `upstream`                         | Decided                                                                         |
-| Licence                            | MIT, open source                                                                             | Decided 2026-11-15                                                              |
-| App shell                          | Tauri 2, one build for Mac and Windows                                                       | Decided                                                                         |
-| Backend                            | Rust                                                                                         | Comes with Handy                                                                |
-| Screens                            | React 18, TypeScript, Tailwind 4, Zustand, Vite                                              | Comes with Handy                                                                |
-| Look                               | The Slash brand: colours, typefaces and logo, as recorded in `DESIGN.md`                     | Decided; palette, type, logo and icon built. The new layout is drawn, not built |
-| Design tool                        | Pencil (`.pen`), with the `impeccable` skill                                                 | Decided                                                                         |
-| Speech engine                      | `transcribe-cpp` in its own worker process; Metal on Apple Silicon, Vulkan on Windows        | Comes with Handy                                                                |
-| Speech models                      | English: `parakeet-unified-en-0.6b`. Arabic with English: `cohere-transcribe-arabic-07-2026` | To verify, by measurement                                                       |
-| Rewrite model                      | Local first, cloud optional; only text is ever sent                                          | Direction decided; the model is open                                            |
-| Our own features                   | A separate Rust module and a separate screens folder, apart from Handy's files               | Proposed                                                                        |
-| Storage                            | SQLite on the device, no sync                                                                | Comes with Handy                                                                |
-| Text                               | `src/i18n/locales/<language>/translation.json`, 26 languages; no text literals in components | Comes with Handy                                                                |
-| Package manager and runner         | Bun; Rust stable through rustup                                                              | Comes with Handy                                                                |
-| Pipeline                           | GitHub Actions, `checks.yml`                                                                 | In use                                                                          |
-| Model hosting                      | Models still download from Handy's server                                                    | Open; to change before installers are published                                 |
-| Self-update, signing, notarisation | Off and none                                                                                 | Open                                                                            |
-| Requirement IDs and task list      | Not written                                                                                  | Open                                                                            |
+| Part                               | Choice                                                                                                            | Status                                                                          |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| Starting point                     | A renamed copy of Handy; its repository is the git remote `upstream`                                              | Decided                                                                         |
+| Licence                            | MIT, open source                                                                                                  | Decided 2026-11-15                                                              |
+| App shell                          | Tauri 2, one build for Mac and Windows                                                                            | Decided                                                                         |
+| Backend                            | Rust                                                                                                              | Comes with Handy                                                                |
+| Screens                            | React 18, TypeScript, Tailwind 4, Zustand, Vite                                                                   | Comes with Handy                                                                |
+| Look                               | The Slash brand: colours, typefaces and logo, as recorded in `DESIGN.md`                                          | Decided; palette, type, logo and icon built. The new layout is drawn, not built |
+| Design tool                        | Pencil (`.pen`), with the `impeccable` skill                                                                      | Decided                                                                         |
+| Speech engine                      | `transcribe-cpp` in its own worker process; Metal on Apple Silicon, Vulkan on Windows                             | Comes with Handy                                                                |
+| Speech models                      | English: `parakeet-unified-en-0.6b`. Arabic with English: `cohere-transcribe-arabic-07-2026`                      | To verify, by measurement                                                       |
+| Rewrite model                      | Local first, cloud optional; only text is ever sent                                                               | Direction decided; the model is open                                            |
+| Our own features                   | A separate Rust module and a separate screens folder, apart from Handy's files                                    | Proposed                                                                        |
+| Storage                            | SQLite on the device, no sync                                                                                     | Comes with Handy                                                                |
+| Text                               | `src/i18n/locales/<language>/translation.json`, 26 languages; no text literals in components                      | Comes with Handy                                                                |
+| Package manager and runner         | Bun; Rust stable through rustup                                                                                   | Comes with Handy                                                                |
+| Pipeline                           | GitHub Actions, `checks.yml`                                                                                      | In use                                                                          |
+| Model hosting                      | Hugging Face only, from the repositories of Handy's author; no fallback server (`src-tauri/src/model_sources.rs`) | Decided 2026-11-16; hosting our own is open                                     |
+| Self-update, signing, notarisation | Off and none                                                                                                      | Open                                                                            |
+| Requirement IDs and task list      | Not written                                                                                                       | Open                                                                            |
 
 ## Build order
 

@@ -3,7 +3,7 @@ use super::model_capabilities::{
 };
 use crate::settings::{get_settings, write_settings};
 use anyhow::Result;
-use hf_hub::api::tokio::{ApiBuilder, CancellationToken, Progress};
+use hf_hub::api::tokio::{CancellationToken, Progress};
 use hf_hub::{Cache, Repo, RepoType};
 use log::{debug, error, info, warn};
 use serde::{Deserialize, Serialize};
@@ -2030,7 +2030,7 @@ impl ModelManager {
 
             // Fresh client per attempt so a wedged connection from the previous
             // try can't poison the retry.
-            let api = ApiBuilder::from_env()
+            let api = crate::model_sources::hugging_face_api()
                 // Ignore cached and environment-provided credentials. A stale token
                 // can make otherwise-public downloads fail authentication.
                 .with_token(None)
@@ -2294,6 +2294,15 @@ impl ModelManager {
             }
             self.update_download_status()?;
             return Ok(());
+        }
+
+        // Slash Voice downloads from Hugging Face only (model_sources). A
+        // plain-URL model already on disk returned above and keeps working.
+        if !crate::model_sources::allows_direct_download(&url) {
+            return Err(anyhow::anyhow!(
+                "{} is an older model that is no longer offered for download",
+                model_info.name
+            ));
         }
 
         // Mark as downloading
@@ -2758,9 +2767,11 @@ mod tests {
                         retired.id, retired.replacement_repo
                     )
                 });
+            // Handy asserted a fallback server here. Slash Voice has none
+            // (founder, 2026-11-16; specs/005-model-sources).
             assert!(
-                !crate::catalog::mirror_fallbacks(&replacement.id).is_empty(),
-                "{}: replacement {} has no mirror fallback",
+                crate::catalog::mirror_fallbacks(&replacement.id).is_empty(),
+                "{}: replacement {} falls back to another server",
                 retired.id,
                 replacement.id
             );

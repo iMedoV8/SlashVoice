@@ -32,8 +32,9 @@ const SCHEMA: u32 = 2;
 /// Base URLs tried in order when the Hugging Face download fails. The full
 /// file URL is `{mirror}/{repo_id}/{revision}/{filename}` — the same three
 /// values that form the HF resolve URL, so a mirror is a plain static host.
-/// `scripts/mirror_models.py` populates it from this catalog.
-const MIRRORS: &[&str] = &["https://blob.handy.computer"];
+/// Slash Voice keeps the list in `model_sources` (Handy's was its own
+/// storage server, populated by `scripts/mirror_models.py`).
+use crate::model_sources::MIRROR_BASES as MIRRORS;
 
 /// Handy's list order and onboarding set, keyed by catalog id. Kept from the
 /// previous generator until onboarding moves to the package's recommendations.
@@ -427,7 +428,18 @@ fn mirror_files(
     sha256: &str,
     size_bytes: u64,
 ) -> Vec<MirrorFile> {
-    MIRRORS
+    mirror_files_at(MIRRORS, repository, revision, filename, sha256, size_bytes)
+}
+
+fn mirror_files_at(
+    bases: &[&str],
+    repository: &str,
+    revision: &str,
+    filename: &str,
+    sha256: &str,
+    size_bytes: u64,
+) -> Vec<MirrorFile> {
+    bases
         .iter()
         .map(|base| MirrorFile {
             url: format!(
@@ -570,18 +582,64 @@ mod tests {
     }
 
     #[test]
-    fn every_offered_model_has_mirror_fallbacks_with_hashes() {
-        // The mirror fallback is the safety net for HF outages and blocked
-        // networks; an offered entry without one silently loses that net.
+    fn no_offered_model_falls_back_to_another_server() {
+        // Handy asserted the opposite: every offered model had a fallback on
+        // its own storage server. Slash Voice has not asked to use that
+        // server, so a failed Hugging Face download ends with an error
+        // (founder, 2026-11-16; specs/005-model-sources).
         for d in CATALOG.iter() {
             let mirrors = mirror_fallbacks(&d.id);
-            assert!(!mirrors.is_empty(), "{}: no mirror fallbacks", d.id);
-            for m in &mirrors {
-                assert_eq!(m.sha256.len(), 64, "{}: mirror entry lacks a sha256", d.id);
-                assert!(m.size_bytes > 0, "{}: mirror entry lacks a size", d.id);
-                assert!(m.url.starts_with("https://"), "{}: bad url {}", d.id, m.url);
+            assert!(
+                mirrors.is_empty(),
+                "{}: falls back to {:?}",
+                d.id,
+                mirrors.iter().map(|m| &m.url).collect::<Vec<_>>()
+            );
+        }
+        assert!(language_detector_mirrors().is_empty());
+    }
+
+    #[test]
+    fn every_offered_file_has_a_hash_and_a_size() {
+        // Handy checked this through its fallback list. The hashes are what
+        // a downloaded file is trusted against, so they are checked directly.
+        for m in transcription_models().filter(|m| m.is_offered()) {
+            assert!(!m.files.is_empty(), "{}: no files", m.id);
+            for f in m.files.values() {
+                assert_eq!(
+                    f.sha256.len(),
+                    64,
+                    "{}: {} lacks a sha256",
+                    m.id,
+                    f.filename
+                );
+                assert!(f.size > 0, "{}: {} lacks a size", m.id, f.filename);
             }
         }
+        let detector = LANGUAGE_DETECTOR.as_ref().expect("language detector");
+        assert_eq!(detector.sha256.len(), 64);
+        assert!(detector.size_bytes > 0);
+    }
+
+    #[test]
+    fn a_fallback_file_keeps_its_hash_size_and_address() {
+        // The builder Handy's test covered through its own server, checked
+        // here with a stand-in base so it stays correct for a future mirror.
+        let files = mirror_files_at(
+            &["https://mirror.example/"],
+            "org/repo",
+            "abc123",
+            "model.gguf",
+            &"a".repeat(64),
+            42,
+        );
+        assert_eq!(files.len(), 1);
+        assert_eq!(
+            files[0].url,
+            "https://mirror.example/org/repo/abc123/model.gguf"
+        );
+        assert_eq!(files[0].sha256.len(), 64);
+        assert_eq!(files[0].size_bytes, 42);
     }
 
     #[test]
