@@ -50,8 +50,8 @@
 - [x] T015 [US1] Welcome screen to still 04 in `src/components/onboarding/OnboardingShell.tsx` and `screens/Welcome.tsx`: step marks, the language menu, the logo without the tile, the heading, the picker with chosen languages on top, one accent button (makes T011 pass)
 - [x] T016 [US1] Permissions screen to still 05 in `src/components/onboarding/screens/Permissions.tsx`: icon tiles, the green tick and "Allowed", the accent on the first permission still missing, Continue visibly unavailable
 - [x] T017 [US1] Navigation column to still 06 in `src/components/Sidebar.tsx`: the logo, Lucide icons, the selected row in the selected tint, the version at the foot
-- [x] T018 [US1] General settings to still 06 in `src/components/settings/general/` and the controls it uses: key caps in the code typeface, the shortcut-behaviour switch as a segmented control, language chips, the model row
-- [ ] T019 [US1] (partly done: welcome and permissions captured; General waits for the founder to grant this build its permissions) Build the app and capture the three screens in dark mode and English into `specs/001-slash-look/evidence/`; compare each with its still and fix what differs
+- [ ] T018 [US1] (reopened 2026-11-15: colours and type are done, the structure differs from still 06 in nine ways listed in `findings.md`) General settings to still 06 in `src/components/settings/general/` and the controls it uses: key caps in the code typeface, the shortcut-behaviour switch as a segmented control, language chips, the model row
+- [ ] T019 [US1] (captured 2026-11-15: all three screens. General does not match still 06, see `findings.md`; T018 is reopened by that) Build the app and capture the three screens in dark mode and English into `specs/001-slash-look/evidence/`; compare each with its still and fix what differs
 
 **Checkpoint**: Story 1 can be shown to the founder on its own.
 
@@ -69,7 +69,7 @@
 
 - [x] T021 [P] [US2] Recolour `branding/app-icon.svg` to the dark ground with the mark in the accent; add `branding/app-icon-light.svg` (accent ground, white mark) as artwork that is not wired in; regenerate `src-tauri/icons/` with `bun run tauri icon`
 - [x] T022 [P] [US2] Redraw the twelve images in `branding/tray/` to still 03 (slash alone; slash and dot; slash and the Lucide `loader`; slash and the Lucide `triangle-alert` in amber) for dark and light bars, and regenerate `src-tauri/resources/*.png` (makes T008 and T020 pass)
-- [ ] T023 [US2] Build, then check the Dock icon at each size and the menu-bar mark through idle, recording and transcribing; capture them into `specs/001-slash-look/evidence/`
+- [ ] T023 [US2] (partly done: Dock icon captured; the menu-bar marks are not) Build, then check the Dock icon at each size and the menu-bar mark through idle, recording and transcribing; capture them into `specs/001-slash-look/evidence/`
 
 ## Phase 5: User Story 3 — Nothing else changed (P3)
 
@@ -78,7 +78,7 @@
 **Independent test**: quickstart sections 1 and 5.
 
 - [x] T024 [US3] Run `bun run check` and `bun run security`; confirm 346 Rust tests pass and 20 are ignored, with none removed
-- [ ] T025 [US3] (partly done: welcome and permissions in all four; General waits as T019) Capture the three screens in light mode, and in Arabic in both modes, into `specs/001-slash-look/evidence/`; fix anything cut off, overlapping or unreadable
+- [ ] T025 [US3] (captured 2026-11-15: all three screens in all four variants; nothing cut off or unreadable on General) Capture the three screens in light mode, and in Arabic in both modes, into `specs/001-slash-look/evidence/`; fix anything cut off, overlapping or unreadable
 - [ ] T026 [US3] Open History, Models, Advanced, Post Process, About and the later onboarding steps; fix anything unusable or still pink, without redesigning them
 - [ ] T027 [US3] Use each control on the three screens once and confirm it behaves as before; confirm from the built app's files that every typeface, icon and style it loads is inside the app
 - [x] T028 [US3] Measure memory with no model loaded and the app's size again; record both beside the baseline in `baseline.md`
