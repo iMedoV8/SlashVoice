@@ -15,4 +15,4 @@ Confirmed by its reading, with nothing to fix: no other path reaches the old ser
 
 ## The founder
 
-Pending: the pull request.
+Approved on 2026-11-16 ("Approve and merge"), after reading the two points put to him in pull request 2: `HF_ENDPOINT` is ignored, and two of Handy's tests are reversed.
