@@ -17,8 +17,6 @@ Slash Voice is a desktop app for macOS and Windows. It is open source under the 
 - 26 interface languages, with English and Arabic (right to left) treated as first-class.
 - Dark and light modes.
 
-
-
 ## What is planned
 
 None of this is built yet.
