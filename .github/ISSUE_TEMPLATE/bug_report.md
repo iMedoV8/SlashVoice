@@ -1,6 +1,6 @@
 ---
 name: Bug Report
-about: Create a report to help us improve Handy
+about: Report something that is broken in Slash Voice
 title: "[BUG] "
 labels: ["bug"]
 assignees: ""
@@ -8,7 +8,11 @@ assignees: ""
 
 ## Before You Submit
 
-**Please search [existing issues](https://github.com/cjpais/Handy/issues) to avoid duplicates.** Your bug may already be reported! Right now it's just me maintaining this project so many issues can be overwhelming! Help me out by checking first.
+**Please search [existing issues](https://github.com/iMedoV8/slash-voice/issues) first.** The project has one maintainer, so a duplicate costs real time.
+
+Slash Voice is built on Handy. If you can reproduce the bug in Handy itself, say so: it helps to know where the fix belongs.
+
+**Do not paste dictation text, recordings or anything private into this report.** For a security problem, do not open an issue: see `SECURITY.md`.
 
 ## Bug Description
 

@@ -2,7 +2,7 @@
 
 <!-- impeccable:product-schema 1 -->
 
-Confirmed by the founder on 2026-11-13. The fuller record is `docs/2026-11-11-slash-voice-design.md`. The Slash brand and voice are in `../Slash/PRODUCT.md` and `../Slash/DESIGN.md` and are changed only there.
+Confirmed by the founder on 2026-11-13. The fuller record is in the founder's private notes. The Slash brand's source is private too and is changed only there; the values this app uses are in `DESIGN.md`.
 
 ## Platform
 
@@ -38,21 +38,22 @@ A local dictation app that knows it is talking to a coding agent. Other tools re
 - Audio stays on the device unless the user chooses an option that says otherwise. Only text may be sent to a rewrite model, and only when turned on.
 - Self-update is off. The builds are not signed with a paid certificate.
 - Built on a renamed copy of Handy (MIT). Handy's name, logo, icon and mascot never appear; a "Built on Handy" credit stays on the About screen.
-- Open: the licences of the speech models, where models are hosted, pricing, and whether the code is open source.
+- Open source under the MIT licence (founder, 2026-11-15).
+- Open: the licences of the speech models, where models are hosted, and pricing.
 
 ## Brand Commitments
 
 - The name "Slash Voice" is a working name.
-- It takes the Slash theme: the accent `#F0532B`, neutral greys, the Onest typeface, and the "/Slash" logo family (founder, 2026-11-12). The values are in `../Slash/DESIGN.md`.
+- It takes the Slash theme: the accent `#F0532B`, neutral greys, the Onest typeface, and the "/Slash" logo family (founder, 2026-11-12). The values are in `DESIGN.md`.
 - Ruled out by the founder for Slash: gradients, glows, purple, colours not asked for, mascots and cartoon shapes.
-- Voice and wording follow `../Slash/PRODUCT.md` and the glossary in `../Slash/docs/01-glossary.md`.
-- Open: the Slash Voice logo and app icon.
+- Voice and wording follow the Slash brand's glossary, which is private. `AGENTS.md`, "Wording", says what a contributor uses instead.
+- The logo and the app icon are decided: see `DESIGN.md`.
 
 ## Evidence on Hand
 
-- About 1,700 of the founder's own dictation recordings, on his machine only, for testing. Never committed, never used in automated tests.
-- Handy's published accuracy and speed figures for its models (`research/handy-study.md`). They are for read, general speech, not technical words or dialect.
-- One measurement of ours: the release build used 112 to 126 MB with no model loaded on the founder's Mac.
+- The founder's own dictation recordings, on his machine only, for testing. Never committed, never used in automated tests.
+- Handy's published accuracy and speed figures for its models (summarised in the founder's private notes). They are for read, general speech, not technical words or dialect.
+- Measurements of ours: the release build used 107 to 126 MB with no model loaded on the founder's Mac (`specs/001-slash-look/baseline.md`).
 - There are no customers, testimonials, usage numbers or benchmarks of our own. None may be invented.
 
 ## Product Principles

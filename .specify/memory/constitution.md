@@ -1,12 +1,12 @@
 # Slash Voice Constitution
 
-These principles bind every spec, plan and task list produced with spec-kit in this repository. The fuller rules are in `AGENTS.md` and `RULES.md`. They mirror the constitution of the product repository (`../Slash/.specify/memory/constitution.md`), with the parts that concern a shared engine and cloud tables left out and the parts that concern a microphone added.
+These principles bind every spec, plan and task list produced with spec-kit in this repository. The fuller rules are in `AGENTS.md` and `RULES.md`. They follow the constitution of the Slash product, which is private, with the parts that concern a microphone added.
 
 ## Core Principles
 
-### I. The design document is the source of truth
+### I. The product document is the source of truth
 
-`docs/2026-11-11-slash-voice-design.md` defines what Slash Voice is, until a requirements document and a task list replace it. One task is one spec-kit feature. A spec links to the document's numbered decisions and sections; it never restates, replaces or contradicts them. Brand, voice and the glossary are read from `../Slash` and changed only there. When a spec needs a decision changed, or two documents disagree, work stops and the founder decides.
+`PRODUCT.md` defines what Slash Voice is, until a requirements document and a task list replace it. One task is one spec-kit feature. A spec links to the documents and issues it relies on; it never restates, replaces or contradicts them. The brand's source is private and is changed only there; the values this app uses are in `DESIGN.md`. When a spec needs a decision changed, or two documents disagree, work stops and the founder decides.
 
 ### II. Tests first (NON-NEGOTIABLE)
 
@@ -22,7 +22,7 @@ The targets in `RULES.md` §4 are requirements with numbers, proposed until meas
 
 ### V. Built on Handy, visibly Slash Voice
 
-Handy's platform code stays as it is; our features live in their own module and attach at the few points the pipeline offers. Changes to Handy's files are small and explained. Visible names, artwork and the look are Slash Voice's and follow `../Slash/DESIGN.md`; internal names stay Handy's so its fixes merge cleanly. Handy's name, logo, icon and mascot never ship, and its copyright notice and the credit on the About screen stay.
+Handy's platform code stays as it is; our features live in their own module and attach at the few points the pipeline offers. Changes to Handy's files are small and explained. Visible names, artwork and the look are Slash Voice's and follow `DESIGN.md`; internal names stay Handy's so its fixes merge cleanly. Handy's name, logo, icon and mascot never ship, and its copyright notice and the credit on the About screen stay.
 
 ### VI. Two systems, two languages
 

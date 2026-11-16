@@ -2,60 +2,64 @@
 
 Slash Voice is a dictation app for Mac and Windows: hold a key, speak, and the text appears where the cursor is, transcribed on the device. It is for the founder and his friends first, and is built so it can launch later. What makes it its own product is planned, not built: it learns from past dictations, gets technical words right, and helps developers talk to coding agents.
 
-It is built on a renamed copy of [Handy](https://github.com/cjpais/Handy) (MIT). Today the app is Handy with the Slash Voice name and placeholder artwork; none of our own features exist yet. The design and the decisions are in `docs/2026-11-11-slash-voice-design.md`, the research behind them is in `research/`, and the current state is in `HANDOFF.md`. If code and documents disagree, or two documents disagree, or this repository and `../Slash` disagree, stop and report it. Do not pick one silently.
+It is built on a renamed copy of [Handy](https://github.com/cjpais/Handy) (MIT), and it is open source under the same licence. Today the app is Handy with the Slash Voice name, colours, typefaces, logo and icon; none of our own features exist yet. If code and documents disagree, or two documents disagree, stop and report it. Do not pick one silently.
+
+"The founder" in these files is the project's maintainer. Decisions that these files say are his are his: an outside contributor proposes them in an issue and does not settle them in a pull request.
 
 **Security, privacy and performance are requirements, not clean-up work.** The gates are in [RULES.md](RULES.md) and they bind every change.
 
-## This is one of three repositories
+## What is public and what is private
 
-| Repository         | What it is                                                                                                                                     |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `../Slash`         | The product: a desktop workspace where a team and their coding agents share threads. It holds the brand, the glossary and the decision record. |
-| `../Slash-Website` | The marketing website.                                                                                                                         |
-| This one           | Slash Voice.                                                                                                                                   |
+This repository is public. Two sibling folders on the founder's machine are private, and a contributor does not have them. Nothing in this repository depends on them to build or to pass its checks.
 
-These are read from the product folder. They are never copied here and never changed from here:
+| Folder                 | What it holds                                                                                          | What a contributor uses instead                                                                                               |
+| ---------------------- | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| `../Slash`             | The Slash product: the brand's source (colours, typefaces, logo), the glossary and its decision record | `DESIGN.md` and `specs/001-slash-look/contracts/look-tokens.md` hold every brand value this app uses. For wording, see below. |
+| `../Slash-Voice-Notes` | The founder's notes: the design decisions, the market research, the study of Handy and the handoff     | `PRODUCT.md` says what the product is and what is planned. `docs/handy-code-guide.md` says how Handy's code is organised.     |
 
-| What                                                                 | Where                                                       |
-| -------------------------------------------------------------------- | ----------------------------------------------------------- |
-| Product purpose, audience, voice, brand commitments                  | `../Slash/PRODUCT.md`                                       |
-| Colours, typefaces, shapes, the logo, what the founder has ruled out | `../Slash/DESIGN.md`                                        |
-| Words to use, in English and Arabic                                  | `../Slash/docs/01-glossary.md`, `../Slash/docs/06-ux.md` §8 |
-| Decisions (`D-` numbers)                                             | `../Slash/docs/README.md`                                   |
-| How the founder works                                                | `../Slash/HANDOFF.md` §1 and §2                             |
+Rules for those who do have the private folders:
 
-**Not reconciled yet, report it when it matters.** `../Slash/AGENTS.md` records voice as a part of the Slash engine (whisper.cpp through a Rust binding, ADR-019, milestone M6) and the Mac app as Swift (ADR-003). Slash Voice is a separate app on Tauri for both systems, built on Handy's engine. No decision record in `../Slash/docs/README.md` covers that yet, and whether Slash Voice decisions take `D-` numbers there is not decided. Ask before assuming either.
+- The brand is read from `../Slash` and changed only there. It is never copied here beyond the values already in `DESIGN.md` and the look contract.
+- Nothing from `../Slash-Voice-Notes` is committed here: no research, no handoff notes, no decision text.
+- If this repository and a private folder disagree, stop and report it.
+
+**Wording.** The glossary is private. Use the words already in `src/i18n/locales/en/translation.json` and `src/i18n/locales/ar/translation.json`, and the product words in `PRODUCT.md`. A new user-facing term is the founder's decision; propose it, do not invent it.
 
 ## Tech stack
 
-"Decided" means the founder chose it and it is recorded in the design document. "Comes with Handy" means it is what the copied code uses; changing it is a decision. "Proposed" and "Open" are not settled: do not build on them as if they were.
+"Decided" means the founder chose it. "Comes with Handy" means it is what the copied code uses; changing it is a decision. "Proposed" and "Open" are not settled: do not build on them as if they were.
 
-| Part                               | Choice                                                                                       | Status                                        | Source                     |
-| ---------------------------------- | -------------------------------------------------------------------------------------------- | --------------------------------------------- | -------------------------- |
-| Starting point                     | A renamed copy of Handy; its repository is the git remote `upstream`                         | Decided                                       | design §3, decision 9      |
-| App shell                          | Tauri 2, one build for Mac and Windows                                                       | Decided                                       | design §3, decision 9      |
-| Backend                            | Rust                                                                                         | Comes with Handy                              | `docs/handy-code-guide.md` |
-| Screens                            | React 18, TypeScript, Tailwind 4, Zustand, Vite                                              | Comes with Handy                              | `docs/handy-code-guide.md` |
-| Look                               | The Slash brand: colours, typefaces and logo from `../Slash/DESIGN.md`                       | Decided 2026-11-12; not designed or built yet | `DESIGN.md`                |
-| Design tool                        | Pencil (`.pen`), with the `impeccable` skill                                                 | Decided 2026-11-12                            | `DESIGN.md`                |
-| Speech engine                      | `transcribe-cpp` in its own worker process; Metal on Apple Silicon, Vulkan on Windows        | Comes with Handy                              | `research/handy-study.md`  |
-| Speech models                      | English: `parakeet-unified-en-0.6b`. Arabic with English: `cohere-transcribe-arabic-07-2026` | To verify, on the founder's own recordings    | `research/handy-study.md`  |
-| Rewrite model                      | Local first, cloud optional; only text is ever sent                                          | Direction decided; the model is open          | design §3, decision 7      |
-| Our own features                   | A separate Rust module and a separate screens folder, apart from Handy's files               | Proposed                                      | design §4                  |
-| Storage                            | SQLite on the device, no sync                                                                | Comes with Handy                              | design §4                  |
-| Text                               | `src/i18n/locales/<language>/translation.json`, 26 languages; no text literals in components | Comes with Handy                              | `docs/handy-code-guide.md` |
-| Package manager and runner         | Bun; Rust stable through rustup                                                              | Comes with Handy                              | `BUILD.md`                 |
-| Pipeline                           | GitHub Actions, `checks.yml`                                                                 | Proposed; the repository is not on GitHub yet | `RULES.md` §6              |
-| Self-update, signing, notarisation | Off and none                                                                                 | Open                                          | design §7                  |
-| Requirement IDs and task list      | Not written                                                                                  | Open                                          | below                      |
+| Part                               | Choice                                                                                       | Status                                                                          |
+| ---------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| Starting point                     | A renamed copy of Handy; its repository is the git remote `upstream`                         | Decided                                                                         |
+| Licence                            | MIT, open source                                                                             | Decided 2026-11-15                                                              |
+| App shell                          | Tauri 2, one build for Mac and Windows                                                       | Decided                                                                         |
+| Backend                            | Rust                                                                                         | Comes with Handy                                                                |
+| Screens                            | React 18, TypeScript, Tailwind 4, Zustand, Vite                                              | Comes with Handy                                                                |
+| Look                               | The Slash brand: colours, typefaces and logo, as recorded in `DESIGN.md`                     | Decided; palette, type, logo and icon built. The new layout is drawn, not built |
+| Design tool                        | Pencil (`.pen`), with the `impeccable` skill                                                 | Decided                                                                         |
+| Speech engine                      | `transcribe-cpp` in its own worker process; Metal on Apple Silicon, Vulkan on Windows        | Comes with Handy                                                                |
+| Speech models                      | English: `parakeet-unified-en-0.6b`. Arabic with English: `cohere-transcribe-arabic-07-2026` | To verify, by measurement                                                       |
+| Rewrite model                      | Local first, cloud optional; only text is ever sent                                          | Direction decided; the model is open                                            |
+| Our own features                   | A separate Rust module and a separate screens folder, apart from Handy's files               | Proposed                                                                        |
+| Storage                            | SQLite on the device, no sync                                                                | Comes with Handy                                                                |
+| Text                               | `src/i18n/locales/<language>/translation.json`, 26 languages; no text literals in components | Comes with Handy                                                                |
+| Package manager and runner         | Bun; Rust stable through rustup                                                              | Comes with Handy                                                                |
+| Pipeline                           | GitHub Actions, `checks.yml`                                                                 | In use                                                                          |
+| Model hosting                      | Models still download from Handy's server                                                    | Open; to change before installers are published                                 |
+| Self-update, signing, notarisation | Off and none                                                                                 | Open                                                                            |
+| Requirement IDs and task list      | Not written                                                                                  | Open                                                                            |
 
 ## Build order
 
-1. **Milestone 1.** Rename, build and run on Mac: done 2026-11-12. Still to do: the Windows build, and replacing Handy's screens and pink theme with the Slash brand.
-2. **The look.** Designed in Pencil first, shown to the founder as stills, built only after he approves them.
-3. **Features**, in the order of design §6: technical vocabulary and correction memory, repo-aware names, voice slash commands, point-and-speak, rewrite in the founder's style, live preview, spoken agent status.
+1. **Rename, build and run on Mac.** Done.
+2. **The Slash colours, typefaces, logo and icon.** Done (`specs/001-slash-look`). Its settings screen does not yet match its still (`specs/001-slash-look/findings.md`).
+3. **Published as open source.** `specs/003-open-source`.
+4. **Installers for Mac and Windows**, built by the pipeline, and model downloads that no longer depend on Handy's server.
+5. **The new layout.** Chosen by the founder from stills (`design/README.md`, direction C); not built.
+6. **Features**, in this order: technical vocabulary and correction memory, repo-aware names, voice slash commands, point-and-speak, rewrite in the user's style, live preview, spoken agent status.
 
-There is no requirements document and no task list yet. Writing them (requirement IDs and one task per feature, in `docs/`) is the first spec-kit work, and their ID prefixes are the founder's to choose. Until they exist, a spec links to the numbered decisions and sections of the design document.
+There is no requirements document and no task list yet. Writing them (requirement IDs and one task per feature, in `docs/`) is the first spec-kit work for the features, and their ID prefixes are the founder's to choose. Until they exist, a spec links to `PRODUCT.md` and to the issue that asked for the change.
 
 Every task needs the founder's go-ahead. Do not start a task whose dependencies are not done.
 
@@ -72,13 +76,13 @@ Every task is built through spec-kit. No code is written without a spec, a plan 
 | 5    | `/speckit-analyze`   | Consistency check. Fix findings before step 6.                                                                   |
 | 6    | `/speckit-implement` | The code, tests first.                                                                                           |
 
-A spec links to decisions and document sections. It never restates or replaces them.
+A spec links to the documents and issues it relies on. It never restates or replaces them.
 
 ## Before you write code
 
-1. Read the design document and the section of `research/handy-study.md` that covers the part you touch.
-2. Read `docs/handy-code-guide.md` before changing any of Handy's files.
-3. Use the words in `../Slash/docs/01-glossary.md` exactly, in code and in text.
+1. Read `PRODUCT.md`, and `docs/handy-code-guide.md` before changing any of Handy's files.
+2. Read `DESIGN.md` before touching anything a user sees.
+3. Use the words already in the locale files exactly, in code and in text (see "Wording" above).
 4. If something is unclear or contradictory, ask. Do not guess.
 
 ## How to work
@@ -118,7 +122,7 @@ These hold on every task, whether or not a skill is invoked.
 
 ## Orchestrator and helper
 
-The same as in the product repository (`../Slash/AGENTS.md`, D-215): Claude Code orchestrates and plans; Codex is a helper through the `codex-delegate` skill and never claims, commits, pushes or merges.
+When two coding programs work together here, one orchestrates and plans and the other is a helper. In the founder's setup Claude Code orchestrates and Codex helps through the `codex-delegate` skill. The helper never claims a task, commits, pushes or merges.
 
 ## Commands
 
@@ -132,7 +136,7 @@ On this Mac, add `/opt/homebrew/opt/rustup/bin` to `PATH` first.
 
 Not built yet: dependency vulnerability and licence checks, benchmarks, and end-to-end tests with the `e2e` framework.
 
-More commands and how Handy's code is organised: `docs/handy-code-guide.md`.
+More commands and how Handy's code is organised: `docs/handy-code-guide.md`. How to set up each system: `BUILD.md`.
 
 ## When you finish
 

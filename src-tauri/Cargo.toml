@@ -1,8 +1,8 @@
 [package]
 name = "handy"
-version = "0.10.0"
-description = "Handy"
-authors = ["cjpais"]
+version = "0.1.0"
+description = "Slash Voice, a dictation app built on Handy"
+authors = ["cjpais", "Slash Voice contributors"]
 edition = "2021"
 license = "MIT"
 default-run = "handy"

@@ -2,7 +2,7 @@
 
 Slash Voice listens to a person's microphone, reads which app they are in, and types into it. A change that is correct but sends audio somewhere, types the wrong thing into a terminal, or makes dictation feel slow is not done.
 
-These rules apply to every agent and every person. They follow the same order of work as `../Slash/RULES.md`. Where this file and the design document differ, stop and report it.
+These rules apply to every agent and every person. Where this file and another document differ, stop and report it.
 
 Some checks named here do not exist yet. Each one says so. The rules themselves apply from the first line of code.
 
@@ -48,7 +48,7 @@ Never break these. If a task seems to need it, stop and ask.
 
 ## 4. Performance
 
-- The targets are proposed, taken from the October MVP specification, and none has been measured:
+- The targets are proposed, and none has been measured:
 
   | Measure                                                           | Proposed target                                                          |
   | ----------------------------------------------------------------- | ------------------------------------------------------------------------ |
@@ -95,7 +95,7 @@ If a check cannot run on your machine, say so in the pull request. Do not report
 
 Not in the gate yet: the Mac and Windows builds, and the Rust linter. Clippy with warnings as errors finds 18 problems in Handy's own code under the current Rust, so gating on it means changing Handy's files first.
 
-Handy's own workflows are still in `.github/workflows/`. They build and release Handy with Handy's signing keys, which this repository does not have. Which of them to keep is not decided.
+Handy's own workflows were removed when the repository was published: they build and release Handy with signing keys this repository does not have. A release workflow of our own is not written yet.
 
 Never merge with a red or skipped required check. Never bypass a hook or a check to get a change in.
 
@@ -111,4 +111,4 @@ Never merge with a red or skipped required check. Never bypass a hook or a check
 
 ## 8. Design
 
-Before any design work, read `DESIGN.md` and `../Slash/DESIGN.md` in full. Design is done in Pencil first, shown to the founder as stills, and built in code only after he approves them. Design work uses the `impeccable` skill.
+Before any design work, read `DESIGN.md` in full, and `../Slash/DESIGN.md` if you have that private folder. Design is done in Pencil first, shown to the founder as stills, and built in code only after he approves them. Design work uses the `impeccable` skill.

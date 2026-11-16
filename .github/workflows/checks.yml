@@ -1,6 +1,5 @@
-# Required checks on every pull request (RULES.md §6), in the style of ../Slash.
+# Required checks on every pull request (RULES.md §6).
 # Actions are pinned to a commit. The token is read-only. No secret is used.
-# Not run yet: this repository is not on GitHub. The same commands pass locally.
 name: checks
 
 on:

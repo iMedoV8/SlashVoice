@@ -1,6 +1,8 @@
 # Build Instructions
 
-This guide covers how to set up the development environment and build Handy from source across different platforms.
+This guide covers how to set up the development environment and build Slash Voice from source on macOS and Windows.
+
+Slash Voice is built on [Handy](https://github.com/cjpais/Handy), and most of this guide is Handy's. The Linux sections are kept as Handy wrote them and have not been tested with Slash Voice: Linux is not a supported system yet, and the file names in those sections still follow Handy's.
 
 ## Prerequisites
 
@@ -77,8 +79,8 @@ This guide covers how to set up the development environment and build Handy from
 ### 1. Clone the Repository
 
 ```bash
-git clone git@github.com:cjpais/Handy.git
-cd Handy
+git clone https://github.com/iMedoV8/slash-voice.git
+cd slash-voice
 ```
 
 ### 2. Install Dependencies
@@ -135,33 +137,32 @@ Resources only need re-copying if they change upstream (new icons, sounds, model
 
 Local builds use the ad-hoc `signingIdentity: "-"`. A rebuild can have a new macOS code
 identity while the old **System Settings > Privacy & Security > Accessibility** entry
-remains visibly enabled, leaving Handy on `Waiting...`.
+remains visibly enabled, leaving Slash Voice on `Waiting...`.
 
-After installing the final bundle at `/Applications/Handy.app`, quit Handy, clear only its
+After installing the final bundle at `/Applications/Slash Voice.app`, quit Slash Voice, clear only its
 stale Accessibility record, then reopen it:
 
 ```bash
-osascript -e 'tell application id "com.pais.handy" to quit' || true
-tccutil reset Accessibility com.pais.handy
-open /Applications/Handy.app
+osascript -e 'tell application id "com.slashvoice.app" to quit' || true
+tccutil reset Accessibility com.slashvoice.app
+open "/Applications/Slash Voice.app"
 ```
 
 Grant Accessibility again when prompted. This does not reset Microphone or other TCC
-services, and official releases normally do not need it.
+services. Every unsigned build needs it, because each one has a new identity.
 
 For optional diagnosis, compare the designated requirements of the previous and rebuilt
 bundles:
 
 ```bash
-codesign -dr - /path/to/previous/Handy.app 2>&1
-codesign -dr - /Applications/Handy.app 2>&1
+codesign -dr - "/path/to/previous/Slash Voice.app" 2>&1
+codesign -dr - "/Applications/Slash Voice.app" 2>&1
 ```
 
 An ad-hoc requirement contains a `cdhash`; a changed requirement confirms the rebuild is
 not covered by the old grant. The reset procedure does not require this check.
 
-See [issue #1618](https://github.com/cjpais/Handy/issues/1618) for the related onboarding
-and stale-permission report.
+Handy's issue 1618 is the original report of this.
 
 ### AppImage build fails on Arch / rolling-release distros
 
@@ -234,7 +235,7 @@ around either case with a short Cargo target directory:
 $env:CARGO_TARGET_DIR = "C:\h"
 
 # Or persist it for all future terminals (note: redirects ALL your
-# Rust projects' build output, not just Handy):
+# Rust projects' build output, not just Slash Voice):
 [Environment]::SetEnvironmentVariable('CARGO_TARGET_DIR', 'C:\h', 'User')
 ```
 
@@ -245,11 +246,11 @@ and `bun run tauri build` work normally.
 
 ### Windows `tauri build` fails at bundling with `program not found`
 
-If the build compiles all the way to `Built application at: ...\handy.exe` and
+If the build compiles all the way to `Built application at: ...\slash-voice.exe` and
 then fails with:
 
 ```
-Signing C:\...\handy.exe with a custom signing command
+Signing C:\...\slash-voice.exe with a custom signing command
 failed to bundle project `program not found`
 ```
 
