@@ -1,0 +1,208 @@
+# Builds the Windows installer and the Mac disk image (specs/004-installers).
+# Started by hand, it attaches both to a draft pre-release. On a pull request
+# that changes this file it only builds, so the workflow is tested before it
+# reaches main. Adapted from Handy's build.yml and release.yml.
+# Actions are pinned to a commit. No secret is used. Only the release job can
+# write, and only when the workflow was started by hand.
+name: release
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/release.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    name: build ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: windows-x64
+            os: windows-latest
+            args: "--bundles nsis"
+            bundle-dir: src-tauri/target/release/bundle/nsis
+            pattern: "*-setup.exe"
+            suffix: windows-x64-setup.exe
+          # macOS 26 for the Apple Intelligence SDK, as in Handy's workflow.
+          - name: macos-arm64
+            os: macos-26
+            args: "--target aarch64-apple-darwin --bundles dmg"
+            bundle-dir: src-tauri/target/aarch64-apple-darwin/release/bundle/dmg
+            pattern: "*.dmg"
+            suffix: macos-arm64.dmg
+    steps:
+      # Deep build paths. The speech engine's own build works around the
+      # 260-character limit; this is for git and the other tools.
+      - name: Enable long paths (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" `
+            -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
+          git config --system core.longpaths true
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+
+      # A release is always compiled from scratch: no cache is restored, so a
+      # stale native library can never be linked into an installer.
+      - name: Install Rust stable
+        shell: bash
+        run: |
+          rustup toolchain install stable --profile minimal --no-self-update
+          rustup default stable
+          if [ "$RUNNER_OS" = "macOS" ]; then rustup target add aarch64-apple-darwin; fi
+          rustc --version
+
+      - name: Install Vulkan SDK (Windows)
+        if: runner.os == 'Windows'
+        uses: humbletim/install-vulkan-sdk@30ba978f977e81b72d091fc8888feb1fb26f9aff # v1.2
+        with:
+          version: 1.4.309.0
+          cache: true
+
+      # build.rs stages these runtime files beside the app (it reads
+      # HANDY_VC_REDIST_DIRS), so the app runs without a separate install.
+      - name: Locate the VC++ runtime (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $vsRoot = & $vswhere -latest -products * -property installationPath
+          if (-not $vsRoot) { throw "vswhere found no Visual Studio installation" }
+          $versionFile = Join-Path $vsRoot "VC\Auxiliary\Build\Microsoft.VCRedistVersion.default.txt"
+          $redistVersion = (Get-Content $versionFile).Trim()
+          $archDir = Join-Path $vsRoot "VC\Redist\MSVC\$redistVersion\x64"
+          if (-not (Test-Path $archDir)) { throw "VC++ redist dir not found: $archDir" }
+          $crt = Get-ChildItem $archDir -Directory -Filter "Microsoft.VC*.CRT" |
+            Sort-Object Name | Select-Object -Last 1
+          if (-not $crt -or -not (Test-Path (Join-Path $crt.FullName "msvcp140.dll"))) {
+            throw "VC++ CRT redist dir not found or incomplete under: $archDir"
+          }
+          $omp = Get-ChildItem $archDir -Directory -Filter "Microsoft.VC*.OpenMP" |
+            Sort-Object Name | Select-Object -Last 1
+          if (-not $omp -or -not (Test-Path (Join-Path $omp.FullName "vcomp140.dll"))) {
+            throw "VC++ OpenMP redist dir not found or incomplete under: $archDir"
+          }
+          $dirs = "$($crt.FullName);$($omp.FullName)"
+          Write-Host "HANDY_VC_REDIST_DIRS=$dirs"
+          Add-Content -Path $env:GITHUB_ENV -Value "HANDY_VC_REDIST_DIRS=$dirs"
+
+      - name: Install SPIRV headers for the Vulkan build (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          vcpkg install spirv-headers:x64-windows
+          if ($LASTEXITCODE -ne 0) { throw "vcpkg install spirv-headers failed" }
+          $prefix = "$env:VCPKG_INSTALLATION_ROOT/installed/x64-windows" -replace '\\','/'
+          $combined = if ($env:CMAKE_PREFIX_PATH) { "$prefix;$env:CMAKE_PREFIX_PATH" } else { $prefix }
+          Add-Content $env:GITHUB_ENV "CMAKE_PREFIX_PATH=$combined"
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build
+        shell: bash
+        env:
+          BUILD_ARGS: ${{ matrix.args }}
+        run: bun run tauri build $BUILD_ARGS
+
+      # A missing runtime file gives an app that will not start.
+      - name: Check the staged runtime files (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $dlls = Get-ChildItem "src-tauri/transcribe-libs" -Filter "*.dll" -ErrorAction SilentlyContinue
+          if (-not $dlls) { throw "src-tauri/transcribe-libs holds no DLLs" }
+          foreach ($name in @("msvcp140.dll", "vcruntime140.dll", "vcomp140.dll")) {
+            if (-not ($dlls | Where-Object { $_.Name -ieq $name })) { throw "missing $name" }
+          }
+          if (-not ($dlls | Where-Object { $_.Name -like "*transcribe*" })) { throw "missing the transcribe runtime" }
+          if (-not ($dlls | Where-Object { $_.Name -like "*ggml*" })) { throw "missing the ggml runtime" }
+          $dlls | ForEach-Object { Write-Host $_.Name }
+
+      - name: Name the installer and write its checksum
+        shell: bash
+        env:
+          BUNDLE_DIR: ${{ matrix.bundle-dir }}
+          PATTERN: ${{ matrix.pattern }}
+          SUFFIX: ${{ matrix.suffix }}
+        run: |
+          set -euo pipefail
+          VERSION=$(grep -o '"version": "[^"]*"' src-tauri/tauri.conf.json | head -n 1 | cut -d'"' -f4)
+          SRC=$(find "$BUNDLE_DIR" -maxdepth 1 -name "$PATTERN" -print -quit)
+          if [ -z "$SRC" ]; then echo "::error::no file matching $PATTERN in $BUNDLE_DIR"; ls -la "$BUNDLE_DIR" || true; exit 1; fi
+          ASSET="slash-voice_${VERSION}_${SUFFIX}"
+          mkdir -p dist-release
+          cp "$SRC" "dist-release/$ASSET"
+          cd dist-release
+          if command -v sha256sum >/dev/null 2>&1; then sha256sum "$ASSET" > "$ASSET.sha256"; else shasum -a 256 "$ASSET" > "$ASSET.sha256"; fi
+          ls -l
+          cat "$ASSET.sha256"
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: slash-voice-${{ matrix.name }}
+          path: dist-release/*
+          if-no-files-found: error
+          retention-days: 14
+
+  release:
+    name: draft release
+    if: github.event_name == 'workflow_dispatch'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          path: dist-release
+          merge-multiple: true
+
+      # A draft is refreshed; a published release is never touched.
+      - name: Create or refresh the draft pre-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TARGET_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          VERSION=$(grep -o '"version": "[^"]*"' src-tauri/tauri.conf.json | head -n 1 | cut -d'"' -f4)
+          TAG="v$VERSION"
+          NOTES="$PWD/.github/release-notes.md"
+          cd dist-release
+          cat ./*.sha256 > SHA256SUMS.txt
+          rm ./*.sha256
+          ls -l
+          cat SHA256SUMS.txt
+          if gh release view "$TAG" --json isDraft >/dev/null 2>&1; then
+            if [ "$(gh release view "$TAG" --json isDraft --jq .isDraft)" != "true" ]; then
+              echo "::error::$TAG is already published. Raise the version before building again."
+              exit 1
+            fi
+            gh release upload "$TAG" ./* --clobber
+          else
+            gh release create "$TAG" ./* --draft --prerelease --target "$TARGET_SHA" --title "Slash Voice $VERSION" --notes-file "$NOTES"
+          fi

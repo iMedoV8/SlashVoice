@@ -27,14 +27,7 @@ You need [Rust](https://rustup.rs/), [Bun](https://bun.sh/) and the tools for yo
    bun install
    ```
 
-3. Download the small model that detects silence.
-
-   ```bash
-   mkdir -p src-tauri/resources/models
-   curl -L -o src-tauri/resources/models/silero-vad-v6.2-F32.gguf https://huggingface.co/handy-computer/silero-vad-v6.2-gguf/resolve/main/silero-vad-v6.2-F32.gguf
-   ```
-
-4. Run the app.
+3. Run the app.
 
    ```bash
    bun run tauri dev

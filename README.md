@@ -17,8 +17,6 @@ Slash Voice is a desktop app for macOS and Windows. It is open source under the 
 - 26 interface languages, with English and Arabic (right to left) treated as first-class.
 - Dark and light modes.
 
-
-
 ## What is planned
 
 None of this is built yet.
@@ -41,9 +39,9 @@ The rules that hold the project to this are in [RULES.md](RULES.md).
 
 ## Install
 
-There are no installers yet. They will be published on this repository's [releases page](https://github.com/iMedoV8/slash-voice/releases). Until then, build from source.
+Installers for Windows (64-bit) and for Macs with Apple Silicon are built by this repository's pipeline and published on the [releases page](https://github.com/iMedoV8/slash-voice/releases). If that page is empty, the first release has not been published yet: build from source.
 
-The first builds will not be signed with a paid certificate, so both systems will warn you on first launch:
+The builds are not signed with a paid certificate, so both systems warn you on first launch:
 
 - **Windows** says "unknown publisher". Choose **More info**, then **Run anyway**.
 - **macOS** says it cannot verify the app. Open **System Settings → Privacy & Security** and choose **Open Anyway**.
@@ -60,13 +58,6 @@ cd slash-voice
 bun install
 ```
 
-Download the small model that detects silence:
-
-```bash
-mkdir -p src-tauri/resources/models
-curl -L -o src-tauri/resources/models/silero-vad-v6.2-F32.gguf https://huggingface.co/handy-computer/silero-vad-v6.2-gguf/resolve/main/silero-vad-v6.2-F32.gguf
-```
-
 Run it in development, or build the app:
 
 ```bash
@@ -79,10 +70,10 @@ bun run tauri build
 
 ## Known limits
 
-- **Speech models are still downloaded from Handy's server.** Slash Voice does not host them yet. This will change before installers are published.
-- **Linux is not supported.** Handy's Linux code and packaging files are still in the repository and are untested here.
-- **The settings screen does not yet match its design.** The colours and typefaces are ours; the layout is still close to Handy's. The new look is drawn and waiting to be built ([design/README.md](design/README.md)).
-- **No signed builds, no self-update.**
+- **Slash Voice does not host the speech models yet.** They are downloaded from Hugging Face repositories published by the author of the app it is built on, and from that project's own server when Hugging Face fails.
+- **Linux is not supported.** The Linux code and packaging files that came with the code base are still in the repository and are untested here.
+- **The settings screen does not yet match its design.** The colours and typefaces are ours; the layout is not yet. The new look is drawn and waiting to be built ([design/README.md](design/README.md)).
+- **No signed builds, no self-update.** No Intel Mac build and no Windows ARM build.
 
 ## Contributing
 
