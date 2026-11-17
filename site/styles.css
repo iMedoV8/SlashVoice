@@ -331,19 +331,23 @@ h1 {
   border-end-start-radius: 4.75rem;
 }
 
+/* A block of fixed height, so its middle sits exactly on the tail's horizontal line. As an inline
+   box it rode on the line's baseline and sat about 8px low. */
 .source {
-  display: inline-flex;
+  display: flex;
+  width: fit-content;
+  height: 3rem;
   align-items: center;
   gap: 0.625rem;
   margin-block-start: calc(-1.5rem - var(--thread) / 2);
   margin-inline-start: calc(var(--thread-x) + min(13.5rem, 55%));
-  padding: 0.75rem 1.25rem;
+  padding-inline: 1.25rem;
   border: 1px solid var(--rule);
   border-radius: var(--radius-pill);
   background: var(--panel);
   font-size: 0.9375rem;
   font-weight: 600;
-  line-height: 1.5;
+  line-height: 1;
   text-decoration: none;
   transition: border-color var(--duration-quick) var(--ease-out);
 }
@@ -505,17 +509,6 @@ h1 {
 
 .footer ul {
   gap: 0.5rem 1.5rem;
-}
-
-.credit {
-  flex-basis: 100%;
-  margin: 0;
-}
-
-.credit a {
-  text-decoration: underline;
-  text-decoration-color: var(--rule);
-  text-underline-offset: 0.2em;
 }
 
 /* Arabic letters join, so they are never tightened. */

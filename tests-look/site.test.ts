@@ -53,10 +53,13 @@ describe.each(PAGES)("$file", ({ file, lang, dir }) => {
     const outside = hrefs.filter(
       (h) =>
         /^https?:/.test(h) &&
-        !h.startsWith("https://github.com/iMedoV8/slash-voice") &&
-        h !== "https://github.com/cjpais/Handy",
+        !h.startsWith("https://github.com/iMedoV8/slash-voice"),
     );
     expect(outside).toEqual([]);
+  });
+
+  test("carries no credit line for Handy (the founder, 2026-11-17)", () => {
+    expect(html()).not.toMatch(/Handy/);
   });
 
   test("offers the other language", () => {
