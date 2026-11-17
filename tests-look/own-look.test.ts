@@ -127,10 +127,28 @@ describe("the pages", () => {
     expect(advanced).toMatch(/scrollIntoView/);
   });
 
-  test("About keeps the credit to Handy", () => {
-    const about = read("src/components/settings/about/AboutSettings.tsx");
-    expect(about).toMatch(/github\.com\/cjpais\/Handy/);
-    expect(about).toMatch(/settings\.about\.sourceCode/);
+  // Handy is credited in the README only (founder, 2026-11-18). MIT asks that
+  // its notice ship with every copy, so the licence file is bundled instead.
+  test("About does not name or link to Handy", () => {
+    // Comments and the logo component's internal name are not shown.
+    const about = read("src/components/settings/about/AboutSettings.tsx")
+      .replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, "")
+      .replace(/HandyTextLogo/g, "");
+    expect(about).not.toMatch(/cjpais|Handy|sourceCode/);
+    for (const lang of ["en", "ar"]) {
+      const text = JSON.parse(
+        read(`src/i18n/locales/${lang}/translation.json`),
+      );
+      expect(JSON.stringify(text.settings.about)).not.toMatch(/Handy/);
+    }
+  });
+
+  test("the licence, with Handy's copyright notice, ships inside the app", () => {
+    const bundled = "src-tauri/resources/LICENSE.txt";
+    expect(existsSync(join(ROOT, bundled))).toBe(true);
+    expect(read(bundled)).toBe(read("LICENSE"));
+    const bundle = JSON.parse(read("src-tauri/tauri.conf.json")).bundle;
+    expect(bundle.resources).toContain("resources/**/*");
   });
 });
 

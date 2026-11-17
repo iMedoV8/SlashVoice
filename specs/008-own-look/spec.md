@@ -35,7 +35,7 @@ The founder opens Slash Voice. It opens on History, not on settings. The sidebar
 | Models       | On this computer (the selected one marked, delete), for your languages (download, progress, cancel), and the rest folded under "Untested"                            |
 | Post Process | Today's settings, in the new layout                                                                                                                                  |
 | Advanced     | Today's settings, with its groups as a jump control in the header                                                                                                    |
-| About        | Version, links, data and log folders, the "Built on Handy" credit                                                                                                    |
+| About        | Version, data and log folders, credits (the "Built on Handy" row was removed on 2026-11-18 at the founder's word; Handy is credited in the README)                   |
 
 **Acceptance Scenarios**:
 

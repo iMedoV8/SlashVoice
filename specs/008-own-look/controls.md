@@ -133,16 +133,16 @@ After: the release build of this branch, launched from `src-tauri/target` the sa
 
 ## About
 
-| Control today                      | Where after  | Done |
-| ---------------------------------- | ------------ | ---- |
-| App language                       | General      | [x]  |
-| Theme                              | General      | [x]  |
-| Version                            | About header | [x]  |
-| Show what's new after an update    | About        | [x]  |
-| Built on Handy, link to its source | About        | [x]  |
-| App data folder, open              | About        | [x]  |
-| Log folder, open                   | About        | [x]  |
-| Acknowledgement: ggml              | About        | [x]  |
+| Control today                      | Where after                                                                                      | Done |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------ | ---- |
+| App language                       | General                                                                                          | [x]  |
+| Theme                              | General                                                                                          | [x]  |
+| Version                            | About header                                                                                     | [x]  |
+| Show what's new after an update    | About                                                                                            | [x]  |
+| Built on Handy, link to its source | Removed: Handy is credited in the README; the licence ships inside the app (founder, 2026-11-18) | [x]  |
+| App data folder, open              | About                                                                                            | [x]  |
+| Log folder, open                   | About                                                                                            | [x]  |
+| Acknowledgement: ggml              | About                                                                                            | [x]  |
 
 ## Debug (shown in debug mode)
 

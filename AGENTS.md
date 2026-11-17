@@ -100,7 +100,7 @@ A spec links to the documents and issues it relies on. It never restates or repl
 - **Only text goes to a rewrite model**, and only when the user has turned that on.
 - **No telemetry, tracker or analytics** unless a decision record names it.
 - **Visible names are Slash Voice; internal names stay Handy's.** The product name, the identifier (`com.slashvoice.app`), the program name (`slash-voice`), window and tray text, translations, icons and logos are ours. The crate name `handy`, `HANDY_*` environment variables, component names such as `HandyHand`, and code comments are left alone on purpose, so merges from `upstream` stay easy.
-- **Never ship Handy's name, logo, icon or mascot**, and never imply Handy endorses Slash Voice. Keep Handy's copyright notice (`LICENSE`) and the "Built on Handy" credit on the About screen.
+- **Never ship Handy's name, logo, icon or mascot**, and never imply Handy endorses Slash Voice. Keep Handy's copyright notice: in `LICENSE`, and in the copy bundled inside the app (`src-tauri/resources/LICENSE.txt`), which MIT requires in every copy. Handy is credited in the README's closing section only, not in the app's screens (founder, 2026-11-18).
 - **Self-update stays off** (`SLASH_VOICE_HAS_RELEASE_FEED` in `src-tauri/src/settings.rs`) until Slash Voice has its own release feed and signing key. Never point the updater at Handy's releases.
 - **New Slash Voice features go in their own module**, not spread through Handy's files. Keep changes to Handy's files small.
 - **All user-facing text goes in the locale files.** The linter rejects text literals in components. A screen is done only when it works in English and in Arabic, right-to-left.

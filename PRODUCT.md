@@ -37,7 +37,7 @@ A local dictation app that knows it is talking to a coding agent. Other tools re
 - **Arabic mixed with English is part of the product from the start**, not a later addition. Which speech model serves it is not decided; it is to be measured on the founder's own recordings.
 - Audio stays on the device unless the user chooses an option that says otherwise. Only text may be sent to a rewrite model, and only when turned on.
 - Self-update is off. The builds are not signed with a paid certificate.
-- Built on a renamed copy of Handy (MIT). Handy's name, logo, icon and mascot never appear; a "Built on Handy" credit stays on the About screen.
+- Built on a renamed copy of Handy (MIT). Handy's name, logo, icon and mascot never appear in the app. Handy is credited in the README; its licence, with its copyright notice, ships inside the app (founder, 2026-11-18).
 - Open source under the MIT licence (founder, 2026-11-15).
 - Open: the licences of the speech models, where models are hosted, and pricing.
 

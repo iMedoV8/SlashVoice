@@ -22,7 +22,7 @@ The targets in `RULES.md` §4 are requirements with numbers, proposed until meas
 
 ### V. Built on Handy, visibly Slash Voice
 
-Handy's platform code stays as it is; our features live in their own module and attach at the few points the pipeline offers. Changes to Handy's files are small and explained. Visible names, artwork and the look are Slash Voice's and follow `DESIGN.md`; internal names stay Handy's so its fixes merge cleanly. Handy's name, logo, icon and mascot never ship, and its copyright notice and the credit on the About screen stay.
+Handy's platform code stays as it is; our features live in their own module and attach at the few points the pipeline offers. Changes to Handy's files are small and explained. Visible names, artwork and the look are Slash Voice's and follow `DESIGN.md`; internal names stay Handy's so its fixes merge cleanly. Handy's name, logo, icon and mascot never ship, and its copyright notice stays, in `LICENSE` and bundled inside the app; the credit is in the README (founder, 2026-11-18).
 
 ### VI. Two systems, two languages
 

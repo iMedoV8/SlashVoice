@@ -58,6 +58,7 @@ Differences that come from a decision are marked with it.
 
 ### About (still 7)
 
+- No "Built on Handy" row and no "View Handy" button. Founder, 2026-11-18: Handy is credited in the README only. Its licence, with its copyright notice, ships inside the app (`src-tauri/resources/LICENSE.txt`), as MIT requires.
 - No app icon beside the name: the logo is shown large instead.
 - "Update checks are off" shows only when self-update is locked, which is the case in every build until Slash Voice has its own release feed.
 - The ggml line keeps today's longer text.

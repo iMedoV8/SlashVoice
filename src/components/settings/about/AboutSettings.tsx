@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { getVersion } from "@tauri-apps/api/app";
-import { openUrl } from "@tauri-apps/plugin-opener";
-import { ExternalLink } from "lucide-react";
 import { commands } from "@/bindings";
 import HandyTextLogo from "../../icons/HandyTextLogo";
 import { SettingsGroup } from "../../ui/SettingsGroup";
 import { SettingContainer } from "../../ui/SettingContainer";
 import { PathDisplay } from "../../ui/PathDisplay";
-import { Button } from "../../ui/Button";
 import { AppDataDirectory } from "../AppDataDirectory";
 import { ShowWhatsNewOnUpdate } from "../ShowWhatsNewOnUpdate";
 import { LogDirectory } from "../debug";
 
-/** About (still 7): the name and version, credits, folders, updates. */
+/**
+ * About (still 7): the name and version, credits, folders, updates. Handy is
+ * credited in the README and its licence ships inside the app (founder,
+ * 2026-11-18), so it is not named here.
+ */
 export const AboutSettings: React.FC = () => {
   const { t } = useTranslation();
   const [version, setVersion] = useState("");
@@ -58,23 +59,6 @@ export const AboutSettings: React.FC = () => {
       </div>
 
       <SettingsGroup title={t("settings.about.credits")}>
-        {/* Credit required by Handy's MIT licence: Slash Voice is built on it. */}
-        <SettingContainer
-          title={t("settings.about.sourceCode.title")}
-          description={t("settings.about.sourceCode.description")}
-          descriptionMode="inline"
-          grouped={true}
-        >
-          <Button
-            variant="secondary"
-            size="md"
-            onClick={() => openUrl("https://github.com/cjpais/Handy")}
-            className="flex items-center gap-[6px]"
-          >
-            <ExternalLink width={13} height={13} aria-hidden="true" />
-            {t("settings.about.sourceCode.button")}
-          </Button>
-        </SettingContainer>
         <SettingContainer
           title={t("settings.about.acknowledgments.ggml.title")}
           description={t("settings.about.acknowledgments.ggml.details")}

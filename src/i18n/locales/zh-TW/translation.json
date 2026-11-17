@@ -908,11 +908,6 @@
         "title": "應用程式資料目錄",
         "description": "Slash Voice 儲存資料的位置"
       },
-      "sourceCode": {
-        "title": "Built on Handy",
-        "description": "Slash Voice is built on Handy, an open-source dictation app by CJ Pais, used under the MIT licence.",
-        "button": "View Handy"
-      },
       "supportDevelopment": {
         "title": "支持開發",
         "description": "幫助我們繼續開發 Slash Voice",
