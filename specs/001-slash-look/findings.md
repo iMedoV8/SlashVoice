@@ -34,6 +34,8 @@ Task T018 was ticked, but the built screen differs from the approved still in th
 
 In short: the colours and type are ours, the structure is still Handy's. This is the main reason the app reads as a copy.
 
+**Addressed by `specs/008-own-look` (2026-11-18)**, which builds direction C rather than still 06: the bottom bar is gone (8), key caps are small and in the code typeface with Change (2), behaviour is a three-part switch (3), rows have no info icons (4), menus are outlined and light (7), and labels are in sentence case (9). The window's title bar (1), the language chips (5) and the model row (6) follow direction C's stills instead; the model in use sits in the sidebar's foot.
+
 ### Works
 
 - Dark and light both read well on the General screen. No pink, no gradient.

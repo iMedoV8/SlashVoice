@@ -10,15 +10,20 @@ Built (`specs/001-slash-look`):
 
 - The Slash palette in dark and light, Onest, JetBrains Mono and IBM Plex Sans Arabic bundled, Slash corners. Values in `specs/001-slash-look/contracts/look-tokens.md`, checked by `tests-look/`.
 - Logo option B, the slash-with-arcs app icon (dark ground everywhere; the light one is kept as artwork only), and the four menu-bar states.
-- The welcome and permissions screens rebuilt to their stills; every other screen inherits the palette and type.
+- The welcome and permissions screens rebuilt to their stills.
 - Handy's pink, its mascot on the welcome screen, and the purple of the first build are gone.
+
+Built (`specs/008-own-look`), direction C:
+
+- The window opens on History. The sidebar has the logo, a status line, History and Words, the settings, About with the version at its foot, and the model in use below. There is no bottom bar.
+- Settings groups put their name and one line beside their rows; rows have no info or reset buttons.
+- History, Words, General, Models, Post Process, Advanced and About in that layout; the recording pill in Slash's dress, with the accent on its dot and spinner.
+- Left out until the features exist: the app per dictation, corrections, word packs and the fix-last-dictation key. The differences from each still are listed in the pull request for `specs/008-own-look`.
 
 Not there yet:
 
-- **The General screen does not match its still.** Its colours and type are right; its structure is still Handy's. The nine differences are in `specs/001-slash-look/findings.md`.
-- The later onboarding steps still show the placeholder tile.
+- The later onboarding steps still show the placeholder tile, and onboarding is not drawn in direction C.
 - macOS draws menu-bar icons as templates, so the attention mark shows in the menu-bar colour there (its triangle shape still sets it apart); the amber shows on Windows.
-- The new layout below is drawn and not built.
 
 **Contrast findings.** Two of the brand's own light values fall short of 4.5 to 1: tertiary text `#767676` on the light window (about 4.2) and white on the accent (about 3.5). They are used as the brand defines them; changing them is a decision for the brand, which is the founder's.
 
@@ -48,8 +53,8 @@ The brand file says its rules cover the Slash app and must not be carried elsewh
 
 ## Decided by the founder (2026-11-16)
 
-- **The layout: direction C, "the sidebar".** The structure the app has today is kept and reworked so that nobody who sees it recognises Handy. The app opens on History. Stills: `design/stills/own-look-c-*`; the full record is in `design/README.md`. Not built.
-- **The recording pill carries the accent.** Its dot is grey while the microphone gets ready and the accent from the moment it is listening. Its spinner is the accent while transcribing and while a model loads. Still: `design/stills/own-look-c-08-pill-dark.png` and `-light`. Not built.
+- **The layout: direction C, "the sidebar".** The structure the app has today is kept and reworked so that nobody who sees it recognises Handy. The app opens on History. Stills: `design/stills/own-look-c-*`; the full record is in `design/README.md`. Built in `specs/008-own-look`.
+- **The recording pill carries the accent.** Its dot is grey while the microphone gets ready and the accent from the moment it is listening. Its spinner is the accent while transcribing and while a model loads. Still: `design/stills/own-look-c-08-pill-dark.png` and `-light`. Built in `specs/008-own-look`.
   - This is a change to the earlier rule that running work never takes the accent. The look contract (`specs/001-slash-look/contracts/look-tokens.md`) and the check `tests-look/banned.test.ts` were updated to allow exactly these two places (`specs/008-own-look`).
   - The brand's private source still states the earlier rule. That is reported to the founder and is his to reconcile there.
 
@@ -58,7 +63,7 @@ The brand file says its rules cover the Slash app and must not be carried elsewh
 - **The arcs in dark mode.** Drawn two ways: the whole mark in the accent, or the slash in the accent with the arcs in the light text colour. He has not said which.
 - **How the icon follows the mode.** Whether macOS and Windows can show a different app icon in dark and light mode for this kind of app is not verified. If they cannot, one of the two is the icon everywhere.
 - **Menu-bar and tray icons.** Drawn (idle, recording, transcribing, needs attention) and not approved. As drawn, the idle icon is the slash alone, without the arcs.
-- **Light mode.** Built on the welcome, permissions and General screens and not yet approved.
+- **Light mode.** Built on every screen and not yet approved.
 - **The last onboarding step** is not drawn in the chosen layout, and the Arabic wording in the direction C stills is a draft.
 
 ## How design work is done here
