@@ -16,6 +16,16 @@ Slash Voice is built on [Handy](https://github.com/cjpais/Handy) by CJ Pais and 
 
 Each package carries the licence text of its typeface.
 
+## Typefaces, on the download page
+
+The page in `site/` uses the Slash website's typefaces. Each licence text is in `site/fonts/`.
+
+| Typeface   | Licence | Notice                                       |
+| ---------- | ------- | -------------------------------------------- |
+| Mona Sans  | OFL-1.1 | Copyright 2022 The Mona Sans Project Authors |
+| Onest      | OFL-1.1 | See `site/fonts/onest-OFL.txt`               |
+| Alexandria | OFL-1.1 | See `site/fonts/alexandria-OFL.txt`          |
+
 ## Icons
 
 [Lucide](https://lucide.dev), ISC licence.
