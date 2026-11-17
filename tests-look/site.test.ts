@@ -6,7 +6,7 @@ import { join } from "node:path";
 import { ROOT, read } from "./lib";
 
 const VERSION = JSON.parse(read("src-tauri/tauri.conf.json")).version;
-const RELEASE = `https://github.com/iMedoV8/slash-voice/releases/download/v${VERSION}`;
+const RELEASE = `https://github.com/iMedoV8/SlashVoice/releases/download/v${VERSION}`;
 const PAGES = [
   { file: "site/index.html", lang: "en", dir: "ltr" },
   { file: "site/ar/index.html", lang: "ar", dir: "rtl" },
@@ -53,7 +53,7 @@ describe.each(PAGES)("$file", ({ file, lang, dir }) => {
     const outside = hrefs.filter(
       (h) =>
         /^https?:/.test(h) &&
-        !h.startsWith("https://github.com/iMedoV8/slash-voice"),
+        !h.startsWith("https://github.com/iMedoV8/SlashVoice"),
     );
     expect(outside).toEqual([]);
   });

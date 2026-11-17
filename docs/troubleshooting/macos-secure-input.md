@@ -18,4 +18,4 @@ Secure Input belongs to the system and to the app that turned it on. Another app
 
 ## Still stuck
 
-Open an [issue](https://github.com/iMedoV8/slash-voice/issues) and say which apps were open. Do not include anything you typed.
+Open an [issue](https://github.com/iMedoV8/SlashVoice/issues) and say which apps were open. Do not include anything you typed.

@@ -8,7 +8,7 @@ assignees: ""
 
 ## Before You Submit
 
-**Please search [existing issues](https://github.com/iMedoV8/slash-voice/issues) first.** The project has one maintainer, so a duplicate costs real time.
+**Please search [existing issues](https://github.com/iMedoV8/SlashVoice/issues) first.** The project has one maintainer, so a duplicate costs real time.
 
 Slash Voice is built on Handy. If you can reproduce the bug in Handy itself, say so: it helps to know where the fix belongs.
 

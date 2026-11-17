@@ -79,8 +79,8 @@ Slash Voice is built on [Handy](https://github.com/cjpais/Handy), and most of th
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/iMedoV8/slash-voice.git
-cd slash-voice
+git clone https://github.com/iMedoV8/SlashVoice.git
+cd SlashVoice
 ```
 
 ### 2. Install Dependencies

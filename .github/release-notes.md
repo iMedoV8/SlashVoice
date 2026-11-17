@@ -26,4 +26,4 @@ The first time you dictate, the app downloads a speech model. That needs an inte
 
 Slash Voice is built on [Handy](https://github.com/cjpais/Handy) by CJ Pais, under the MIT licence.
 
-Found a problem? Open an [issue](https://github.com/iMedoV8/slash-voice/issues). Please do not paste dictation text or recordings.
+Found a problem? Open an [issue](https://github.com/iMedoV8/SlashVoice/issues). Please do not paste dictation text or recordings.

@@ -7,7 +7,7 @@ import { commands, type SecureInputStatus } from "@/bindings";
 
 // Detailed remediation steps live in the docs rather than in the banner
 export const SECURE_INPUT_HELP_URL =
-  "https://github.com/iMedoV8/slash-voice/blob/main/docs/troubleshooting/macos-secure-input.md";
+  "https://github.com/iMedoV8/SlashVoice/blob/main/docs/troubleshooting/macos-secure-input.md";
 
 /**
  * Compact warning banner shown while macOS Secure Input is stuck on.

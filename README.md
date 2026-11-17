@@ -39,7 +39,7 @@ The rules that hold the project to this are in [RULES.md](RULES.md).
 
 ## Install
 
-Installers for Windows (64-bit) and for Macs with Apple Silicon are built by this repository's pipeline and published on the [releases page](https://github.com/iMedoV8/slash-voice/releases). If that page is empty, the first release has not been published yet: build from source.
+Installers for Windows (64-bit) and for Macs with Apple Silicon are built by this repository's pipeline and published on the [releases page](https://github.com/iMedoV8/SlashVoice/releases). If that page is empty, the first release has not been published yet: build from source.
 
 The builds are not signed with a paid certificate, so both systems warn you on first launch:
 
@@ -53,8 +53,8 @@ macOS also asks for two permissions: the microphone, to hear you, and accessibil
 You need [Rust](https://rustup.rs/), [Bun](https://bun.sh/) and the [Tauri prerequisites](https://tauri.app/start/prerequisites/). The details for each system are in [BUILD.md](BUILD.md).
 
 ```bash
-git clone https://github.com/iMedoV8/slash-voice.git
-cd slash-voice
+git clone https://github.com/iMedoV8/SlashVoice.git
+cd SlashVoice
 bun install
 ```
 

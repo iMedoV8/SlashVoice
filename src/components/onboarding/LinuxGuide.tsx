@@ -5,7 +5,7 @@ import { ExternalLink } from "lucide-react";
 import { TextLink } from "../ui/TextLink";
 
 const LINUX_SETUP_URL =
-  "https://github.com/iMedoV8/slash-voice/blob/main/BUILD.md#linux";
+  "https://github.com/iMedoV8/SlashVoice/blob/main/BUILD.md#linux";
 
 /** Linux footer hint linking the setup guide; shortcuts and pasting vary by desktop. */
 export const LinuxGuide: React.FC<{

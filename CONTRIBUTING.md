@@ -6,7 +6,7 @@ Slash Voice is built on [Handy](https://github.com/cjpais/Handy). A bug in the s
 
 ## Before you start
 
-- **Bugs:** search the [issues](https://github.com/iMedoV8/slash-voice/issues) first, then open one with the bug form.
+- **Bugs:** search the [issues](https://github.com/iMedoV8/SlashVoice/issues) first, then open one with the bug form.
 - **Features and ideas:** open an issue and describe the problem before writing code. A feature that arrives as a surprise pull request is likely to be declined. The planned features are listed in the [readme](README.md).
 - **Security problems:** do not open an issue. See [SECURITY.md](SECURITY.md).
 
@@ -18,7 +18,7 @@ You need [Rust](https://rustup.rs/), [Bun](https://bun.sh/) and the tools for yo
 
    ```bash
    git clone https://github.com/YOUR_USERNAME/slash-voice.git
-   cd slash-voice
+   cd SlashVoice
    ```
 
 2. Install the dependencies.
