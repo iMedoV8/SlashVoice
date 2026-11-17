@@ -1,19 +1,27 @@
 import React from "react";
-import { InfoTooltip } from "./InfoTooltip";
 
 interface SettingContainerProps {
   title: string;
   description: string;
   children: React.ReactNode;
+  /**
+   * inline: the description shows under the title. tooltip: it is kept as the
+   * label's hover text only; direction C has no info buttons on rows.
+   */
   descriptionMode?: "inline" | "tooltip";
   grouped?: boolean;
   layout?: "horizontal" | "stacked";
   disabled?: boolean;
+  /** Kept for callers; the row no longer shows a tooltip button. */
   tooltipPosition?: "top" | "bottom";
   /** Horizontal only: the control takes the row's free width, for content that fits itself to it. */
   grow?: boolean;
 }
 
+/**
+ * One settings row (direction C, still 3): the label on one side, its control
+ * on the other, 40 high, no box, no info or reset button.
+ */
 export const SettingContainer: React.FC<SettingContainerProps> = ({
   title,
   description,
@@ -22,101 +30,51 @@ export const SettingContainer: React.FC<SettingContainerProps> = ({
   grouped = false,
   layout = "horizontal",
   disabled = false,
-  tooltipPosition = "top",
   grow = false,
 }) => {
-  const info = (
-    <InfoTooltip
-      text={description}
-      placement={tooltipPosition === "bottom" ? "below" : "above"}
-    />
+  const box = grouped ? "" : " px-3 rounded-card border border-line";
+  const dim = disabled ? " opacity-50" : "";
+  const label = (
+    <>
+      <h3
+        className={`m-0 text-[13px] leading-[1.4] font-normal text-text${dim}`}
+        title={descriptionMode === "tooltip" ? description : undefined}
+      >
+        {title}
+      </h3>
+      {descriptionMode === "inline" && description && (
+        <p
+          className={`m-0 mt-[2px] text-[12.5px] leading-[1.45] text-ink-2${dim}`}
+        >
+          {description}
+        </p>
+      )}
+    </>
   );
 
-  // Slash rows (still 06): flush with the group label, 38 high, no boxes.
-  const containerClasses = grouped
-    ? "px-1 py-2"
-    : "px-3 py-2 rounded-card border border-line";
-
   if (layout === "stacked") {
-    if (descriptionMode === "tooltip") {
-      return (
-        <div className={containerClasses}>
-          <div className="flex items-center gap-2 mb-2">
-            <h3
-              className={`text-[13px] font-normal text-text ${disabled ? "opacity-50" : ""}`}
-            >
-              {title}
-            </h3>
-            {info}
-          </div>
-          <div className="w-full">{children}</div>
-        </div>
-      );
-    }
-
     return (
-      <div className={containerClasses}>
-        <div className="mb-2">
-          <h3
-            className={`text-[13px] font-normal text-text ${disabled ? "opacity-50" : ""}`}
-          >
-            {title}
-          </h3>
-          <p
-            className={`text-[12.5px] text-ink-2 ${disabled ? "opacity-50" : ""}`}
-          >
-            {description}
-          </p>
-        </div>
+      <div className={`py-[10px]${box}`}>
+        <div className="mb-2">{label}</div>
         <div className="w-full">{children}</div>
       </div>
     );
   }
 
-  // Horizontal layout (default)
-  const horizontalContainerClasses = `${
-    grouped
-      ? "flex items-center justify-between min-h-[38px] px-1 py-[6px]"
-      : "flex items-center justify-between min-h-[38px] px-3 py-[6px] rounded-card border border-line"
-  }${grow ? " gap-4" : ""}`;
-  const titleClasses = grow ? "max-w-2/3 shrink-0" : "max-w-2/3";
-  const controlClasses = grow
-    ? "relative flex min-w-0 flex-1 justify-end"
-    : "relative";
-
-  if (descriptionMode === "tooltip") {
-    return (
-      <div className={horizontalContainerClasses}>
-        <div className={titleClasses}>
-          <div className="flex items-center gap-2">
-            <h3
-              className={`text-[13px] font-normal text-text ${disabled ? "opacity-50" : ""}`}
-            >
-              {title}
-            </h3>
-            {info}
-          </div>
-        </div>
-        <div className={controlClasses}>{children}</div>
-      </div>
-    );
-  }
-
   return (
-    <div className={horizontalContainerClasses}>
-      <div className={titleClasses}>
-        <h3
-          className={`text-[13px] font-normal text-text ${disabled ? "opacity-50" : ""}`}
-        >
-          {title}
-        </h3>
-        <p
-          className={`text-[12.5px] text-ink-2 ${disabled ? "opacity-50" : ""}`}
-        >
-          {description}
-        </p>
+    <div
+      className={`flex min-h-[44px] items-center justify-between gap-4 py-[7px]${box}`}
+    >
+      <div className={grow ? "max-w-2/3 shrink-0" : "min-w-0"}>{label}</div>
+      <div
+        className={
+          grow
+            ? "relative flex min-w-0 flex-1 justify-end"
+            : "relative shrink-0"
+        }
+      >
+        {children}
       </div>
-      <div className={controlClasses}>{children}</div>
     </div>
   );
 };

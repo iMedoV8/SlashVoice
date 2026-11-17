@@ -19,7 +19,9 @@
     "postProcessing": "Pascaproses",
     "history": "Riwayat",
     "debug": "Debug",
-    "about": "Tentang"
+    "about": "Tentang",
+    "words": "Words",
+    "label": "Pages"
   },
   "onboarding": {
     "customModelDescription": "Tidak didukung secara resmi",
@@ -352,7 +354,9 @@
         },
         "errors": {
           "set": "Gagal mengatur pintasan: {{error}}"
-        }
+        },
+        "change": "Change",
+        "cancelChange": "Cancel"
       },
       "language": {
         "title": "Bahasa",
@@ -388,6 +392,22 @@
           "hold_or_toggle": "Tahan untuk merekam atau tekan untuk mulai/berhenti",
           "push_to_talk": "Merekam selama Anda menahan pintasan",
           "toggle": "Ketuk pintasan untuk mulai merekam, lalu ketuk lagi untuk berhenti"
+        }
+      },
+      "groups": {
+        "shortcut": {
+          "title": "Shortcut",
+          "description": "Works in every app, even with this window closed."
+        },
+        "appearance": {
+          "title": "Appearance"
+        },
+        "languages": {
+          "title": "Languages",
+          "description": "The languages you dictate in."
+        },
+        "sound": {
+          "title": "Sound"
         }
       }
     },
@@ -625,7 +645,8 @@
           "traditionalTw": "Tradisional (Taiwan)",
           "traditionalHk": "Tradisional (Hong Kong)"
         }
-      }
+      },
+      "jumpTo": "Jump to a group"
     },
     "postProcessing": {
       "hotkey": {
@@ -716,7 +737,14 @@
       "showMore": "Tampilkan lebih banyak",
       "showLess": "Tampilkan lebih sedikit",
       "dropTitle": "Lepaskan untuk mentranskripsi",
-      "dropDescription": "Akan muncul di Riwayat."
+      "dropDescription": "Akan muncul di Riwayat.",
+      "search": "Search dictations",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "dictationsOne": "{{n}} dictation",
+      "dictationsMany": "{{n}} dictations",
+      "noMatches": "No dictations match.",
+      "play": "Play the recording"
     },
     "debug": {
       "title": "Debug",
@@ -897,6 +925,23 @@
           "description": "Pustaka tensor berkinerja tinggi untuk inferensi pembelajaran mesin di perangkat",
           "details": "Fitur ucapan-ke-teks lokal Slash Voice dibangun menggunakan transcribe.cpp dan ggml. Terima kasih kepada Georgi Gerganov dan para kontributor atas karya luar biasa mereka."
         }
+      },
+      "versionLine": "Version {{version}}",
+      "updateChecksOff": "Update checks are off",
+      "credits": "Credits",
+      "folders": "Folders",
+      "recordings": "Recordings",
+      "updates": "Updates"
+    },
+    "words": {
+      "title": "Words",
+      "search": "Search words",
+      "add": "Add word",
+      "empty": "No words yet. Add the names Slash Voice should spell your way.",
+      "noMatches": "No words match.",
+      "yours": {
+        "title": "Your words",
+        "description": "Names you added by hand."
       }
     }
   },
@@ -992,5 +1037,14 @@
     "learnMore": "Cara memperbaiki",
     "recorderBlocked": "Pintasan tidak dapat direkam saat ini — macOS Secure Input memblokir peristiwa tombol. Selesaikan peringatan Secure Input terlebih dahulu.",
     "dismiss": "Tutup"
+  },
+  "statusLine": {
+    "ready": "Ready",
+    "loading": "Loading the model",
+    "downloading": "Downloading a model",
+    "failed": "The model didn't load",
+    "noModel": "No model yet",
+    "hold": "Hold",
+    "press": "Press"
   }
 }

@@ -19,7 +19,9 @@
     "postProcessing": "Post-Elaborazione",
     "history": "Cronologia",
     "debug": "Debug",
-    "about": "Informazioni"
+    "about": "Informazioni",
+    "words": "Words",
+    "label": "Pages"
   },
   "onboarding": {
     "customModelDescription": "Non ufficialmente supportato",
@@ -352,7 +354,9 @@
         },
         "errors": {
           "set": "Errore nella configurazione della scorciatoia: {{error}}"
-        }
+        },
+        "change": "Change",
+        "cancelChange": "Cancel"
       },
       "language": {
         "title": "Lingua",
@@ -388,6 +392,22 @@
           "hold_or_toggle": "Tieni premuto per registrare o tocca per alternare",
           "push_to_talk": "Registra finché tieni premuta la scorciatoia",
           "toggle": "Tocca la scorciatoia per avviare la registrazione, tocca di nuovo per fermarla"
+        }
+      },
+      "groups": {
+        "shortcut": {
+          "title": "Shortcut",
+          "description": "Works in every app, even with this window closed."
+        },
+        "appearance": {
+          "title": "Appearance"
+        },
+        "languages": {
+          "title": "Languages",
+          "description": "The languages you dictate in."
+        },
+        "sound": {
+          "title": "Sound"
         }
       }
     },
@@ -625,7 +645,8 @@
           "traditionalTw": "Tradizionale (Taiwan)",
           "traditionalHk": "Tradizionale (Hong Kong)"
         }
-      }
+      },
+      "jumpTo": "Jump to a group"
     },
     "postProcessing": {
       "hotkey": {
@@ -716,7 +737,14 @@
       "showMore": "Mostra di più",
       "showLess": "Mostra di meno",
       "dropTitle": "Rilascia per trascrivere",
-      "dropDescription": "Comparirà nella cronologia."
+      "dropDescription": "Comparirà nella cronologia.",
+      "search": "Search dictations",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "dictationsOne": "{{n}} dictation",
+      "dictationsMany": "{{n}} dictations",
+      "noMatches": "No dictations match.",
+      "play": "Play the recording"
     },
     "debug": {
       "title": "Debug",
@@ -897,6 +925,23 @@
           "description": "Inferenza ad alte prestazioni del modello di riconoscimento vocale automatico Whisper di OpenAI",
           "details": "Slash Voice usa ggml per il riconoscimento vocale veloce in locale. Grazie a Georgi Gerganov e collaboratori per il fantastico lavoro."
         }
+      },
+      "versionLine": "Version {{version}}",
+      "updateChecksOff": "Update checks are off",
+      "credits": "Credits",
+      "folders": "Folders",
+      "recordings": "Recordings",
+      "updates": "Updates"
+    },
+    "words": {
+      "title": "Words",
+      "search": "Search words",
+      "add": "Add word",
+      "empty": "No words yet. Add the names Slash Voice should spell your way.",
+      "noMatches": "No words match.",
+      "yours": {
+        "title": "Your words",
+        "description": "Names you added by hand."
       }
     }
   },
@@ -992,5 +1037,14 @@
     "learnMore": "Come risolvere",
     "recorderBlocked": "Non è possibile registrare scorciatoie in questo momento: Secure Input di macOS sta bloccando gli eventi dei tasti. Risolvi prima l'avviso di Secure Input.",
     "dismiss": "Ignora"
+  },
+  "statusLine": {
+    "ready": "Ready",
+    "loading": "Loading the model",
+    "downloading": "Downloading a model",
+    "failed": "The model didn't load",
+    "noModel": "No model yet",
+    "hold": "Hold",
+    "press": "Press"
   }
 }

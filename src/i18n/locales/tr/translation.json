@@ -19,7 +19,9 @@
     "postProcessing": "Son İşlem",
     "history": "Geçmiş",
     "debug": "Hata Ayıklama",
-    "about": "Hakkında"
+    "about": "Hakkında",
+    "words": "Words",
+    "label": "Pages"
   },
   "onboarding": {
     "customModelDescription": "Resmi olarak desteklenmiyor",
@@ -352,7 +354,9 @@
         },
         "errors": {
           "set": "Kısayol ayarlanamadı: {{error}}"
-        }
+        },
+        "change": "Change",
+        "cancelChange": "Cancel"
       },
       "language": {
         "title": "Dil",
@@ -388,6 +392,22 @@
           "hold_or_toggle": "Kaydetmek için basılı tutun veya açıp kapatmak için dokunun",
           "push_to_talk": "Kısayolu basılı tuttuğunuz sürece kaydeder",
           "toggle": "Kaydı başlatmak için kısayola dokunun, durdurmak için tekrar dokunun"
+        }
+      },
+      "groups": {
+        "shortcut": {
+          "title": "Shortcut",
+          "description": "Works in every app, even with this window closed."
+        },
+        "appearance": {
+          "title": "Appearance"
+        },
+        "languages": {
+          "title": "Languages",
+          "description": "The languages you dictate in."
+        },
+        "sound": {
+          "title": "Sound"
         }
       }
     },
@@ -625,7 +645,8 @@
           "traditionalTw": "Geleneksel (Tayvan)",
           "traditionalHk": "Geleneksel (Hong Kong)"
         }
-      }
+      },
+      "jumpTo": "Jump to a group"
     },
     "postProcessing": {
       "hotkey": {
@@ -716,7 +737,14 @@
       "showMore": "Daha fazla göster",
       "showLess": "Daha az göster",
       "dropTitle": "Yazıya dökmek için bırakın",
-      "dropDescription": "Geçmiş'te görünecek."
+      "dropDescription": "Geçmiş'te görünecek.",
+      "search": "Search dictations",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "dictationsOne": "{{n}} dictation",
+      "dictationsMany": "{{n}} dictations",
+      "noMatches": "No dictations match.",
+      "play": "Play the recording"
     },
     "debug": {
       "title": "Hata Ayıklama",
@@ -897,6 +925,23 @@
           "description": "Cihaz üzerinde makine öğrenmesi çıkarımı için yüksek performanslı tensör kütüphanesi",
           "details": "Slash Voice'nin yerel konuşmadan metne dönüştürme özelliği transcribe.cpp ve ggml üzerine kuruludur. Georgi Gerganov'a ve katkıda bulunanlara harika çalışmaları için teşekkür ederiz."
         }
+      },
+      "versionLine": "Version {{version}}",
+      "updateChecksOff": "Update checks are off",
+      "credits": "Credits",
+      "folders": "Folders",
+      "recordings": "Recordings",
+      "updates": "Updates"
+    },
+    "words": {
+      "title": "Words",
+      "search": "Search words",
+      "add": "Add word",
+      "empty": "No words yet. Add the names Slash Voice should spell your way.",
+      "noMatches": "No words match.",
+      "yours": {
+        "title": "Your words",
+        "description": "Names you added by hand."
       }
     }
   },
@@ -992,5 +1037,14 @@
     "learnMore": "Bu nasıl düzeltilir",
     "recorderBlocked": "Şu anda kısayol kaydedilemiyor — macOS Secure Input tuş olaylarını engelliyor. Önce Secure Input uyarısını giderin.",
     "dismiss": "Kapat"
+  },
+  "statusLine": {
+    "ready": "Ready",
+    "loading": "Loading the model",
+    "downloading": "Downloading a model",
+    "failed": "The model didn't load",
+    "noModel": "No model yet",
+    "hold": "Hold",
+    "press": "Press"
   }
 }

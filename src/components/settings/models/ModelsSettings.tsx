@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { RefreshCw } from "lucide-react";
 import { Tooltip } from "@/components/ui/Tooltip";
+import { PageActions } from "@/components/ui/PageHeader";
 import { useModelStore } from "@/stores/modelStore";
 import {
   ModelTable,
@@ -136,21 +137,19 @@ export const ModelsSettings: React.FC<ModelsSettingsProps> = ({
       ];
 
   return (
-    <div className="mx-auto flex min-h-0 w-full max-w-3xl flex-1 flex-col">
-      {/* The title, and across from it where to change the languages the
-          grades are for. */}
-      <div className="mb-[16px] flex flex-none items-center justify-between gap-[12px] px-[12px]">
-        <h1 className="text-xl font-semibold">{t("settings.models.title")}</h1>
-        {onChangeLanguages && (
+    <div className="flex min-h-0 w-full flex-1 flex-col pt-4">
+      {/* Where to change the languages the grades are for, in the header. */}
+      {onChangeLanguages && (
+        <PageActions>
           <button
             type="button"
             onClick={onChangeLanguages}
-            className="shrink-0 cursor-pointer text-sm text-text underline decoration-line-strong underline-offset-[3px] hover:decoration-text focus:outline-none focus-visible:ring-1 focus-visible:ring-logo-primary"
+            className="shrink-0 cursor-pointer rounded-control px-2 py-[6px] text-[12.5px] text-ink-2 transition-colors hover:bg-wash hover:text-text focus:outline-none focus-visible:ring-2 focus-visible:ring-logo-primary/40"
           >
             {t("settings.models.changeLanguages")}
           </button>
-        )}
-      </div>
+        </PageActions>
+      )}
       <div className="mx-[12px] mb-[16px] flex-none empty:hidden">
         <RetiredModelsNotice />
       </div>

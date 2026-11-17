@@ -1,7 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { SettingContainer } from "./SettingContainer";
-import { ResetButton } from "./ResetButton";
 
 interface SliderProps {
   value: number;
@@ -16,8 +15,6 @@ interface SliderProps {
   grouped?: boolean;
   showValue?: boolean;
   formatValue?: (value: number) => string;
-  onReset?: () => void;
-  isResetting?: boolean;
 }
 
 export const Slider: React.FC<SliderProps> = ({
@@ -33,8 +30,6 @@ export const Slider: React.FC<SliderProps> = ({
   grouped = false,
   showValue = true,
   formatValue = (v) => v.toFixed(2),
-  onReset,
-  isResetting = false,
 }) => {
   const { t } = useTranslation();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,13 +67,6 @@ export const Slider: React.FC<SliderProps> = ({
             <span className="text-sm font-medium text-text w-12 text-end">
               {formatValue(value)}
             </span>
-          )}
-          {onReset && (
-            <ResetButton
-              onClick={onReset}
-              disabled={disabled || isResetting}
-              ariaLabel={t("common.resetSetting", { setting: label })}
-            />
           )}
         </div>
       </div>

@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { listen } from "@tauri-apps/api/event";
 import { SettingContainer } from "../ui/SettingContainer";
-import { ResetButton } from "../ui/ResetButton";
 import { InfoTooltip } from "../ui/InfoTooltip";
 import { Tooltip } from "../ui/Tooltip";
 import { LanguageDetectorDownload } from "./LanguageDetectorDownload";
@@ -174,10 +173,6 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
     setSearchQuery("");
   };
 
-  const handleReset = async () => {
-    await resetSetting("selected_language");
-  };
-
   const handleToggle = () => {
     if (isUpdating("selected_language")) return;
     setIsOpen(!isOpen);
@@ -330,13 +325,6 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
             </div>
           )}
         </div>
-        <ResetButton
-          ariaLabel={t("common.resetSetting", {
-            setting: t("settings.general.language.title"),
-          })}
-          onClick={handleReset}
-          disabled={isUpdating("selected_language")}
-        />
       </div>
       {isUpdating("selected_language") && (
         <div className="absolute inset-0 bg-wash rounded flex items-center justify-center">

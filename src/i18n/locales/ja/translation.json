@@ -19,7 +19,9 @@
     "postProcessing": "後処理",
     "history": "履歴",
     "debug": "デバッグ",
-    "about": "概要"
+    "about": "概要",
+    "words": "Words",
+    "label": "Pages"
   },
   "onboarding": {
     "customModelDescription": "公式サポート対象外",
@@ -352,7 +354,9 @@
         },
         "errors": {
           "set": "ショートカットを設定できませんでした: {{error}}"
-        }
+        },
+        "change": "Change",
+        "cancelChange": "Cancel"
       },
       "language": {
         "title": "言語",
@@ -388,6 +392,22 @@
           "hold_or_toggle": "長押しで録音、タップで切り替え",
           "push_to_talk": "ショートカットを押している間だけ録音します",
           "toggle": "ショートカットをタップすると録音を開始し、もう一度タップすると停止します"
+        }
+      },
+      "groups": {
+        "shortcut": {
+          "title": "Shortcut",
+          "description": "Works in every app, even with this window closed."
+        },
+        "appearance": {
+          "title": "Appearance"
+        },
+        "languages": {
+          "title": "Languages",
+          "description": "The languages you dictate in."
+        },
+        "sound": {
+          "title": "Sound"
         }
       }
     },
@@ -625,7 +645,8 @@
           "traditionalTw": "繁体字 (台湾)",
           "traditionalHk": "繁体字 (香港)"
         }
-      }
+      },
+      "jumpTo": "Jump to a group"
     },
     "postProcessing": {
       "hotkey": {
@@ -716,7 +737,14 @@
       "showMore": "もっと見る",
       "showLess": "閉じる",
       "dropTitle": "ドロップして文字起こし",
-      "dropDescription": "履歴に表示されます。"
+      "dropDescription": "履歴に表示されます。",
+      "search": "Search dictations",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "dictationsOne": "{{n}} dictation",
+      "dictationsMany": "{{n}} dictations",
+      "noMatches": "No dictations match.",
+      "play": "Play the recording"
     },
     "debug": {
       "title": "デバッグ",
@@ -897,6 +925,23 @@
           "description": "オンデバイス機械学習推論のための高性能テンソルライブラリ",
           "details": "Slash Voice のローカルの音声からテキストへの文字起こしは transcribe.cpp と ggml を基盤としています。Georgi Gerganov 氏と貢献者の皆様の素晴らしい仕事に感謝します。"
         }
+      },
+      "versionLine": "Version {{version}}",
+      "updateChecksOff": "Update checks are off",
+      "credits": "Credits",
+      "folders": "Folders",
+      "recordings": "Recordings",
+      "updates": "Updates"
+    },
+    "words": {
+      "title": "Words",
+      "search": "Search words",
+      "add": "Add word",
+      "empty": "No words yet. Add the names Slash Voice should spell your way.",
+      "noMatches": "No words match.",
+      "yours": {
+        "title": "Your words",
+        "description": "Names you added by hand."
       }
     }
   },
@@ -992,5 +1037,14 @@
     "learnMore": "解決方法",
     "recorderBlocked": "現在ショートカットを記録できません。macOS の Secure Input がキーイベントをブロックしています。先に Secure Input の警告を解消してください。",
     "dismiss": "閉じる"
+  },
+  "statusLine": {
+    "ready": "Ready",
+    "loading": "Loading the model",
+    "downloading": "Downloading a model",
+    "failed": "The model didn't load",
+    "noModel": "No model yet",
+    "hold": "Hold",
+    "press": "Press"
   }
 }

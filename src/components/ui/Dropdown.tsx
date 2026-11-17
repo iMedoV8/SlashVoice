@@ -90,7 +90,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
       <button
         type="button"
         ref={triggerRef}
-        className={`px-2 py-[5px] text-sm font-semibold bg-wash border border-line-strong rounded-md min-w-[200px] w-full text-start grid grid-cols-[1fr_auto] gap-2 items-center transition-all duration-150 ${
+        className={`h-[32px] ps-[10px] pe-2 text-[13px] font-normal text-text bg-transparent border border-line rounded-control min-w-[200px] w-full text-start grid grid-cols-[1fr_auto] gap-2 items-center transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-logo-primary/40 ${
           disabled
             ? "opacity-50 cursor-not-allowed"
             : `${hover} cursor-pointer ${tone === "neutral" ? "hover:border-ink-3" : "hover:border-logo-primary"}`
@@ -100,17 +100,19 @@ export const Dropdown: React.FC<DropdownProps> = ({
         aria-expanded={isOpen}
       >
         <span className="truncate">{selectedOption?.label || placeholder}</span>
+        {/* Up and down chevrons (still 3): it opens a list. */}
         <svg
-          className={`w-4 h-4 transition-transform duration-200 ${isOpen ? "transform rotate-180" : ""}`}
+          className="h-[14px] w-[14px] text-ink-3"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
+          aria-hidden="true"
         >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
-            d="M19 9l-7 7-7-7"
+            d="M7 9.5l5-5 5 5M7 14.5l5 5 5-5"
           />
         </svg>
       </button>

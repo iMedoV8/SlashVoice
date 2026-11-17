@@ -110,9 +110,7 @@ describe("the recording pill", () => {
 
   test("the spinner is the accent", () => {
     const spinner = rules.find((r) => r.selector === ".sspinner");
-    expect(spinner?.body).toMatch(
-      /border-top-color:\s*var\(--color-accent\)/,
-    );
+    expect(spinner?.body).toMatch(/border-top-color:\s*var\(--color-accent\)/);
   });
 
   test("the accent is used on nothing else in the pill", () => {

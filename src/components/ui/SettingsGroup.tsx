@@ -3,26 +3,42 @@ import React from "react";
 interface SettingsGroupProps {
   title?: string;
   description?: string;
+  /** An anchor for the page's jump control (Advanced). */
+  id?: string;
   children: React.ReactNode;
 }
 
+/**
+ * Direction C (still 3): the group's name and one line about it on the left,
+ * its rows on the right, divided by hairlines; a hairline between groups.
+ */
 export const SettingsGroup: React.FC<SettingsGroupProps> = ({
   title,
   description,
+  id,
   children,
-}) => {
-  // Slash settings (still 06): a plain label over rows divided by hairlines.
-  return (
-    <div className="space-y-1">
-      {title && (
-        <div className="px-1">
-          <h2 className="m-0 text-xs font-medium text-ink-3">{title}</h2>
-          {description && (
-            <p className="mt-1 mb-0 text-xs text-ink-3">{description}</p>
-          )}
-        </div>
-      )}
-      <div className="overflow-visible divide-y divide-line">{children}</div>
+}) => (
+  <section
+    id={id}
+    aria-label={title}
+    className="grid scroll-mt-4 grid-cols-[minmax(0,148px)_minmax(0,1fr)] gap-x-7 border-b border-line py-5 last:border-b-0"
+  >
+    {title ? (
+      <div className="pt-[9px]">
+        <h2 className="m-0 text-[13px] leading-[1.4] font-semibold text-text">
+          {title}
+        </h2>
+        {description && (
+          <p className="mt-[6px] mb-0 text-[12.5px] leading-[1.5] text-ink-2">
+            {description}
+          </p>
+        )}
+      </div>
+    ) : (
+      <div />
+    )}
+    <div className="min-w-0 divide-y divide-line overflow-visible">
+      {children}
     </div>
-  );
-};
+  </section>
+);

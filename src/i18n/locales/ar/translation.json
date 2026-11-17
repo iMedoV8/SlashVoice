@@ -19,7 +19,9 @@
     "postProcessing": "معالجة لاحقة",
     "history": "السجل",
     "debug": "تصحيح الأخطاء",
-    "about": "حول"
+    "about": "حول",
+    "words": "الكلمات",
+    "label": "الصفحات"
   },
   "onboarding": {
     "customModelDescription": "غير مدعوم رسميًا",
@@ -352,7 +354,9 @@
         },
         "errors": {
           "set": "فشل تعيين الاختصار: {{error}}"
-        }
+        },
+        "change": "تغيير",
+        "cancelChange": "إلغاء"
       },
       "language": {
         "title": "اللغة",
@@ -388,6 +392,22 @@
           "hold_or_toggle": "اضغط مطوّلًا للتسجيل أو انقر للتبديل",
           "push_to_talk": "يسجّل أثناء الضغط على الاختصار",
           "toggle": "انقر على الاختصار لبدء التسجيل، وانقر مرة أخرى للإيقاف"
+        }
+      },
+      "groups": {
+        "shortcut": {
+          "title": "الاختصار",
+          "description": "يعمل في كل التطبيقات، حتى وهذه النافذة مغلقة."
+        },
+        "appearance": {
+          "title": "المظهر"
+        },
+        "languages": {
+          "title": "اللغات",
+          "description": "اللغات التي تُملي بها."
+        },
+        "sound": {
+          "title": "الصوت"
         }
       }
     },
@@ -625,7 +645,8 @@
           "traditionalTw": "تقليدية (تايوان)",
           "traditionalHk": "تقليدية (هونغ كونغ)"
         }
-      }
+      },
+      "jumpTo": "انتقل إلى مجموعة"
     },
     "postProcessing": {
       "hotkey": {
@@ -716,7 +737,14 @@
       "showMore": "عرض المزيد",
       "showLess": "عرض أقل",
       "dropTitle": "أفلت الملف لنسخه",
-      "dropDescription": "سيظهر في السجل."
+      "dropDescription": "سيظهر في السجل.",
+      "search": "ابحث في الإملاءات",
+      "today": "اليوم",
+      "yesterday": "أمس",
+      "dictationsOne": "إملاء واحد",
+      "dictationsMany": "{{n}} إملاءات",
+      "noMatches": "لا توجد إملاءات مطابقة.",
+      "play": "شغّل التسجيل"
     },
     "debug": {
       "title": "تصحيح الأخطاء",
@@ -897,6 +925,23 @@
           "description": "استنتاج عالي الأداء لنموذج التعرف التلقائي على الكلام Whisper من OpenAI",
           "details": ".يستخدم Slash Voice برنامج ggml لمعالجة سريعة ومحلية لتحويل الكلام إلى نص. شكراً للعمل الرائع الذي قام به Georgi Gerganov والمساهمون"
         }
+      },
+      "versionLine": "الإصدار {{version}}",
+      "updateChecksOff": "التحقق من التحديثات متوقف",
+      "credits": "شكر وتقدير",
+      "folders": "المجلدات",
+      "recordings": "التسجيلات",
+      "updates": "التحديثات"
+    },
+    "words": {
+      "title": "الكلمات",
+      "search": "ابحث في الكلمات",
+      "add": "أضف كلمة",
+      "empty": "لا توجد كلمات بعد. أضف الأسماء التي تريد أن يكتبها Slash Voice كما تكتبها أنت.",
+      "noMatches": "لا توجد كلمات مطابقة.",
+      "yours": {
+        "title": "كلماتك",
+        "description": "أسماء أضفتها بنفسك."
       }
     }
   },
@@ -992,5 +1037,14 @@
     "learnMore": "كيفية الإصلاح",
     "recorderBlocked": "لا يمكن تسجيل الاختصارات الآن — يحجب Secure Input في macOS أحداث المفاتيح. عالج تحذير Secure Input أولاً.",
     "dismiss": "تجاهل"
+  },
+  "statusLine": {
+    "ready": "جاهز",
+    "loading": "جارٍ تحميل النموذج",
+    "downloading": "جارٍ تنزيل نموذج",
+    "failed": "لم يُحمَّل النموذج",
+    "noModel": "لا يوجد نموذج بعد",
+    "hold": "اضغط مطوّلًا",
+    "press": "اضغط"
   }
 }

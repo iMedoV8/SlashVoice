@@ -20,8 +20,6 @@ export const LanguageDetectionWindow: React.FC<
       onChange={(value) =>
         updateSetting("language_detection_window_secs", value)
       }
-      onReset={() => resetSetting("language_detection_window_secs")}
-      isResetting={isUpdating("language_detection_window_secs")}
       min={2}
       max={30}
       step={1}

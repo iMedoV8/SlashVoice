@@ -11,11 +11,14 @@ import { AudioFeedback } from "../AudioFeedback";
 import { useSettings } from "../../../hooks/useSettings";
 import { VolumeSlider } from "../VolumeSlider";
 import { MuteWhileRecording } from "../MuteWhileRecording";
-import { ModelSettingsCard } from "./ModelSettingsCard";
+import { ModelLanguageRows } from "./ModelSettingsCard";
 import { PreferredLanguages } from "../PreferredLanguages";
 import { ChineseScriptSetting } from "../ChineseScript";
+import { ThemeSelector } from "../ThemeSelector";
+import { AppLanguageSelector } from "../AppLanguageSelector";
 import { isChinese } from "@/lib/utils/languageSuggestions";
 
+/** General (still 3): Shortcut, Appearance, Languages, Sound. */
 export const GeneralSettings: React.FC = () => {
   const { t } = useTranslation();
   const { audioFeedbackEnabled, getSetting } = useSettings();
@@ -25,21 +28,31 @@ export const GeneralSettings: React.FC = () => {
     (getSetting("spoken_languages") ?? []).some(isChinese) ||
     (getSetting("chinese_script") ?? "as_transcribed") !== "as_transcribed";
   return (
-    <div className="max-w-3xl w-full mx-auto space-y-[18px]">
-      <SettingsGroup title={t("settings.general.title")}>
+    <div className="w-full">
+      <SettingsGroup
+        title={t("settings.general.groups.shortcut.title")}
+        description={t("settings.general.groups.shortcut.description")}
+      >
         <ShortcutInput shortcutId="transcribe" grouped={true} />
         <ShortcutActivationSetting descriptionMode="tooltip" grouped={true} />
         {/* Cancel shortcut remains hidden on Linux because of dynamic shortcut instability. */}
         {!isLinux && <ShortcutInput shortcutId="cancel" grouped={true} />}
       </SettingsGroup>
-      <SettingsGroup title={t("settings.languages.title")}>
+      <SettingsGroup title={t("settings.general.groups.appearance.title")}>
+        <ThemeSelector descriptionMode="tooltip" grouped={true} />
+        <AppLanguageSelector descriptionMode="tooltip" grouped={true} />
+      </SettingsGroup>
+      <SettingsGroup
+        title={t("settings.general.groups.languages.title")}
+        description={t("settings.general.groups.languages.description")}
+      >
         <PreferredLanguages descriptionMode="tooltip" grouped={true} />
         {speaksChinese && (
           <ChineseScriptSetting descriptionMode="tooltip" grouped={true} />
         )}
+        <ModelLanguageRows />
       </SettingsGroup>
-      <ModelSettingsCard />
-      <SettingsGroup title={t("settings.sound.title")}>
+      <SettingsGroup title={t("settings.general.groups.sound.title")}>
         <MicrophoneSelector descriptionMode="tooltip" grouped={true} />
         <ChannelSelector descriptionMode="tooltip" grouped={true} />
         <MuteWhileRecording descriptionMode="tooltip" grouped={true} />

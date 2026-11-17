@@ -2,7 +2,6 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Dropdown } from "../ui/Dropdown";
 import { SettingContainer } from "../ui/SettingContainer";
-import { ResetButton } from "../ui/ResetButton";
 import { useSettings } from "../../hooks/useSettings";
 import type { AudioDevice } from "@/bindings";
 
@@ -35,10 +34,6 @@ export const OutputDeviceSelector: React.FC<OutputDeviceSelectorProps> =
         await updateSetting("selected_output_device", deviceName);
       };
 
-      const handleReset = async () => {
-        await resetSetting("selected_output_device");
-      };
-
       const outputDeviceOptions = outputDevices.map((device: AudioDevice) => ({
         value: device.name,
         label: device.name,
@@ -69,15 +64,6 @@ export const OutputDeviceSelector: React.FC<OutputDeviceSelectorProps> =
                 outputDevices.length === 0
               }
               onOpen={refreshOutputDevices}
-            />
-            <ResetButton
-              ariaLabel={t("common.resetSetting", {
-                setting: t("settings.sound.outputDevice.title"),
-              })}
-              onClick={handleReset}
-              disabled={
-                disabled || isUpdating("selected_output_device") || isLoading
-              }
             />
           </div>
         </SettingContainer>

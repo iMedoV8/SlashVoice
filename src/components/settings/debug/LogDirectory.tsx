@@ -56,7 +56,7 @@ export const LogDirectory: React.FC<LogDirectoryProps> = ({
       description={t("settings.debug.logDirectory.description")}
       descriptionMode={descriptionMode}
       grouped={grouped}
-      layout="stacked"
+      grow
     >
       {loading ? (
         <div className="animate-pulse">

@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Button } from "./Button";
+import { FolderOpen } from "lucide-react";
 
 interface PathDisplayProps {
   path: string;
@@ -8,6 +8,14 @@ interface PathDisplayProps {
   disabled?: boolean;
 }
 
+/** The home folder shown as ~, so a path reads short and names nobody. */
+const shorten = (path: string) =>
+  path
+    .replace(/^\/Users\/[^/]+/, "~")
+    .replace(/^\/home\/[^/]+/, "~")
+    .replace(/^[A-Za-z]:\\Users\\[^\\]+/, "~");
+
+/** A folder (still 7): its path in the code typeface, and Open. */
 export const PathDisplay: React.FC<PathDisplayProps> = ({
   path,
   onOpen,
@@ -16,19 +24,25 @@ export const PathDisplay: React.FC<PathDisplayProps> = ({
   const { t } = useTranslation();
 
   return (
-    <div className="flex items-center gap-2">
-      <div className="flex-1 min-w-0 px-2 py-2 bg-wash border border-line-strong rounded-lg text-xs font-mono break-all select-text cursor-text">
-        {path}
-      </div>
-      <Button
+    <div className="flex min-w-0 items-center gap-3">
+      {path && (
+        <span
+          dir="ltr"
+          title={path}
+          className="min-w-0 truncate font-mono text-[12px] text-ink-3 select-text"
+        >
+          {shorten(path)}
+        </span>
+      )}
+      <button
+        type="button"
         onClick={onOpen}
-        variant="secondary"
-        size="sm"
         disabled={disabled}
-        className="px-3 py-2"
+        className="flex h-[28px] shrink-0 cursor-pointer items-center gap-[6px] rounded-[6px] px-2 text-[12.5px] text-text transition-colors hover:bg-wash disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-logo-primary/40"
       >
+        <FolderOpen width={14} height={14} aria-hidden="true" />
         {t("common.open")}
-      </Button>
+      </button>
     </div>
   );
 };

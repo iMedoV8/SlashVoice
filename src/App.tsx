@@ -14,7 +14,6 @@ import {
 } from "tauri-plugin-macos-permissions-api";
 import "./App.css";
 import SecureInputWarning from "./components/SecureInputWarning";
-import Footer from "./components/footer";
 import { OnboardingFlow } from "./components/onboarding/OnboardingFlow";
 import ModelMigration from "./components/onboarding/ModelMigration";
 import {
@@ -35,6 +34,7 @@ import { useSettingsStore } from "./stores/settingsStore";
 import { commands } from "@/bindings";
 import { deleteRetiredModel } from "@/lib/models/retired";
 import { NoticePanel } from "@/components/notices/NoticePanel";
+import { PageHeader, PageHeaderProvider } from "@/components/ui/PageHeader";
 import { getLanguageDirection, initializeRTL } from "@/lib/utils/rtl";
 
 // flow is first-run onboarding; the rest are single screens for returning users.
@@ -82,8 +82,9 @@ function App() {
   // Set when a returning user's selected model is a retired (ONNX) model that
   // is still on disk: they must update it before the app can transcribe.
   const [migrationModelId, setMigrationModelId] = useState<string | null>(null);
+  // Direction C opens on History (specs/008-own-look).
   const [currentSection, setCurrentSection] =
-    useState<SidebarSection>("general");
+    useState<SidebarSection>("history");
   const showHistory = useCallback(() => setCurrentSection("history"), []);
   const { settings, updateSetting } = useSettings();
   const direction = getLanguageDirection(i18n.language);
@@ -324,37 +325,33 @@ function App() {
         <ErrorBoundary context="What's New">
           <WhatsNewGate />
         </ErrorBoundary>
-        {/* Main content area that takes remaining space */}
-        <div className="flex-1 flex overflow-hidden">
+        <div className="flex flex-1 overflow-hidden">
           <Sidebar
             activeSection={currentSection}
             onSectionChange={setCurrentSection}
           />
-          {/* Scrollable content area */}
-          <div className="flex-1 flex flex-col overflow-hidden">
-            {/* Slash page header (still 06): the section's name over a hairline. */}
-            <header className="flex h-[44px] shrink-0 items-center border-b border-line px-5 text-[13px] font-semibold text-text">
-              {t(SECTIONS_CONFIG[currentSection].labelKey)}
-            </header>
-            <div ref={settingsScrollRef} className="flex-1 overflow-y-auto">
-              {/* Models fills the window: its table scrolls, not the page. */}
-              <div
-                className={`flex flex-col items-center px-5 py-4 gap-4 ${currentSection === "models" ? "h-full" : ""}`}
-              >
-                <SecureInputWarning />
-                {renderSettingsContent(
-                  currentSection,
-                  setOnboardingPreview,
-                  runOnboarding,
-                  runModelMigration,
-                  setCurrentSection,
-                )}
+          <PageHeaderProvider>
+            <div className="flex flex-1 flex-col overflow-hidden">
+              {/* The page's title, with its own actions across from it. */}
+              <PageHeader title={t(SECTIONS_CONFIG[currentSection].labelKey)} />
+              <div ref={settingsScrollRef} className="flex-1 overflow-y-auto">
+                {/* Models fills the window: its table scrolls, not the page. */}
+                <div
+                  className={`flex flex-col px-7 pt-2 pb-8 ${currentSection === "models" ? "h-full" : ""}`}
+                >
+                  <SecureInputWarning />
+                  {renderSettingsContent(
+                    currentSection,
+                    setOnboardingPreview,
+                    runOnboarding,
+                    runModelMigration,
+                    setCurrentSection,
+                  )}
+                </div>
               </div>
             </div>
-          </div>
+          </PageHeaderProvider>
         </div>
-        {/* Fixed footer at bottom */}
-        <Footer onShowHistory={showHistory} />
         <FileDropOverlay onDropped={showHistory} />
       </div>
     );

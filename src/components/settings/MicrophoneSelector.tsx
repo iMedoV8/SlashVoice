@@ -2,7 +2,6 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Dropdown } from "../ui/Dropdown";
 import { SettingContainer } from "../ui/SettingContainer";
-import { ResetButton } from "../ui/ResetButton";
 import { useSettings } from "../../hooks/useSettings";
 
 interface MicrophoneSelectorProps {
@@ -69,10 +68,6 @@ export const MicrophoneSelector: React.FC<MicrophoneSelectorProps> = React.memo(
     const { t } = useTranslation();
     const { resetSetting, isUpdating, isLoading } = useSettings();
 
-    const handleReset = async () => {
-      await resetSetting("selected_microphone");
-    };
-
     return (
       <SettingContainer
         title={t("settings.sound.microphone.title")}
@@ -82,13 +77,6 @@ export const MicrophoneSelector: React.FC<MicrophoneSelectorProps> = React.memo(
       >
         <div className="flex items-center space-x-1">
           <MicrophoneDropdown />
-          <ResetButton
-            ariaLabel={t("common.resetSetting", {
-              setting: t("settings.sound.microphone.title"),
-            })}
-            onClick={handleReset}
-            disabled={isUpdating("selected_microphone") || isLoading}
-          />
         </div>
       </SettingContainer>
     );

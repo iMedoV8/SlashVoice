@@ -11,11 +11,12 @@ import {
   Check,
   Copy,
   FileAudio,
-  FilePlus,
   FolderOpen,
+  Play,
   RotateCcw,
   Star,
   Trash2,
+  Upload,
   X,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -31,9 +32,11 @@ import {
   useTranscriptionJobsStore,
   type ActiveJobStatus,
 } from "@/stores/transcriptionJobsStore";
-import { formatDateTime } from "@/utils/dateFormat";
+import { formatDate } from "@/utils/dateFormat";
 import { AudioPlayer, AudioPlayerGroup } from "../../ui/AudioPlayer";
 import { Button } from "../../ui/Button";
+import { PageActions } from "../../ui/PageHeader";
+import { SearchField } from "../../ui/SearchField";
 import { copyToClipboard } from "./clipboard";
 import {
   pickAndTranscribeFiles,
@@ -49,12 +52,13 @@ const IconButton: React.FC<{
   children: React.ReactNode;
 }> = ({ onClick, title, disabled, active, children }) => (
   <button
+    type="button"
     onClick={onClick}
     disabled={disabled}
-    className={`p-1.5 rounded-md flex items-center justify-center transition-colors cursor-pointer disabled:cursor-not-allowed disabled:text-text/20 ${
-      active
-        ? "text-logo-primary hover:text-logo-primary"
-        : "text-ink-3 hover:text-logo-primary"
+    aria-label={title}
+    aria-pressed={active}
+    className={`grid size-[28px] cursor-pointer place-items-center rounded-[6px] transition-colors hover:bg-selected disabled:cursor-not-allowed disabled:text-text/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-logo-primary/40 ${
+      active ? "text-text" : "text-ink-3 hover:text-text"
     }`}
     title={title}
   >
@@ -85,53 +89,58 @@ const TranscribePulseKeyframes: React.FC = () => (
 const FileReadRow: React.FC<{ read: FileRead }> = ({ read }) => {
   const { t } = useTranslation();
   return (
-    <div className="px-4 py-2 pb-5 flex flex-col gap-3">
-      <span
-        className="flex items-center gap-1 min-w-0 h-7 text-sm text-ink-3"
-        title={read.name}
-      >
-        <FileAudio width={14} height={14} className="shrink-0" />
-        <span className="truncate">{read.name}</span>
-      </span>
-      <p className="italic text-sm w-full" style={TRANSCRIBE_PULSE}>
-        <TranscribePulseKeyframes />
-        {t("settings.history.readingFile")}
-      </p>
+    <div className="grid grid-cols-[56px_minmax(0,1fr)] gap-x-3 rounded-control px-3 py-[9px]">
+      <span />
+      <div className="flex min-w-0 flex-col gap-1">
+        <span
+          className="flex min-w-0 items-center gap-1 text-[12px] text-ink-3"
+          title={read.name}
+        >
+          <FileAudio width={13} height={13} className="shrink-0" />
+          <span className="truncate">{read.name}</span>
+        </span>
+        <p className="m-0 text-[13px]" style={TRANSCRIBE_PULSE}>
+          <TranscribePulseKeyframes />
+          {t("settings.history.readingFile")}
+        </p>
+      </div>
     </div>
   );
 };
 
-interface HeaderButtonProps {
-  onClick: () => void;
-  label: string;
-  icon: React.ComponentType<{ className?: string }>;
+/** The day a timestamp (in seconds) falls on, at local midnight. */
+const dayOf = (timestamp: number) => {
+  const d = new Date(timestamp * 1000);
+  d.setHours(0, 0, 0, 0);
+  return d.getTime();
+};
+
+interface Day {
+  key: number;
+  entries: HistoryEntry[];
 }
 
-const HeaderButton: React.FC<HeaderButtonProps> = ({
-  onClick,
-  label,
-  icon: Icon,
-}) => (
-  <Button
-    onClick={onClick}
-    variant="secondary"
-    size="sm"
-    className="flex items-center gap-2"
-    title={label}
-  >
-    <Icon className="w-4 h-4" />
-    <span>{label}</span>
-  </Button>
-);
+/** Entries, newest first, in runs by local day. */
+const byDay = (entries: HistoryEntry[]): Day[] => {
+  const days: Day[] = [];
+  for (const entry of entries) {
+    const key = dayOf(entry.timestamp);
+    const last = days[days.length - 1];
+    if (last?.key === key) last.entries.push(entry);
+    else days.push({ key, entries: [entry] });
+  }
+  return days;
+};
 
 export const HistorySettings: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const osType = useOsType();
   const jobs = useTranscriptionJobsStore((state) => state.jobs);
   const reads = useFileReadsStore((state) => state.reads);
   const [entries, setEntries] = useState<HistoryEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
+  const [query, setQuery] = useState("");
   const sentinelRef = useRef<HTMLDivElement>(null);
   const entriesRef = useRef<HistoryEntry[]>([]);
   const loadingRef = useRef(false);
@@ -303,42 +312,95 @@ export const HistorySettings: React.FC = () => {
     }
   };
 
+  // Search looks through what is loaded; the sentinel keeps loading the rest.
+  const needle = query.trim().toLocaleLowerCase();
+  const shown = needle
+    ? entries.filter((e) =>
+        e.transcription_text.toLocaleLowerCase().includes(needle),
+      )
+    : entries;
+  const days = byDay(shown);
+  const today = dayOf(Date.now() / 1000);
+  const dayLabel = (key: number) =>
+    key === today
+      ? t("settings.history.today")
+      : key === today - 86_400_000 ||
+          // A day that held a clock change is 23 or 25 hours long.
+          Math.round((today - key) / 86_400_000) === 1
+        ? t("settings.history.yesterday")
+        : formatDate(String(key / 1000), i18n.language);
+
   let content: React.ReactNode;
 
   if (loading) {
     content = (
-      <div className="px-4 py-3 text-center text-ink-2">
+      <p className="m-0 px-3 py-6 text-ink-2">
         {t("settings.history.loading")}
-      </div>
+      </p>
     );
   } else if (entries.length === 0 && reads.length === 0) {
     content = (
-      <div className="px-4 py-3 text-center text-ink-2">
-        {t("settings.history.empty")}
-      </div>
+      <p className="m-0 px-3 py-6 text-ink-2">{t("settings.history.empty")}</p>
     );
   } else {
     content = (
       <>
         <AudioPlayerGroup>
-          <div className="divide-y divide-line">
-            {reads.map((read) => (
-              <FileReadRow key={`read-${read.id}`} read={read} />
-            ))}
-            {entries.map((entry) => (
-              <HistoryEntryComponent
-                key={entry.id}
-                entry={entry}
-                job={jobs[entry.id]}
-                onToggleSaved={() => toggleSaved(entry.id)}
-                onCopyText={() => copyToClipboard(entry.transcription_text)}
-                getAudioUrl={getAudioUrl}
-                deleteAudio={deleteAudioEntry}
-                retryTranscription={commands.retryHistoryEntryTranscription}
-                cancelTranscription={commands.cancelHistoryEntryTranscription}
-              />
-            ))}
-          </div>
+          {reads.length > 0 && (
+            <div className="pt-3">
+              {reads.map((read) => (
+                <FileReadRow key={`read-${read.id}`} read={read} />
+              ))}
+            </div>
+          )}
+          {days.map((day, i) => {
+            // The last day may go on past what is loaded.
+            const complete = !hasMore || i < days.length - 1;
+            const n = day.entries.length;
+            return (
+              <section key={day.key} className="pt-4">
+                <h2 className="m-0 flex items-baseline gap-2 px-3 pb-2 text-[13px] font-semibold text-text">
+                  {dayLabel(day.key)}
+                  {complete && !needle && (
+                    <span className="font-mono text-[12px] font-normal text-ink-3">
+                      {t(
+                        n === 1
+                          ? "settings.history.dictationsOne"
+                          : "settings.history.dictationsMany",
+                        { n },
+                      )}
+                    </span>
+                  )}
+                </h2>
+                <div className="flex flex-col">
+                  {day.entries.map((entry) => (
+                    <HistoryEntryComponent
+                      key={entry.id}
+                      entry={entry}
+                      job={jobs[entry.id]}
+                      onToggleSaved={() => toggleSaved(entry.id)}
+                      onCopyText={() =>
+                        copyToClipboard(entry.transcription_text)
+                      }
+                      getAudioUrl={getAudioUrl}
+                      deleteAudio={deleteAudioEntry}
+                      retryTranscription={
+                        commands.retryHistoryEntryTranscription
+                      }
+                      cancelTranscription={
+                        commands.cancelHistoryEntryTranscription
+                      }
+                    />
+                  ))}
+                </div>
+              </section>
+            );
+          })}
+          {needle && shown.length === 0 && !hasMore && (
+            <p className="m-0 px-3 py-6 text-ink-2">
+              {t("settings.history.noMatches")}
+            </p>
+          )}
         </AudioPlayerGroup>
         {/* Sentinel for infinite scroll */}
         <div ref={sentinelRef} className="h-1" />
@@ -347,31 +409,35 @@ export const HistorySettings: React.FC = () => {
   }
 
   return (
-    <div className="max-w-3xl w-full mx-auto space-y-6">
-      <div className="space-y-2">
-        <div className="px-4 flex items-center justify-between">
-          <div>
-            <h2 className="text-xs font-medium text-ink-3 uppercase tracking-wide">
-              {t("settings.history.title")}
-            </h2>
-          </div>
-          <div className="flex items-center gap-2">
-            <HeaderButton
-              onClick={transcribeFile}
-              label={t("settings.history.transcribeFile")}
-              icon={FilePlus}
-            />
-            <HeaderButton
-              onClick={openRecordingsFolder}
-              label={t("settings.history.openFolder")}
-              icon={FolderOpen}
-            />
-          </div>
-        </div>
-        <div className="bg-background border border-line rounded-lg overflow-visible">
-          {content}
-        </div>
-      </div>
+    <div className="-mx-3 w-[calc(100%+1.5rem)]">
+      <PageActions>
+        <SearchField
+          value={query}
+          onChange={setQuery}
+          placeholder={t("settings.history.search")}
+          clearLabel={t("common.clear")}
+          className="w-[210px]"
+        />
+        <Button
+          onClick={transcribeFile}
+          variant="secondary"
+          size="lg"
+          className="flex shrink-0 items-center gap-[6px]"
+        >
+          <Upload width={14} height={14} aria-hidden="true" />
+          {t("settings.history.transcribeFile")}
+        </Button>
+        <button
+          type="button"
+          onClick={openRecordingsFolder}
+          aria-label={t("settings.history.openFolder")}
+          title={t("settings.history.openFolder")}
+          className="grid size-[32px] shrink-0 cursor-pointer place-items-center rounded-control text-ink-2 transition-colors hover:bg-wash hover:text-text focus:outline-none focus-visible:ring-2 focus-visible:ring-logo-primary/40"
+        >
+          <FolderOpen width={15} height={15} aria-hidden="true" />
+        </button>
+      </PageActions>
+      {content}
     </div>
   );
 };
@@ -402,6 +468,8 @@ const HistoryEntryComponent: React.FC<HistoryEntryProps> = ({
   // Pressed cancel: a running job stops after its current chunk.
   const [cancelling, setCancelling] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  // The player opens on the row when Play is pressed.
+  const [playing, setPlaying] = useState(false);
   const [overflows, setOverflows] = useState(false);
   const textRef = useRef<HTMLParagraphElement>(null);
 
@@ -453,7 +521,11 @@ const HistoryEntryComponent: React.FC<HistoryEntryProps> = ({
     }
   };
 
-  const formattedDate = formatDateTime(String(entry.timestamp), i18n.language);
+  const time = new Intl.DateTimeFormat(i18n.language, {
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).format(new Date(entry.timestamp * 1000));
 
   let progressText = t("settings.history.transcribing");
   if (job?.state === "queued") {
@@ -464,80 +536,31 @@ const HistoryEntryComponent: React.FC<HistoryEntryProps> = ({
     });
   }
 
+  // Still 1: time, then the text; the actions show on the row under the
+  // pointer or holding keyboard focus.
   return (
-    <div className="px-4 py-2 pb-5 flex flex-col gap-3">
-      <div className="flex justify-between items-center gap-3">
-        <div className="flex items-center gap-2 min-w-0">
-          <p className="text-sm font-medium shrink-0">{formattedDate}</p>
-          {entry.source_name && (
-            <span
-              className="flex items-center gap-1 min-w-0 text-sm text-ink-3"
-              title={entry.source_name}
-            >
-              <FileAudio width={14} height={14} className="shrink-0" />
-              <span className="truncate">{entry.source_name}</span>
-            </span>
-          )}
-        </div>
-        <div className="flex items-center shrink-0">
-          <IconButton
-            onClick={handleCopyText}
-            disabled={!hasTranscription || retrying}
-            title={t("settings.history.copyToClipboard")}
-          >
-            {showCopied ? (
-              <Check width={16} height={16} />
-            ) : (
-              <Copy width={16} height={16} />
-            )}
-          </IconButton>
-          <IconButton
-            onClick={onToggleSaved}
-            active={entry.saved}
-            title={
-              entry.saved
-                ? t("settings.history.unsave")
-                : t("settings.history.save")
-            }
-          >
-            <Star
-              width={16}
-              height={16}
-              fill={entry.saved ? "currentColor" : "none"}
-            />
-          </IconButton>
-          {retrying ? (
-            <IconButton
-              onClick={() => {
-                setCancelling(true);
-                void cancelTranscription(entry.id);
-              }}
-              disabled={cancelling}
-              title={t("settings.history.cancelTranscription")}
-            >
-              <X width={16} height={16} />
-            </IconButton>
-          ) : (
-            <IconButton
-              onClick={() => retryTranscription(entry.id)}
-              title={t("settings.history.retranscribe")}
-            >
-              <RotateCcw width={16} height={16} />
-            </IconButton>
-          )}
-          <IconButton
-            onClick={handleDeleteEntry}
-            title={t("settings.history.delete")}
-          >
-            <Trash2 width={16} height={16} />
-          </IconButton>
-        </div>
-      </div>
+    <div className="group grid grid-cols-[56px_minmax(0,1fr)_auto] gap-x-3 rounded-control px-3 py-[9px] transition-colors hover:bg-wash focus-within:bg-wash">
+      <span
+        dir="ltr"
+        className="pt-[1px] font-mono text-[12px] leading-[20px] text-ink-3"
+      >
+        {time}
+      </span>
 
-      <div className="flex flex-col items-start gap-1 pb-2">
+      <div className="flex min-w-0 flex-col items-start gap-1">
+        {entry.source_name && (
+          <span
+            className="flex min-w-0 max-w-full items-center gap-1 text-[12px] text-ink-3"
+            title={entry.source_name}
+          >
+            <FileAudio width={13} height={13} className="shrink-0" />
+            <span className="truncate">{entry.source_name}</span>
+          </span>
+        )}
         <p
           ref={textRef}
-          className={`italic text-sm w-full ${
+          dir="auto"
+          className={`m-0 w-full text-[13.5px] leading-[20px] ${
             retrying
               ? ""
               : hasTranscription
@@ -571,16 +594,87 @@ const HistoryEntryComponent: React.FC<HistoryEntryProps> = ({
           <button
             type="button"
             onClick={() => setExpanded(!expanded)}
-            className="text-xs font-medium text-ink-3 hover:text-logo-primary cursor-pointer"
+            className="cursor-pointer text-[12px] font-medium text-ink-3 hover:text-text"
           >
             {expanded
               ? t("settings.history.showLess")
               : t("settings.history.showMore")}
           </button>
         )}
+        {playing && (
+          <AudioPlayer
+            onLoadRequest={handleLoadAudio}
+            className="mt-1 w-full"
+          />
+        )}
       </div>
 
-      <AudioPlayer onLoadRequest={handleLoadAudio} className="w-full" />
+      <div
+        className={`flex items-start gap-[2px] transition-opacity ${
+          entry.saved || retrying || playing
+            ? "opacity-100"
+            : "opacity-0 group-hover:opacity-100 group-focus-within:opacity-100"
+        }`}
+      >
+        <IconButton
+          onClick={handleCopyText}
+          disabled={!hasTranscription || retrying}
+          title={t("settings.history.copyToClipboard")}
+        >
+          {showCopied ? (
+            <Check width={15} height={15} />
+          ) : (
+            <Copy width={15} height={15} />
+          )}
+        </IconButton>
+        <IconButton
+          onClick={onToggleSaved}
+          active={entry.saved}
+          title={
+            entry.saved
+              ? t("settings.history.unsave")
+              : t("settings.history.save")
+          }
+        >
+          <Star
+            width={15}
+            height={15}
+            fill={entry.saved ? "currentColor" : "none"}
+          />
+        </IconButton>
+        <IconButton
+          onClick={() => setPlaying(!playing)}
+          active={playing}
+          title={t("settings.history.play")}
+        >
+          <Play width={15} height={15} />
+        </IconButton>
+        {retrying ? (
+          <IconButton
+            onClick={() => {
+              setCancelling(true);
+              void cancelTranscription(entry.id);
+            }}
+            disabled={cancelling}
+            title={t("settings.history.cancelTranscription")}
+          >
+            <X width={15} height={15} />
+          </IconButton>
+        ) : (
+          <IconButton
+            onClick={() => retryTranscription(entry.id)}
+            title={t("settings.history.retranscribe")}
+          >
+            <RotateCcw width={15} height={15} />
+          </IconButton>
+        )}
+        <IconButton
+          onClick={handleDeleteEntry}
+          title={t("settings.history.delete")}
+        >
+          <Trash2 width={15} height={15} />
+        </IconButton>
+      </div>
     </div>
   );
 };

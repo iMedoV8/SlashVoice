@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Dropdown } from "../ui/Dropdown";
+import { SegmentedControl } from "../ui/SegmentedControl";
 import { SettingContainer } from "../ui/SettingContainer";
 import { useSettings } from "../../hooks/useSettings";
 import type { ShortcutActivation } from "@/bindings";
@@ -49,13 +49,14 @@ export const ShortcutActivationSetting: React.FC<ShortcutActivationProps> =
         descriptionMode={descriptionMode}
         grouped={grouped}
       >
-        <Dropdown
-          options={options}
-          menuClassName="right-0 w-80 max-w-[calc(100vw-2rem)]"
-          selectedValue={selected}
-          onSelect={(value) =>
-            updateSetting("shortcut_activation", value as ShortcutActivation)
-          }
+        <SegmentedControl
+          label={t("settings.general.shortcutActivation.title")}
+          options={options.map((o) => ({
+            value: o.value as ShortcutActivation,
+            label: <span title={o.description}>{o.label}</span>,
+          }))}
+          value={selected}
+          onChange={(value) => updateSetting("shortcut_activation", value)}
           disabled={isUpdating("shortcut_activation")}
         />
       </SettingContainer>

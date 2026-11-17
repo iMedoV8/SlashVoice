@@ -31,8 +31,6 @@ export const PasteDelay: React.FC<PasteDelayProps> = ({
     <Slider
       value={settings?.[settingKey] ?? 60}
       onChange={handleDelayChange}
-      onReset={() => resetSetting(settingKey)}
-      isResetting={isUpdating(settingKey)}
       min={10}
       max={5000}
       step={10}

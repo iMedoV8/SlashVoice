@@ -19,7 +19,9 @@
     "postProcessing": "Post Process",
     "history": "History",
     "debug": "Debug",
-    "about": "About"
+    "about": "About",
+    "words": "Words",
+    "label": "Pages"
   },
   "onboarding": {
     "customModelDescription": "Not officially supported",
@@ -330,7 +332,7 @@
     "general": {
       "title": "General",
       "shortcut": {
-        "title": "Slash Voice Shortcuts",
+        "title": "Slash Voice shortcuts",
         "description": "Configure keyboard shortcuts to trigger speech-to-text recording",
         "loading": "Loading shortcuts...",
         "none": "No shortcuts configured",
@@ -338,21 +340,23 @@
         "pressKeys": "Press keys...",
         "bindings": {
           "transcribe": {
-            "name": "Transcribe Shortcut",
+            "name": "Dictate",
             "description": "The keyboard shortcut to record and transcribe your voice."
           },
           "cancel": {
-            "name": "Cancel Shortcut",
+            "name": "Cancel",
             "description": "The keyboard shortcut to cancel the current recording."
           },
           "transcribe_with_post_process": {
-            "name": "Post-Processing Hotkey",
+            "name": "Post-processing hotkey",
             "description": "Optional: A dedicated hotkey that always applies AI post-processing to your transcription."
           }
         },
         "errors": {
           "set": "Failed to set shortcut: {{error}}"
-        }
+        },
+        "change": "Change",
+        "cancelChange": "Cancel"
       },
       "language": {
         "title": "Language",
@@ -371,13 +375,13 @@
         "stopDetectorDownload": "Stop downloading the language detector"
       },
       "preferredLanguages": {
-        "title": "Preferred Languages",
+        "title": "You speak",
         "description": "The languages you speak. Slash Voice uses them to recommend models.",
         "noMatch": "No language matches “{{query}}”",
         "weak": "No model recognizes {{languages}} well yet."
       },
       "shortcutActivation": {
-        "title": "Shortcut Behavior",
+        "title": "Behavior",
         "description": "Choose how the transcribe shortcut starts and stops recording.",
         "options": {
           "holdOrToggle": "Auto",
@@ -388,6 +392,22 @@
           "hold_or_toggle": "Hold to record or tap to toggle",
           "push_to_talk": "Records while you hold the shortcut",
           "toggle": "Tap the shortcut to start recording, tap again to stop"
+        }
+      },
+      "groups": {
+        "shortcut": {
+          "title": "Shortcut",
+          "description": "Works in every app, even with this window closed."
+        },
+        "appearance": {
+          "title": "Appearance"
+        },
+        "languages": {
+          "title": "Languages",
+          "description": "The languages you dictate in."
+        },
+        "sound": {
+          "title": "Sound"
         }
       }
     },
@@ -445,17 +465,17 @@
         "loading": "Loading..."
       },
       "channel": {
-        "title": "Input Channel",
+        "title": "Input channel",
         "description": "Select which input channel to record from. Use this if your audio interface has multiple inputs.",
         "average": "Average all channels",
         "channel": "Channel {{n}}"
       },
       "audioFeedback": {
-        "label": "Audio Feedback",
+        "label": "Play a sound on start and stop",
         "description": "Play sound when recording starts and stops"
       },
       "outputDevice": {
-        "title": "Output Device",
+        "title": "Output device",
         "description": "Select your preferred audio output device for feedback sounds",
         "placeholder": "Select output device...",
         "loading": "Loading..."
@@ -474,20 +494,20 @@
         "experimental": "Experimental"
       },
       "experimentalToggle": {
-        "label": "Experimental Features",
+        "label": "Experimental features",
         "description": "Enable experimental features that are still in development."
       },
       "lazyStreamClose": {
-        "label": "Keep Mic Open Between Transcriptions",
+        "label": "Keep mic open between transcriptions",
         "description": "Keeps the microphone stream open for 30 seconds after recording stops, reducing latency for back-to-back transcriptions. May degrade Bluetooth audio quality while active."
       },
       "airpodsMode": {
-        "label": "AirPods Mode",
+        "label": "AirPods mode",
         "description": "Automatically switches AirPods to the Mac for transcription when an iPhone is playing audio. Without this, recordings can come back silent."
       },
       "acceleration": {
         "transcribe": {
-          "title": "Hardware Acceleration",
+          "title": "Hardware acceleration",
           "description": "Choose the hardware used for transcription. Auto uses the GPU when available and falls back to the CPU."
         },
         "gpuDevice": {
@@ -495,15 +515,15 @@
         }
       },
       "startHidden": {
-        "label": "Start Hidden",
+        "label": "Start hidden",
         "description": "Launch to system tray without opening the window."
       },
       "autostart": {
-        "label": "Launch on Startup",
+        "label": "Launch at login",
         "description": "Automatically start Slash Voice when you log in to your computer."
       },
       "showTrayIcon": {
-        "label": "Show Tray Icon",
+        "label": "Show tray icon",
         "description": "Display the Slash Voice icon in the system tray."
       },
       "overlay": {
@@ -517,7 +537,7 @@
           }
         },
         "position": {
-          "title": "Overlay Position",
+          "title": "Overlay position",
           "description": "Where the overlay appears on screen during recording and transcription.",
           "options": {
             "bottom": "Bottom",
@@ -526,7 +546,7 @@
         }
       },
       "pasteMethod": {
-        "title": "Paste Method",
+        "title": "Paste method",
         "description": "Choose how text is inserted. Direct: simulates typing via system input. None: skips paste, only updates history/clipboard.",
         "options": {
           "clipboard": "Clipboard ({{modifier}}+V)",
@@ -539,14 +559,14 @@
         "externalScriptPlaceholder": "/path/to/your/script.sh"
       },
       "typingTool": {
-        "title": "Typing Tool",
+        "title": "Typing tool",
         "description": "Choose which Linux typing tool to use for Direct paste method. Auto will automatically detect and use the best available tool for your system.",
         "options": {
           "auto": "Auto (Recommended)"
         }
       },
       "clipboardHandling": {
-        "title": "Clipboard Handling",
+        "title": "Clipboard handling",
         "description": "Don't Modify Clipboard preserves your current clipboard contents after transcription. Copy to Clipboard leaves the transcription result in your clipboard after pasting.",
         "options": {
           "dontModify": "Don't Modify Clipboard",
@@ -554,7 +574,7 @@
         }
       },
       "autoSubmit": {
-        "title": "Auto Submit",
+        "title": "Auto submit",
         "description": "Automatically send the selected key combination after text insertion. Cmd+Enter applies on macOS, while Windows/Linux use Super+Enter.",
         "options": {
           "off": "Off",
@@ -569,7 +589,7 @@
         "description": "Automatically translate speech from other languages to English during transcription."
       },
       "modelUnload": {
-        "title": "Unload Model",
+        "title": "Unload the model",
         "description": "Automatically free GPU/CPU memory when the model hasn't been used for the specified time",
         "options": {
           "never": "Never",
@@ -583,7 +603,7 @@
         }
       },
       "customWords": {
-        "title": "Custom Words",
+        "title": "Custom words",
         "description": "Help supported models recognize names and specialized terms. Fuzzy correction is currently limited to words using A–Z and numbers.",
         "placeholder": "Add a word",
         "add": "Add",
@@ -591,21 +611,21 @@
         "duplicate": "\"{{word}}\" already exists"
       },
       "voiceActivityDetection": {
-        "title": "Voice Activity Detection",
+        "title": "Voice activity detection",
         "description": "Filter silence from recordings. Streaming-capable models use a longer VAD tail; disabling VAD records raw audio."
       },
       "longFormChunking": {
-        "title": "Long Audio Chunking",
+        "title": "Long audio chunking",
         "description": "Splits long recordings at pauses before transcribing, which typically improves transcription performance. Transcribed files and long re-transcriptions are always split."
       },
       "languageDetection": {
-        "title": "Limit Auto to My Languages",
+        "title": "Limit auto to my languages",
         "description": "Auto only picks from your preferred languages, using a small language detector. Turn this on if Auto keeps choosing a language you don't speak",
         "downloadHint": "Turning this on downloads a small language detector",
         "downloadingHint": "Downloading the language detector. Turn this off to cancel"
       },
       "vadBackend": {
-        "title": "Voice Activity Backend",
+        "title": "Voice activity backend",
         "description": "Choose the detector used to filter silence. Earshot is experimental; switch back to Silero if speech is clipped or noise is retained.",
         "options": {
           "silero": "Silero",
@@ -613,11 +633,11 @@
         }
       },
       "fillerWordRemoval": {
-        "title": "Remove Filler Words",
+        "title": "Remove filler words",
         "description": "Removes common hesitation words from transcriptions. Turn off to keep them."
       },
       "chineseScript": {
-        "title": "Chinese Script",
+        "title": "Chinese script",
         "description": "Writes Mandarin and Cantonese transcriptions in Simplified characters, or in Traditional characters as written in Taiwan or Hong Kong. Other languages are left unchanged.",
         "options": {
           "asTranscribed": "As Transcribed",
@@ -625,7 +645,8 @@
           "traditionalTw": "Traditional (Taiwan)",
           "traditionalHk": "Traditional (Hong Kong)"
         }
-      }
+      },
+      "jumpTo": "Jump to a group"
     },
     "postProcessing": {
       "hotkey": {
@@ -638,7 +659,7 @@
           "description": "Select an OpenAI-compatible or Anthropic-compatible provider."
         },
         "apiFormat": {
-          "title": "API Format",
+          "title": "API format",
           "description": "Request format expected by your custom endpoint.",
           "options": {
             "openai": "OpenAI Compatible (Chat Completions)",
@@ -655,7 +676,7 @@
           "placeholderAnthropic": "https://api.anthropic.com/v1"
         },
         "apiKey": {
-          "title": "API Key",
+          "title": "API key",
           "description": "API key for the selected provider.",
           "placeholder": "sk-..."
         },
@@ -671,7 +692,7 @@
       "prompts": {
         "title": "Prompt",
         "selectedPrompt": {
-          "title": "Selected Prompt",
+          "title": "Selected prompt",
           "description": "Select a template for refining transcriptions or create a new one. Use ${output} inside the prompt text to reference the captured transcript."
         },
         "noPrompts": "No prompts available",
@@ -692,7 +713,7 @@
     },
     "history": {
       "title": "History",
-      "openFolder": "Open Recordings Folder",
+      "openFolder": "Open recordings folder",
       "loading": "Loading history...",
       "empty": "No transcriptions yet. Start recording to build your history!",
       "copyToClipboard": "Copy transcription to clipboard",
@@ -706,7 +727,7 @@
       "transcribing": "Transcribing...",
       "transcriptionFailed": "Transcription failed. You can re-transcribe using the retry icon.",
       "notTranscribed": "Not transcribed. You can transcribe it using the retry icon.",
-      "transcribeFile": "Transcribe File",
+      "transcribeFile": "Transcribe file",
       "mediaFiles": "Audio and video",
       "fileUnsupported": "Couldn't read audio from {{name}}.",
       "transcribeFailed": "Transcription failed. Please try again.",
@@ -716,20 +737,27 @@
       "showMore": "Show more",
       "showLess": "Show less",
       "dropTitle": "Drop to transcribe",
-      "dropDescription": "It'll show up in History."
+      "dropDescription": "It'll show up in History.",
+      "search": "Search dictations",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "dictationsOne": "{{n}} dictation",
+      "dictationsMany": "{{n}} dictations",
+      "noMatches": "No dictations match.",
+      "play": "Play the recording"
     },
     "debug": {
       "title": "Debug",
       "logDirectory": {
-        "title": "Log Directory",
+        "title": "Logs",
         "description": "Location where log files are stored"
       },
       "logLevel": {
-        "title": "Log Level",
+        "title": "Log level",
         "description": "Set the verbosity of logging"
       },
       "liveLogs": {
-        "title": "Live Logs",
+        "title": "Live logs",
         "description": "Stream application logs in real time to diagnose issues without opening the log file. Only logs emitted while this panel is open are shown; respects the Log Level setting above.",
         "live": "Live",
         "paused": "Paused",
@@ -740,17 +768,17 @@
         "empty": "Waiting for logs… Entries appear here as the app emits them."
       },
       "updateChecks": {
-        "label": "Check for Updates",
+        "label": "Check for updates",
         "description": "Automatically check for new versions of Slash Voice",
         "lockedDescription": "Disabled by system configuration (HANDY_DISABLE_UPDATER)"
       },
       "whatsNewPreview": {
-        "title": "Preview What's New",
+        "title": "Preview what's new",
         "description": "Open the latest bundled release note without marking it as seen",
         "button": "Preview"
       },
       "onboardingPreview": {
-        "title": "Preview Onboarding",
+        "title": "Preview onboarding",
         "description": "Preview onboarding screens without changing permissions, models, or completion state",
         "exitButton": "Exit Preview",
         "choose": "Choose a screen",
@@ -764,30 +792,30 @@
         }
       },
       "onboardingRun": {
-        "title": "Run Onboarding",
+        "title": "Run onboarding",
         "description": "Go through onboarding for real from the start: it asks for permissions, downloads models and saves your choices",
         "button": "Start"
       },
       "modelMigration": {
-        "title": "Model Migration",
+        "title": "Model migration",
         "description": "Open the old-format model update screen for real: it downloads replacements, switches models and deletes old files",
         "button": "Open"
       },
       "soundTheme": {
-        "label": "Sound Theme",
+        "label": "Sound theme",
         "description": "Choose a sound theme for recording start and stop feedback"
       },
       "wordCorrectionThreshold": {
-        "title": "Word Correction Threshold",
+        "title": "Word correction threshold",
         "description": "Sensitivity for custom word corrections"
       },
       "historyLimit": {
-        "title": "History Limit",
+        "title": "History limit",
         "description": "Maximum number of history entries to keep",
         "entries": "entries"
       },
       "recordingRetention": {
-        "title": "Auto-Delete Recordings",
+        "title": "Auto-delete recordings",
         "description": "Automatically delete old recordings to save space",
         "never": "Never",
         "preserveLimit": "Keep latest {{count}}",
@@ -797,56 +825,56 @@
         "placeholder": "Select retention period..."
       },
       "alwaysOnMicrophone": {
-        "label": "Always-On Microphone",
+        "label": "Always-on microphone",
         "description": "Keep microphone active for faster response"
       },
       "clamshellMicrophone": {
-        "title": "Clamshell Microphone",
+        "title": "Clamshell microphone",
         "description": "Microphone to use when laptop lid is closed"
       },
       "postProcessingToggle": {
-        "label": "Post Processing",
+        "label": "Post processing",
         "description": "Enable AI-powered text refinement after transcription"
       },
       "muteWhileRecording": {
-        "label": "Mute While Recording",
+        "label": "Mute while recording",
         "description": "Mute system audio during recording"
       },
       "appendTrailingSpace": {
-        "label": "Append Trailing Space",
+        "label": "Append trailing space",
         "description": "Add a space after pasted transcription"
       },
       "keyboardImplementation": {
-        "title": "Keyboard Implementation",
+        "title": "Keyboard implementation",
         "description": "Choose the keyboard shortcut backend.",
         "bindingsReset": "Keyboard shortcuts were incompatible and reset to defaults"
       },
       "pasteDelay": {
-        "title": "Paste Delay (Before)",
+        "title": "Paste delay (before)",
         "description": "Delay (in milliseconds) after copying text, before sending the paste keystroke. Increase if nothing gets pasted."
       },
       "pasteDelayAfter": {
-        "title": "Paste Delay (After)",
+        "title": "Paste delay (after)",
         "description": "Delay (in milliseconds) after the paste keystroke, before restoring your previous clipboard. Increase if your old clipboard content is being pasted instead of the transcription."
       },
       "holdThreshold": {
-        "title": "Hold Threshold",
+        "title": "Hold threshold",
         "description": "Auto mode only: how long (in milliseconds) the shortcut must be held before it counts as a hold instead of a tap. Lower if short holds keep leaving recording on; raise if deliberate taps get treated as holds."
       },
       "reliablePaste": {
-        "title": "Reliable Paste (Beta)",
+        "title": "Reliable paste (beta)",
         "description": "Restore the clipboard only after the target app actually reads the transcription, instead of after a fixed delay. Intended to fix old clipboard content being pasted under system load. Requires a clipboard paste method; macOS and Windows only."
       },
       "recordingBuffer": {
-        "title": "Extra Recording Buffer",
+        "title": "Extra recording buffer",
         "description": "Extra time (in milliseconds) to keep recording after you release the key, to capture trailing audio. 0 = no extra buffer."
       },
       "languageDetectionWindow": {
-        "title": "Language Detection Audio",
+        "title": "Language detection audio",
         "description": "Seconds of speech the language detector hears. Longer is more accurate but slower."
       },
       "keyboardDiagnostic": {
-        "title": "Keyboard Diagnostic",
+        "title": "Keyboard diagnostic",
         "description": "Checks whether keyboard events reach Slash Voice. Only event counts are recorded — never which keys you press.",
         "run": "Run 10s diagnostic",
         "running": "Listening… press your shortcut a few times (e.g. Option+Space)",
@@ -873,11 +901,11 @@
         "description": "Current version of Slash Voice"
       },
       "whatsNewUpdates": {
-        "label": "Show What's New",
+        "label": "Show what's new after an update",
         "description": "Show release notes after Slash Voice updates"
       },
       "appDataDirectory": {
-        "title": "App Data Directory",
+        "title": "App data",
         "description": "Location where Slash Voice stores its data"
       },
       "sourceCode": {
@@ -886,7 +914,7 @@
         "button": "View Handy"
       },
       "supportDevelopment": {
-        "title": "Support Development",
+        "title": "Support development",
         "description": "Help us continue building Slash Voice",
         "button": "Donate"
       },
@@ -897,6 +925,23 @@
           "description": "High-performance tensor library for on-device machine learning inference",
           "details": "Slash Voice's local speech-to-text is built on transcribe.cpp and ggml. Thanks to the amazing work by Georgi Gerganov and contributors."
         }
+      },
+      "versionLine": "Version {{version}}",
+      "updateChecksOff": "Update checks are off",
+      "credits": "Credits",
+      "folders": "Folders",
+      "recordings": "Recordings",
+      "updates": "Updates"
+    },
+    "words": {
+      "title": "Words",
+      "search": "Search words",
+      "add": "Add word",
+      "empty": "No words yet. Add the names Slash Voice should spell your way.",
+      "noMatches": "No words match.",
+      "yours": {
+        "title": "Your words",
+        "description": "Names you added by hand."
       }
     }
   },
@@ -965,11 +1010,11 @@
     "errorsAndWarnings": "{{errors}}, {{warnings}}"
   },
   "appLanguage": {
-    "title": "Application Language",
+    "title": "App language",
     "description": "Change the language of the Slash Voice interface"
   },
   "theme": {
-    "title": "Application Theme",
+    "title": "Theme",
     "description": "Choose whether Slash Voice follows your system theme or stays light or dark",
     "options": {
       "system": "System",
@@ -992,5 +1037,14 @@
     "learnMore": "How to fix",
     "recorderBlocked": "Can't record shortcuts right now — macOS Secure Input is blocking key events. Resolve the Secure Input warning first.",
     "dismiss": "Dismiss"
+  },
+  "statusLine": {
+    "ready": "Ready",
+    "loading": "Loading the model",
+    "downloading": "Downloading a model",
+    "failed": "The model didn't load",
+    "noModel": "No model yet",
+    "hold": "Hold",
+    "press": "Press"
   }
 }

@@ -11,7 +11,6 @@ import {
   Textarea,
 } from "@/components/ui";
 import { Button } from "../../ui/Button";
-import { ResetButton } from "../../ui/ResetButton";
 import { Input } from "../../ui/Input";
 
 import { ProviderSelect } from "../PostProcessingSettingsApi/ProviderSelect";
@@ -164,16 +163,18 @@ const PostProcessingSettingsApiComponent: React.FC = () => {
               onBlur={() => {}}
               className="flex-1 min-w-[380px]"
             />
-            <ResetButton
+            <button
+              type="button"
               onClick={state.handleRefreshModels}
               disabled={state.isFetchingModels}
-              ariaLabel={t("settings.postProcessing.api.model.refreshModels")}
-              className="flex h-10 w-10 items-center justify-center"
+              aria-label={t("settings.postProcessing.api.model.refreshModels")}
+              title={t("settings.postProcessing.api.model.refreshModels")}
+              className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-control text-ink-2 hover:bg-wash hover:text-text disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-logo-primary/40"
             >
               <RefreshCcw
                 className={`h-4 w-4 ${state.isFetchingModels ? "animate-spin" : ""}`}
               />
-            </ResetButton>
+            </button>
           </div>
         </SettingContainer>
       )}

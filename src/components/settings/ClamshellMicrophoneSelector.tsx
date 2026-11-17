@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { commands } from "@/bindings";
 import { Dropdown } from "../ui/Dropdown";
 import { SettingContainer } from "../ui/SettingContainer";
-import { ResetButton } from "../ui/ResetButton";
 import { useSettings } from "../../hooks/useSettings";
 
 interface ClamshellMicrophoneSelectorProps {
@@ -58,10 +57,6 @@ export const ClamshellMicrophoneSelector: React.FC<ClamshellMicrophoneSelectorPr
       await updateSetting("clamshell_microphone", deviceName);
     };
 
-    const handleReset = async () => {
-      await resetSetting("clamshell_microphone");
-    };
-
     const microphoneOptions = audioDevices.map((device) => ({
       value: device.name,
       label: device.name,
@@ -90,13 +85,6 @@ export const ClamshellMicrophoneSelector: React.FC<ClamshellMicrophoneSelectorPr
               audioDevices.length === 0
             }
             onOpen={refreshAudioDevices}
-          />
-          <ResetButton
-            ariaLabel={t("common.resetSetting", {
-              setting: t("settings.debug.clamshellMicrophone.title"),
-            })}
-            onClick={handleReset}
-            disabled={isUpdating("clamshell_microphone") || isLoading}
           />
         </div>
       </SettingContainer>
