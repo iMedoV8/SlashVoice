@@ -15,7 +15,15 @@ A `cdhash` is a hash of this exact build. Our builds are signed ad hoc (`"signin
 
 **Decision.** Sign with a certificate. The designated requirement then names the app's identifier and the certificate, not the build, and stays the same from build to build.
 
-**Not verified.** That macOS keeps the permission across builds signed with a self-made certificate, and that the app's own libraries still load under the hardened runtime when the certificate has no Apple team. Both are tested first (task T001) on the founder's Mac.
+**Verified on 2026-11-18** (tasks T001 to T003), on the founder's Mac. A self-made "Slash Voice" code-signing certificate, valid until 2036, was added to his login keychain. Two builds were signed with it, 0.1.0 (A) and a test build labelled 0.1.1 (B). Both have the same designated requirement:
+
+```text
+designated => identifier "com.slashvoice.app" and certificate leaf = H"7dd17dd5a214276dcc5423d98854eb38c9666274"
+```
+
+The founder granted microphone and accessibility to A and dictated. B was installed over A: it opened without the permissions screen, macOS asked nothing, and dictation worked. The hardened runtime loads the app's libraries with this certificate. Keychain shows the certificate as not trusted, since macOS made it itself; signing does not need that trust, and no password prompt appears.
+
+Note: System Settings showed the app with an old purple icon from the first build. The icon file in the app has no purple; it is macOS's saved copy and is refreshed by a restart.
 
 **Alternatives.** Apple Developer ID ($99 a year): the same effect, and it also removes the "cannot verify" warning; the founder's decision if T001 fails. Keeping ad hoc: rejected, it is the cause.
 

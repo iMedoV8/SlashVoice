@@ -4,9 +4,9 @@
 
 ## Phase 1: The fixed signature (a gate: nothing else starts until it passes)
 
-- [ ] T001 **(founder)** Make the "Slash Voice" code-signing certificate in Keychain Access, valid ten years; export it as a `.p12` with a password; save both in the password manager
-- [ ] T002 Build twice with the certificate; confirm the two builds share one designated requirement; the founder installs the first, grants permissions, installs the second, and dictates (`quickstart.md` §1). If it fails: stop and put the Apple Developer ID choice to the founder
-- [ ] T003 Record the result and memory before (`research.md` R1, `baseline` section of `plan.md`)
+- [x] T001 Make the "Slash Voice" code-signing certificate, valid ten years, in the founder's login keychain (made from Terminal at his request on 2026-11-18; exported for GitHub in T004)
+- [x] T002 Build twice with the certificate; confirm the two builds share one designated requirement; the founder installs the first, grants permissions, installs the second, and dictates (`quickstart.md` §1). If it fails: stop and put the Apple Developer ID choice to the founder
+- [x] T003 Record the result and memory before (`research.md` R1, `baseline` section of `plan.md`)
 
 ## Phase 2: Keys and checks
 
