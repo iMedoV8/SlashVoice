@@ -30,10 +30,15 @@ function pngSize(path: string) {
 }
 
 describe("app icon", () => {
-  test("the shipped icon is the dark ground with the mark in the accent", () => {
-    expect(colours(read("branding/app-icon.svg"))).toEqual(
-      new Set(["#1A1A1A", "#F0532B"]),
-    );
+  // Founder, 2026-11-18: the slash white, the two sound arcs in the accent.
+  test("the shipped icon is the dark ground, a white slash and accent arcs", () => {
+    const svg = read("branding/app-icon.svg");
+    expect(colours(svg)).toEqual(new Set(["#1A1A1A", "#FFFFFF", "#F0532B"]));
+    const slash = svg.match(/<path d="M[^"]*Z"[^>]*>/)?.[0] ?? "";
+    expect(slash).toMatch(/fill="#FFFFFF"/);
+    const arcs = [...svg.matchAll(/<path d="M[^"]*Q[^"]*"[^>]*>/g)];
+    expect(arcs.length).toBe(2);
+    for (const [arc] of arcs) expect(arc).toMatch(/stroke="#F0532B"/);
   });
 
   test("the light-mode icon is the accent ground with a white mark", () => {

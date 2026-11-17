@@ -9,7 +9,7 @@ Slash Voice takes the Slash theme (founder, 2026-11-12). The brand's source is `
 Built (`specs/001-slash-look`):
 
 - The Slash palette in dark and light, Onest, JetBrains Mono and IBM Plex Sans Arabic bundled, Slash corners. Values in `specs/001-slash-look/contracts/look-tokens.md`, checked by `tests-look/`.
-- Logo option B, the slash-with-arcs app icon (dark ground everywhere; the light one is kept as artwork only), and the four menu-bar states.
+- Logo option B, the slash-with-arcs app icon (dark ground, white slash, accent arcs; the light one is kept as artwork only), and the four menu-bar states.
 - The welcome and permissions screens rebuilt to their stills.
 - Handy's pink, its mascot on the welcome screen, and the purple of the first build are gone.
 
@@ -58,9 +58,13 @@ The brand file says its rules cover the Slash app and must not be carried elsewh
   - This is a change to the earlier rule that running work never takes the accent. The look contract (`specs/001-slash-look/contracts/look-tokens.md`) and the check `tests-look/banned.test.ts` were updated to allow exactly these two places (`specs/008-own-look`).
   - The brand's private source still states the earlier rule. That is reported to the founder and is his to reconcile there.
 
+## Decided by the founder (2026-11-18)
+
+- **The shipped app icon: a white slash, the arcs in the accent**, on the dark ground `#1A1A1A`. This replaces the whole mark in the accent and settles the open question on the arcs. It is the icon in the Dock, the Windows taskbar and the download page's tab (`branding/app-icon.svg`, `site/favicon.svg`). The light-mode artwork (`branding/app-icon-light.svg`) is unchanged and not shipped.
+- **Handy is credited in the README only.** The About screen does not name it; its licence, with its copyright notice, ships inside the app.
+
 ## Open, for the founder
 
-- **The arcs in dark mode.** Drawn two ways: the whole mark in the accent, or the slash in the accent with the arcs in the light text colour. He has not said which.
 - **How the icon follows the mode.** Whether macOS and Windows can show a different app icon in dark and light mode for this kind of app is not verified. If they cannot, one of the two is the icon everywhere.
 - **Menu-bar and tray icons.** Drawn (idle, recording, transcribing, needs attention) and not approved. As drawn, the idle icon is the slash alone, without the arcs.
 - **Light mode.** Built on every screen and not yet approved.
