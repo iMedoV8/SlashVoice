@@ -30,8 +30,9 @@ The values the app must use after this task. They are copied from `../Slash/DESI
 - A switch that is on.
 - A selected radio.
 - The slash in the logo.
+- The recording pill's dot, from the moment the microphone is listening, and its spinner while it transcribes or loads a model (founder, 2026-11-16; `specs/008-own-look`).
 
-Nowhere else. Recording and transcribing never use the accent or the failed red.
+Nowhere else. Recording and transcribing never use the failed red, and the accent marks them only on the pill's dot and spinner: the bars, the words and the timer stay in the text colour.
 
 ## Colours that must not appear
 

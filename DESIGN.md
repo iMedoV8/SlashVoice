@@ -50,7 +50,7 @@ The brand file says its rules cover the Slash app and must not be carried elsewh
 
 - **The layout: direction C, "the sidebar".** The structure the app has today is kept and reworked so that nobody who sees it recognises Handy. The app opens on History. Stills: `design/stills/own-look-c-*`; the full record is in `design/README.md`. Not built.
 - **The recording pill carries the accent.** Its dot is grey while the microphone gets ready and the accent from the moment it is listening. Its spinner is the accent while transcribing and while a model loads. Still: `design/stills/own-look-c-08-pill-dark.png` and `-light`. Not built.
-  - This is a change to the earlier rule that running work never takes the accent. The look contract (`specs/001-slash-look/contracts/look-tokens.md`) and the check `tests-look/banned.test.ts` still hold the earlier rule; they change in the task that builds the pill.
+  - This is a change to the earlier rule that running work never takes the accent. The look contract (`specs/001-slash-look/contracts/look-tokens.md`) and the check `tests-look/banned.test.ts` were updated to allow exactly these two places (`specs/008-own-look`).
   - The brand's private source still states the earlier rule. That is reported to the founder and is his to reconcile there.
 
 ## Open, for the founder

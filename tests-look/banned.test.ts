@@ -75,6 +75,8 @@ describe("the accent", () => {
     "src/components/ui/Switch.tsx",
     "src/components/ui/Radio.tsx",
     "src/components/icons/HandyTextLogo.tsx",
+    // The recording pill's dot and spinner (founder, 2026-11-16); held to those two below.
+    "src/overlay/RecordingOverlay.css",
   ]);
 
   test("is used only where the brand allows it", () => {
@@ -86,6 +88,46 @@ describe("the accent", () => {
         ),
     );
     expect(hits).toEqual([]);
+  });
+});
+
+describe("the recording pill", () => {
+  // Rules of the pill's stylesheet that name the accent, by selector.
+  const css = read("src/overlay/RecordingOverlay.css").replace(
+    /\/\*[\s\S]*?\*\//g,
+    "",
+  );
+  const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((m) => ({
+    selector: m[1].trim(),
+    body: m[2],
+  }));
+  const accentRules = rules.filter((r) => /--color-accent\b/.test(r.body));
+
+  test("the dot is the accent once the microphone is listening", () => {
+    const dot = rules.find((r) => r.selector === ".sdot.ready");
+    expect(dot?.body).toMatch(/background:\s*var\(--color-accent\)/);
+  });
+
+  test("the spinner is the accent", () => {
+    const spinner = rules.find((r) => r.selector === ".sspinner");
+    expect(spinner?.body).toMatch(
+      /border-top-color:\s*var\(--color-accent\)/,
+    );
+  });
+
+  test("the accent is used on nothing else in the pill", () => {
+    expect(accentRules.map((r) => r.selector).sort()).toEqual([
+      ".sdot.ready",
+      ".sspinner",
+    ]);
+    expect(read("src/overlay/RecordingOverlay.tsx")).not.toMatch(/accent/);
+  });
+
+  test("the bars and the getting-ready dot are not the accent", () => {
+    for (const selector of [".swave i", ".sdot.arming"]) {
+      const rule = rules.find((r) => r.selector === selector);
+      expect(rule?.body ?? "").not.toMatch(/accent/);
+    }
   });
 });
 

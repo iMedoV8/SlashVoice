@@ -1,18 +1,22 @@
 @import "../styles/theme.css";
 
 :root {
-  --s-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  /* Slash's typefaces (bundled in main.tsx): Onest for words, IBM Plex Sans
+     Arabic for Arabic, JetBrains Mono for the timer. */
+  --s-font:
+    "Onest Variable", "IBM Plex Sans Arabic", system-ui, -apple-system,
+    "Segoe UI Variable Text", "Segoe UI", sans-serif;
+  --s-mono:
+    "JetBrains Mono Variable", ui-monospace, "SF Mono", Menlo, Consolas,
+    monospace;
   /* Near-opaque app surface (theme.css --color-background at 98%). Auto-flips
      light/dark with --color-background, so no dark-mode override is needed. */
   --s-surface: color-mix(in srgb, var(--color-background) 98%, transparent);
-  /* Accent = logo pink; flips automatically via --color-logo-primary. */
-  --s-accent: var(--color-logo-primary);
+  /* The bars, the caret and the words: the text colour. The accent marks only
+     the listening dot and the spinner (DESIGN.md, 2026-11-16). */
+  --s-ink: var(--color-text);
   /* The rest come from theme.css, which already follows the theme setting. */
-  --s-accent-soft: color-mix(
-    in srgb,
-    var(--color-logo-primary) 20%,
-    transparent
-  );
+  --s-ink-soft: color-mix(in srgb, var(--color-text) 20%, transparent);
   --s-muted: var(--color-ink-2);
   --s-faint: var(--color-ink-3);
   --s-border: var(--color-line);
@@ -163,6 +167,7 @@
 /* Notice: badge and title, in the pill and the Live panel. */
 .scard.cnotice {
   cursor: pointer;
+  border-color: var(--notice);
 }
 .scard.cnotice:not(.open) {
   border-radius: 24px;
@@ -268,7 +273,7 @@
   height: 1.02em;
   translate: 0 3px;
   margin-left: 1px;
-  background: var(--s-accent);
+  background: var(--s-ink);
   border-radius: 2px;
   animation: scaret-blink 1.05s steps(1) infinite;
 }
@@ -314,7 +319,7 @@
     opacity 180ms ease;
 }
 .sdot.ready {
-  background: var(--s-accent);
+  background: var(--color-accent);
   opacity: 1;
   animation: sdot-pulse 1.9s infinite;
 }
@@ -324,17 +329,16 @@
   opacity: 0.45;
   animation: none;
 }
+/* A slow breath, not a ring: the brand rules out glows. */
 @keyframes sdot-pulse {
-  0% {
-    box-shadow: 0 0 0 0 var(--s-accent-soft);
-  }
-  70% {
-    box-shadow: 0 0 0 7px transparent;
+  50% {
+    opacity: 0.55;
   }
 }
 .stimer {
-  font-size: 12px;
-  color: var(--s-faint);
+  font-family: var(--s-mono);
+  font-size: 11.5px;
+  color: var(--color-text);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   opacity: 0;
@@ -360,7 +364,7 @@
   min-height: 3px;
   max-height: 18px;
   border-radius: 2px;
-  background: var(--s-accent);
+  background: var(--s-ink);
   transition:
     height 80ms linear,
     background-color 180ms ease,
@@ -424,7 +428,7 @@
   display: block;
 }
 .sx:hover {
-  background: var(--s-accent-soft);
+  background: var(--s-ink-soft);
   color: var(--color-text);
   transform: scale(1.05);
 }
@@ -438,7 +442,7 @@
   height: 13px;
   border-radius: 50%;
   border: 2px solid var(--s-hair);
-  border-top-color: var(--s-accent);
+  border-top-color: var(--color-accent);
   animation: sspin 0.7s linear infinite;
   flex: none;
 }
@@ -449,11 +453,31 @@
 }
 .swork-label {
   font-size: 12px;
-  color: var(--s-muted);
+  color: var(--color-text);
   white-space: nowrap;
   padding: 0 8px; /* breathing room from the spinner / cancel when content-sized */
   /* Safety net: ellipsize rather than clip if a label exceeds the max pill width. */
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* Reduced motion: the bars hold one height, the dot does not pulse and the
+   spinner does not turn (still 8). */
+@media (prefers-reduced-motion: reduce) {
+  .swave i {
+    height: 8px !important;
+    transition: none;
+  }
+  .swave.arming i,
+  .sdot.ready,
+  .sspinner,
+  .scaret {
+    animation: none;
+  }
+  .scard,
+  .scard.leaving {
+    animation: none;
+    transition: none;
+  }
 }
