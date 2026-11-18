@@ -1,7 +1,8 @@
 # Builds the Windows installer and the Mac disk image (specs/004-installers),
 # and the signed update files and feed (specs/009-updates).
-# Started by hand, it signs the builds and attaches everything to a draft
-# release. On a pull request that changes this file it only builds, unsigned
+# Started by hand on main, it signs the builds and attaches everything to a
+# draft release; started on any other branch it builds unsigned and releases
+# nothing. On a pull request that changes this file it only builds, unsigned
 # and without update files, so the workflow is tested before it reaches main
 # and a pull request never sees a secret. Adapted from Handy's build.yml and
 # release.yml. Actions are pinned to a commit. Only the release job can write,
@@ -125,18 +126,18 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      # Started by hand only: the update key on both systems, and the Slash
+      # Started by hand on main only: the update key on both systems, and the Slash
       # Voice certificate on the Mac, so every Mac build keeps the same
       # signature and macOS keeps its permissions. Each secret is checked to be
       # present; none is printed.
       - name: Signing keys (started by hand only)
-        if: github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
         shell: bash
         env:
-          UPDATE_KEY: ${{ github.event_name == 'workflow_dispatch' && secrets.TAURI_SIGNING_PRIVATE_KEY || '' }}
-          UPDATE_KEY_PASSWORD: ${{ github.event_name == 'workflow_dispatch' && secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD || '' }}
-          MAC_CERT: ${{ github.event_name == 'workflow_dispatch' && matrix.name == 'macos-arm64' && secrets.APPLE_CERTIFICATE || '' }}
-          MAC_CERT_PASSWORD: ${{ github.event_name == 'workflow_dispatch' && matrix.name == 'macos-arm64' && secrets.APPLE_CERTIFICATE_PASSWORD || '' }}
+          UPDATE_KEY: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && secrets.TAURI_SIGNING_PRIVATE_KEY || '' }}
+          UPDATE_KEY_PASSWORD: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD || '' }}
+          MAC_CERT: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && matrix.name == 'macos-arm64' && secrets.APPLE_CERTIFICATE || '' }}
+          MAC_CERT_PASSWORD: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && matrix.name == 'macos-arm64' && secrets.APPLE_CERTIFICATE_PASSWORD || '' }}
           IS_MAC: ${{ matrix.name == 'macos-arm64' }}
         run: |
           set -euo pipefail
@@ -160,7 +161,7 @@ jobs:
         env:
           BUILD_ARGS: ${{ matrix.args }}
           # A pull request has no keys, so it builds without update files.
-          NO_UPDATES: ${{ github.event_name != 'workflow_dispatch' }}
+          NO_UPDATES: ${{ !(github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') }}
         run: |
           if [ "$NO_UPDATES" = "true" ]; then
             bun run tauri build $BUILD_ARGS --config '{"bundle":{"createUpdaterArtifacts":false}}'
@@ -169,7 +170,7 @@ jobs:
           fi
 
       - name: Check the Mac signature (started by hand)
-        if: github.event_name == 'workflow_dispatch' && matrix.name == 'macos-arm64'
+        if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && matrix.name == 'macos-arm64'
         shell: bash
         run: |
           set -euo pipefail
@@ -205,7 +206,7 @@ jobs:
           UPDATE_DIR: ${{ matrix.update-dir }}
           UPDATE_PATTERN: ${{ matrix.update-pattern }}
           UPDATE_SUFFIX: ${{ matrix.update-suffix }}
-          WITH_UPDATES: ${{ github.event_name == 'workflow_dispatch' }}
+          WITH_UPDATES: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' }}
         run: |
           set -euo pipefail
           VERSION=$(grep -o '"version": "[^"]*"' src-tauri/tauri.conf.json | head -n 1 | cut -d'"' -f4)
@@ -236,7 +237,7 @@ jobs:
 
   release:
     name: draft release
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 10

@@ -75,8 +75,9 @@ Release 0.2.0 carries direction C and is the first release that can update itsel
 - **The update key is lost:** no new update can be signed. Installed apps keep working and must be reinstalled by hand once with a new key. The plan says where the key's backup lives.
 - **The certificate expires or is replaced:** Macs would ask for permissions once more. The certificate is made to last at least ten years.
 - **A Windows install the user does not have rights to write to:** the update fails with a notice; the app keeps working.
-- **Portable Windows installs:** keep today's behaviour (a dialog that links to the installer), since they cannot update in place.
-- **Debug or development builds:** never install an update over themselves.
+- **Portable Windows installs:** do not check for updates at all in this task, since they cannot be replaced in place; they update by hand as before. (Changed after the second review: Handy's dialog for them lived in the removed bottom bar.)
+- **Debug or development builds:** never check for or install an update.
+- **Windows and quitting:** the Windows installer reopens the app when it finishes, so on Windows a waiting update is installed only by Restart, never at quit. If the user quits instead, it is fetched and offered again after the next launch.
 
 ## Requirements _(mandatory)_
 
@@ -87,7 +88,7 @@ Release 0.2.0 carries direction C and is the first release that can update itsel
 - **FR-003**: The secret half of the update key and of the signing certificate never enter the repository, a log or a build artifact. They live in the release workflow's secret store and in one backup the founder keeps.
 - **FR-004**: Every Mac build made by the release workflow, and every build the founder makes on his Mac, carries the same signature.
 - **FR-005**: The release workflow publishes, with each release, the installers people download by hand, the update files, their signatures, and the feed that describes them.
-- **FR-006**: An update never restarts the app while it is recording or transcribing. It is installed when the user presses Restart, or else when the app is next quit.
+- **FR-006**: An update never restarts the app while it is recording or transcribing, and no new dictation or file transcription starts once an install has begun. It is installed when the user presses Restart, or else, on a Mac, when the app is next quit.
 - **FR-007**: The user can see whether update checks are on, see a waiting update's version, and turn checks off, on the About page. The control moves there from the Debug page.
 - **FR-008**: When checks are off, the app makes no request to the release feed.
 - **FR-009**: A failed check is silent; a failed or unverified update shows one notice.
@@ -124,6 +125,6 @@ Release 0.2.0 carries direction C and is the first release that can update itsel
 ## Assumptions
 
 - The free certificate is made on the founder's Mac with the commands the plan gives. He makes the keys and passwords and puts them in GitHub's secret store himself; no agent sees a password or a secret half.
-- All releases are pre-releases for now, and the feed follows the newest published one.
+- From 0.2.0, releases are ordinary releases (not pre-releases), because the feed's "latest" address skips pre-releases (`research.md` R4). The feed follows the newest published one.
 - Updates come from GitHub Releases on `iMedoV8/SlashVoice`; no server of our own.
 - Intel Macs, Windows on ARM and Linux are not covered, as in `specs/004-installers`.

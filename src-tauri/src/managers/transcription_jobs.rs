@@ -234,6 +234,16 @@ impl TranscriptionJobManager {
             let (entry_id, cancelled) = {
                 let mut jobs = self.lock();
                 let entry_id = loop {
+                    // Slash Voice: none starts while an update is being
+                    // installed (specs/009-updates); it waits instead.
+                    if crate::updates::installing() {
+                        jobs = self
+                            .wake
+                            .wait_timeout(jobs, std::time::Duration::from_millis(500))
+                            .unwrap_or_else(|poisoned| poisoned.into_inner())
+                            .0;
+                        continue;
+                    }
                     if let Some(entry_id) =
                         jobs.retries.pop_front().or_else(|| jobs.files.pop_front())
                     {

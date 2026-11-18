@@ -33,7 +33,7 @@ describe("the app's updater", () => {
     );
   });
 
-  test("a waiting update is installed when the app exits", () => {
+  test("the exit hook calls the install-at-quit path (source check)", () => {
     expect(read("src-tauri/src/lib.rs")).toMatch(
       /RunEvent::Exit\b[\s\S]{0,200}updates::install_on_quit/,
     );
@@ -52,14 +52,24 @@ describe("the release workflow", () => {
     for (const s of SECRETS) expect(workflow).toContain(`secrets.${s}`);
   });
 
-  test("reads secrets only when started by hand, never on a pull request", () => {
+  test("reads secrets only when started by hand on main", () => {
     for (const line of workflow.split("\n")) {
       if (!/secrets\.(APPLE_|TAURI_SIGNING)/.test(line)) continue;
-      expect(line).toMatch(/github\.event_name == 'workflow_dispatch'/);
+      expect(line).toMatch(
+        /github\.event_name == 'workflow_dispatch' && github\.ref == 'refs\/heads\/main'/,
+      );
     }
   });
 
-  test("never prints a secret", () => {
+  test("releases only from main", () => {
+    expect(workflow).toMatch(
+      /release:\n(?:.*\n){1,3}\s+if: github\.event_name == 'workflow_dispatch' && github\.ref == 'refs\/heads\/main'/,
+    );
+  });
+
+  // A source check: no echo of a secret's value. It cannot prove a build
+  // script never prints one; the run's own masking covers that.
+  test("does not echo a secret", () => {
     expect(workflow).not.toMatch(/echo[^\n]*\$\{\{\s*secrets\./);
     expect(workflow).not.toMatch(
       /echo[^\n]*\$(APPLE_CERTIFICATE|TAURI_SIGNING)/,

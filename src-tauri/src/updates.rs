@@ -7,6 +7,7 @@
 //! from the cached file, right before it is installed.
 
 use std::path::{Path, PathBuf};
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Mutex;
 use std::time::Duration;
 
@@ -28,6 +29,36 @@ pub const UPDATE_PUBKEY: &str = "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyB
 
 const FIRST_CHECK_AFTER: Duration = Duration::from_secs(30);
 const CHECK_EVERY: Duration = Duration::from_secs(6 * 60 * 60);
+/// After claiming the install, how long work that had just started has to
+/// show itself as busy.
+const SETTLE: Duration = Duration::from_millis(300);
+
+/// Set while an update is being installed. New dictations and file jobs
+/// check it and do not start (specs/009-updates, FR-006).
+static INSTALLING: AtomicBool = AtomicBool::new(false);
+/// Set while a check or download runs, so only one runs at a time.
+static CHECKING: AtomicBool = AtomicBool::new(false);
+
+/// Whether an update is being installed; nothing new may start.
+pub fn installing() -> bool {
+    INSTALLING.load(Ordering::SeqCst)
+}
+
+/// Whether this build may update itself at all: never a development build,
+/// never a portable install (it cannot be replaced in place).
+pub fn self_update_allowed(debug_build: bool, portable: bool) -> bool {
+    !debug_build && !portable
+}
+
+fn allowed_here() -> bool {
+    self_update_allowed(cfg!(debug_assertions), crate::portable::is_portable())
+}
+
+/// Whether to install a waiting update when the app quits. Not on Windows:
+/// its installer reopens the app afterwards, which a quit must not do.
+pub fn install_at_quit(windows: bool) -> bool {
+    !windows
+}
 
 /// Whether `bytes` carry a valid signature from `pubkey`. Any doubt is a no.
 pub fn verify_bytes(bytes: &[u8], signature: &str, pubkey: &str) -> bool {
@@ -106,11 +137,14 @@ fn lock(state: &UpdateState) -> std::sync::MutexGuard<'_, Option<Ready>> {
     state.0.lock().unwrap_or_else(|p| p.into_inner())
 }
 
+/// Unknown activity counts as busy: an update never guesses.
 fn busy_now(app: &AppHandle) -> Option<Busy> {
     let jobs_idle = app
         .try_state::<std::sync::Arc<crate::managers::transcription_jobs::TranscriptionJobManager>>()
-        .is_none_or(|jobs| jobs.is_idle());
-    busy_reason(crate::tray::dictation_in_progress(app), jobs_idle)
+        .is_some_and(|jobs| jobs.is_idle());
+    let dictating = app.try_state::<crate::tray::TrayState>().is_none()
+        || crate::tray::dictation_in_progress(app);
+    busy_reason(dictating, jobs_idle)
 }
 
 fn cache_file(app: &AppHandle, version: &str) -> Option<PathBuf> {
@@ -139,6 +173,10 @@ fn write_private(path: &Path, bytes: &[u8]) -> std::io::Result<()> {
 /// checks off stops the next request.
 pub fn start(app: &AppHandle) {
     app.manage(UpdateState::default());
+    if !allowed_here() {
+        info!("Self-update is off in development and portable builds");
+        return;
+    }
     let app = app.clone();
     tauri::async_runtime::spawn(async move {
         tokio::time::sleep(FIRST_CHECK_AFTER).await;
@@ -151,6 +189,9 @@ pub fn start(app: &AppHandle) {
 
 /// Checks now (the tray's "Check for updates"), in the background.
 pub fn check_now(app: &AppHandle) {
+    if !allowed_here() {
+        return;
+    }
     let app = app.clone();
     tauri::async_runtime::spawn(async move { check(&app).await });
 }
@@ -159,6 +200,15 @@ async fn check(app: &AppHandle) {
     if !crate::settings::update_checks_effectively_enabled(&crate::settings::get_settings(app)) {
         return;
     }
+    // One check at a time; none while an install runs.
+    if installing() || CHECKING.swap(true, Ordering::SeqCst) {
+        return;
+    }
+    check_inner(app).await;
+    CHECKING.store(false, Ordering::SeqCst);
+}
+
+async fn check_inner(app: &AppHandle) {
     if let Some(state) = app.try_state::<UpdateState>() {
         if lock(&state).is_some() {
             return; // one is already waiting
@@ -218,6 +268,10 @@ async fn check(app: &AppHandle) {
     }
     drop(bytes); // the waiting update lives on disk, not in memory
     let version = update.version.clone();
+    if installing() {
+        let _ = std::fs::remove_file(&file);
+        return;
+    }
     if let Some(state) = app.try_state::<UpdateState>() {
         *lock(&state) = Some(Ready { update, file });
         info!("Update {version} is ready");
@@ -235,23 +289,49 @@ pub enum InstallError {
 
 /// Installs the waiting update. `restart` reopens the app afterwards.
 fn install(app: &AppHandle, restart: bool) -> Result<(), InstallError> {
+    // Claim the install first, so no new dictation or file job starts, then
+    // give work that had just started time to show itself.
+    if INSTALLING.swap(true, Ordering::SeqCst) {
+        return Err(InstallError::Busy);
+    }
+    std::thread::sleep(SETTLE);
+    let result = install_claimed(app, restart);
+    if result.is_err() {
+        INSTALLING.store(false, Ordering::SeqCst);
+    }
+    result
+}
+
+fn install_claimed(app: &AppHandle, restart: bool) -> Result<(), InstallError> {
     if busy_now(app).is_some() {
         return Err(InstallError::Busy);
     }
     let state = app.try_state::<UpdateState>().ok_or(InstallError::None)?;
     let ready = lock(&state).take().ok_or(InstallError::None)?;
-    let bytes = std::fs::read(&ready.file).map_err(|_| InstallError::Failed)?;
-    let _ = std::fs::remove_file(&ready.file);
+    let bytes = match std::fs::read(&ready.file) {
+        Ok(bytes) => bytes,
+        Err(e) => {
+            warn!("Could not read the waiting update: {e}");
+            let _ = app.emit("update-failed", UpdateFailure::Install);
+            return Err(InstallError::Failed);
+        }
+    };
     // The cached file could have been swapped since it was downloaded.
     if !verify_bytes(&bytes, &ready.update.signature, UPDATE_PUBKEY) {
+        let _ = std::fs::remove_file(&ready.file);
         let _ = app.emit("update-failed", UpdateFailure::Unverified);
         return Err(InstallError::Unverified);
     }
+    // On Windows this starts the installer, which reopens the app, and ends
+    // this process; nothing after it runs there.
     if let Err(e) = ready.update.install(&bytes) {
         warn!("Update install failed: {e}");
         let _ = app.emit("update-failed", UpdateFailure::Install);
+        // Kept, so Restart can try again.
+        *lock(&state) = Some(ready);
         return Err(InstallError::Failed);
     }
+    let _ = std::fs::remove_file(&ready.file);
     info!("Update {} installed", ready.update.version);
     if restart {
         app.restart();
@@ -261,6 +341,9 @@ fn install(app: &AppHandle, restart: bool) -> Result<(), InstallError> {
 
 /// At quit: install a waiting update, if any, without reopening.
 pub fn install_on_quit(app: &AppHandle) {
+    if !install_at_quit(cfg!(windows)) {
+        return; // installed on the next Restart instead
+    }
     let waiting = app
         .try_state::<UpdateState>()
         .is_some_and(|state| lock(&state).is_some());
@@ -351,6 +434,28 @@ mod tests {
             assert!(!is_our_download(url), "{url}");
         }
         assert!(FEED_URL.starts_with("https://github.com/iMedoV8/SlashVoice/"));
+    }
+
+    #[test]
+    fn development_and_portable_builds_never_update_themselves() {
+        assert!(self_update_allowed(false, false));
+        assert!(!self_update_allowed(true, false));
+        assert!(!self_update_allowed(false, true));
+    }
+
+    #[test]
+    fn windows_does_not_install_at_quit() {
+        // Its installer would reopen the app the user just quit.
+        assert!(!install_at_quit(true));
+        assert!(install_at_quit(false));
+    }
+
+    #[test]
+    fn an_install_in_progress_refuses_a_second_and_blocks_new_work() {
+        assert!(!installing());
+        INSTALLING.store(true, Ordering::SeqCst);
+        assert!(installing());
+        INSTALLING.store(false, Ordering::SeqCst);
     }
 
     #[test]

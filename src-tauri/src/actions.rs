@@ -518,6 +518,12 @@ impl ShortcutAction for TranscribeAction {
         let start_time = Instant::now();
         debug!("TranscribeAction::start called for binding: {}", binding_id);
 
+        // Slash Voice: an update is being installed and the app is about to
+        // close (specs/009-updates); start nothing that would be lost.
+        if crate::updates::installing() {
+            return;
+        }
+
         // Load model in the background
         let tm = app.state::<Arc<TranscriptionManager>>();
         let rm = app.state::<Arc<AudioRecordingManager>>();
