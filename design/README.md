@@ -151,7 +151,7 @@ Open points in direction C, for the founder:
 
 ### Home and Appearance as pictures (2026-11-18)
 
-Drawn for `specs/010-home-appearance` at the founder's request. **Not approved yet.** In the Pencil document they sit to the right of direction C, from x 9300. The sidebar is drawn as built: the logo, then the status line, with Home first.
+Drawn for `specs/010-home-appearance` at the founder's request. **Approved by the founder on 2026-11-18.** In the Pencil document they sit to the right of direction C, from x 9300. The sidebar is drawn as built: the logo, then the status line, with Home first.
 
 | Still                                                   | What it shows                                                                                                                                                            | Pencil frame              |
 | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------- |

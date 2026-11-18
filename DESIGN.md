@@ -61,6 +61,7 @@ The brand file says its rules cover the Slash app and must not be carried elsewh
 ## Decided by the founder (2026-11-18)
 
 - **The shipped app icon: a white slash, the arcs in the accent**, on the dark ground `#1A1A1A`. This replaces the whole mark in the accent and settles the open question on the arcs. It is the icon in the Dock, the Windows taskbar and the download page's tab (`branding/app-icon.svg`, `site/favicon.svg`). The light-mode artwork (`branding/app-icon-light.svg`) is unchanged and not shipped.
+- **A Home page, and Appearance as pictures.** Home is the first page and the one the app opens on: totals counted on this computer (words, dictations, speaking speed, time saved against typing at 40 words a minute), getting started, what's new and recent dictations. On General, the theme and the recording pill are chosen from small pictures. Stills: `design/stills/own-look-c-09-home-*`, `own-look-c-10-appearance-*` (`specs/010-home-appearance`). This replaces direction C's "opens on History".
 - **Handy is credited in the README only.** The About screen does not name it; its licence, with its copyright notice, ships inside the app.
 
 ## Open, for the founder
