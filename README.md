@@ -33,7 +33,7 @@ None of this is built yet.
 - Audio never leaves your computer.
 - Nothing is sent to a language model unless you turn that on, and then only text.
 - There is no telemetry and no analytics.
-- Slash Voice does not update itself. You install a new version by hand.
+- Updates come only from this repository's own signed releases (from 0.2.0). The app checks every six hours and asks before restarting; checks can be turned off on the About page.
 
 The rules that hold the project to this are in [RULES.md](RULES.md).
 
@@ -72,8 +72,7 @@ bun run tauri build
 
 - **Slash Voice does not host the speech models yet.** They are downloaded from Hugging Face repositories published by the author of the app it is built on. If Hugging Face cannot be reached, the download fails; there is no second server.
 - **Linux is not supported.** The Linux code and packaging files that came with the code base are still in the repository and are untested here.
-- **The settings screen does not yet match its design.** The colours and typefaces are ours; the layout is not yet. The new look is drawn and waiting to be built ([design/README.md](design/README.md)).
-- **No signed builds, no self-update.** No Intel Mac build and no Windows ARM build.
+- **No paid certificate.** Mac builds are signed with a free, self-made certificate and Windows builds are not signed, so both systems warn on the first install by hand. No Intel Mac build and no Windows ARM build.
 
 ## Contributing
 

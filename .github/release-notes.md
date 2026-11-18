@@ -1,5 +1,11 @@
 An early build of Slash Voice for testing. Dictation works. The features that will make it its own product are not built yet.
 
+## New in 0.2.0
+
+- A new look, and a Home page: your words, dictations and the time dictation saved you, counted on your computer.
+- The theme and the recording pill are chosen from pictures on General.
+- The app updates itself from now on (see below).
+
 ## Download
 
 | System                   | File                                       |
