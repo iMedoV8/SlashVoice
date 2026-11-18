@@ -21,5 +21,5 @@
 ## Phase 4: Finish
 
 - [x] T008 Captures of Home and General in dark, light and Arabic against the stills; list the differences
-- [ ] T009 Gate: `bun run check`, `bun run security`, the app build; memory after
+- [x] T009 Gate: `bun run check`, `bun run security`, the app build; memory after
 - [ ] T010 One pull request
