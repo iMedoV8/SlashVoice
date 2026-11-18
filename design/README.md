@@ -148,3 +148,14 @@ Open points in direction C, for the founder:
 - **Apps are shown with Lucide icons** (terminal, code, chat, globe) and their names, not their logos.
 - **The light window colours** come from the brand, so the two known contrast misses in `DESIGN.md` (tertiary text, white on the accent) show here too.
 - **Not drawn:** Windows window chrome, Arabic for the pill, fix panel, preferences and onboarding, and the screens listed under "Not drawn yet".
+
+### Home and Appearance as pictures (2026-11-18)
+
+Drawn for `specs/010-home-appearance` at the founder's request. **Not approved yet.** In the Pencil document they sit to the right of direction C, from x 9300. The sidebar is drawn as built: the logo, then the status line, with Home first.
+
+| Still                                                   | What it shows                                                                                                                                                            | Pencil frame              |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------- |
+| `own-look-c-09-home-dark.png`, `-light`, `-arabic-dark` | Home: words dictated, dictations, speaking speed and time saved, with how they are counted; getting started; what's new; recent dictations                               | `GgiTX`, `tp168`, `yAYKP` |
+| `own-look-c-10-appearance-dark.png`, `-light`           | General's Appearance group: the theme as three pictures of the window, the recording pill as three pictures (Live, Minimal, None), the pill's position, the app language | `PLtr2`, `ujjfu`          |
+
+The numbers on Home are sample values, not measurements. The pill pictures follow still 8: the accent on the dot only. The theme pictures use the two palettes' real colours; the selected picture has an accent outline, as a selected radio does.
