@@ -53,7 +53,7 @@ An update is installed only when it cannot cut off something the user is doing. 
 **Acceptance Scenarios**:
 
 1. **Given** a fetched update, **When** the user is recording or a transcription is running, **Then** nothing restarts.
-2. **Given** a fetched update, **When** it is offered, **Then** the sidebar's foot shows "Version N is ready" with a Restart button; pressing it installs the update and reopens the app. If the user never presses it, on a Mac the update is installed the next time the app is quit (founder, 2026-11-18). On Windows it waits for Restart, because the Windows installer reopens the app when it finishes and a quit must not do that (found in the second review; to be confirmed by the founder).
+2. **Given** a fetched update, **When** it is offered, **Then** the sidebar's foot shows "Version N is ready" with a Restart button; pressing it installs the update and reopens the app. If the user never presses it, on a Mac the update is installed the next time the app is quit (founder, 2026-11-18). On Windows it waits for Restart, because the Windows installer reopens the app when it finishes and a quit must not do that (found in the second review; approved by the founder, 2026-11-18).
 3. **Given** an update is waiting, **When** the user opens the window, **Then** the sidebar's foot and the About page say which version is ready.
 
 ---
@@ -75,7 +75,7 @@ Release 0.2.0 carries direction C and is the first release that can update itsel
 - **The update key is lost:** no new update can be signed. Installed apps keep working and must be reinstalled by hand once with a new key. The plan says where the key's backup lives.
 - **The certificate expires or is replaced:** Macs would ask for permissions once more. The certificate is made to last at least ten years.
 - **A Windows install the user does not have rights to write to:** the update fails with a notice; the app keeps working.
-- **Portable Windows installs:** do not check for updates at all in this task, since they cannot be replaced in place; they update by hand as before. (Changed after the second review: Handy's dialog for them lived in the removed bottom bar.)
+- **Portable Windows installs:** do not check for updates at all in this task, since they cannot be replaced in place; they update by hand as before. (Changed after the second review, because Handy's dialog for them lived in the removed bottom bar; approved by the founder, 2026-11-18.)
 - **Debug or development builds:** never check for or install an update.
 - **Windows and quitting:** the Windows installer reopens the app when it finishes, so on Windows a waiting update is installed only by Restart, never at quit. If the user quits instead, it is fetched and offered again after the next launch.
 
@@ -125,6 +125,6 @@ Release 0.2.0 carries direction C and is the first release that can update itsel
 ## Assumptions
 
 - The free certificate is made on the founder's Mac with the commands the plan gives. He makes the keys and passwords and puts them in GitHub's secret store himself; no agent sees a password or a secret half.
-- From 0.2.0, releases are ordinary releases (not pre-releases), because the feed's "latest" address skips pre-releases (`research.md` R4). The feed follows the newest published one.
+- From 0.2.0, releases are ordinary releases (not pre-releases), because the feed's "latest" address skips pre-releases (`research.md` R4; approved by the founder, 2026-11-18). The feed follows the newest published one.
 - Updates come from GitHub Releases on `iMedoV8/SlashVoice`; no server of our own.
 - Intel Macs, Windows on ARM and Linux are not covered, as in `specs/004-installers`.
