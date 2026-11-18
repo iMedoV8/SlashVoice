@@ -76,6 +76,29 @@ describe("the release workflow", () => {
     );
   });
 
+  // Tauri, given a certificate file, only looks for Apple-issued
+  // certificates, so our own one is never found (release run 44309478343).
+  // The workflow imports it into a keychain of its own and gives Tauri the
+  // name only, as a build on the founder's Mac does.
+  test("puts the Mac certificate in a keychain of its own and gives Tauri only its name", () => {
+    expect(workflow).not.toMatch(/put APPLE_CERTIFICATE\b/);
+    expect(workflow).toMatch(/security create-keychain/);
+    expect(workflow).toMatch(/security import [^\n]*-T \/usr\/bin\/codesign/);
+    expect(workflow).toMatch(/security set-key-partition-list/);
+    expect(workflow).toMatch(/security list-keychains -d user -s/);
+    expect(workflow).toMatch(/put APPLE_SIGNING_IDENTITY "Slash Voice"/);
+    expect(workflow).toMatch(/security delete-keychain/);
+  });
+
+  // Codex review: any self-made certificate would have passed the old check.
+  test("checks the Mac app carries exactly the Slash Voice certificate", () => {
+    expect(workflow).toContain(
+      'certificate leaf = H"7dd17dd5a214276dcc5423d98854eb38c9666274"',
+    );
+    // The signer must satisfy the requirement, not only declare it.
+    expect(workflow).toMatch(/codesign --verify --deep --strict -R=/);
+  });
+
   test("writes the feed and attaches the signatures", () => {
     expect(workflow).toContain("latest.json");
     expect(workflow).toContain(".sig");
