@@ -4,8 +4,8 @@
 
 ## Phase 1: The counter
 
-- [ ] T001 Rust tests for `stats.rs`: words and seconds add up; an empty dictation is not counted; a file adds words only; totals survive a restart; an unreadable file starts again from zero; the file holds only counts
-- [ ] T002 `stats.rs`, the `get_dictation_totals` command, the two hooks; regenerate the bindings
+- [x] T001 Rust tests for `stats.rs`: words and seconds add up; an empty dictation is not counted; a file adds words only; totals survive a restart; an unreadable file starts again from zero; the file holds only counts
+- [x] T002 `stats.rs`, the `get_dictation_totals` command, the two hooks; regenerate the bindings
 
 ## Phase 2: Home
 

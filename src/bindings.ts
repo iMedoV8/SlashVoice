@@ -5,6 +5,9 @@
 
 
 export const commands = {
+async getDictationTotals() : Promise<DictationTotals | null> {
+    return await TAURI_INVOKE("get_dictation_totals");
+},
 async changeBinding(id: string, binding: string) : Promise<Result<BindingResponse, string>> {
     try {
     return { status: "ok", data: await TAURI_INVOKE("change_binding", { id, binding }) };
@@ -1237,6 +1240,22 @@ export type ChineseScript =
 "traditional_hk"
 export type ClipboardHandling = "dont_modify" | "copy_to_clipboard"
 export type CustomSounds = { start: boolean; stop: boolean }
+/**
+ * What Home reads.
+ */
+export type DictationTotals = { 
+/**
+ * When counting began, Unix seconds.
+ */
+since: number; dictations: number; words: number; 
+/**
+ * Seconds of recording behind `words`.
+ */
+seconds: number; 
+/**
+ * Words from transcribed files: not spoken live, so not in speed or time saved.
+ */
+file_words: number }
 export type GpuDeviceOption = { id: string; name: string; total_vram_mb: number }
 export type HistoryEntry = { id: number; file_name: string; timestamp: number; saved: boolean; title: string; transcription_text: string; post_processed_text: string | null; post_process_prompt: string | null; post_process_requested: boolean; 
 /**

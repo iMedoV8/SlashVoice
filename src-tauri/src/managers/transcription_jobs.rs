@@ -323,6 +323,7 @@ impl TranscriptionJobManager {
         if samples.is_empty() {
             return Err(anyhow!("Recording has no audio samples"));
         }
+        let sample_count = samples.len();
 
         let control = Control {
             manager: self,
@@ -349,6 +350,15 @@ impl TranscriptionJobManager {
         // Post-processing can take a while; a cancel during it still wins.
         if cancelled.load(Ordering::Acquire) {
             return Ok(JobEnd::Cancelled);
+        }
+        // An entry is counted the first time it gets text, so a retry of a
+        // finished entry does not count it twice.
+        if entry.transcription_text.is_empty() {
+            if entry.source_name.is_some() {
+                crate::stats::record_file(&self.app, &text);
+            } else {
+                crate::stats::record_dictation(&self.app, &text, sample_count);
+            }
         }
         let post_process_failed = processed.post_process_failed;
         hm.update_transcription(

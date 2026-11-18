@@ -864,6 +864,8 @@ impl ShortcutAction for TranscribeAction {
                                 return;
                             }
 
+                            crate::stats::record_dictation(&ah, &transcription, sample_count);
+
                             // Save to history if WAV was saved
                             if wav_saved {
                                 if let Err(err) = hm.save_entry(

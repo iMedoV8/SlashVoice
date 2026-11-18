@@ -26,6 +26,7 @@ mod secure_input;
 mod settings;
 mod shortcut;
 mod signal_handle;
+mod stats;
 mod system_languages;
 mod transcription_coordinator;
 mod transcription_hook;
@@ -225,6 +226,7 @@ fn initialize_core_logic(app_handle: &AppHandle) {
     app_handle.manage(history_manager.clone());
     app_handle.manage(tray::TrayState::new());
     app_handle.manage(TranscriptionJobManager::new(app_handle));
+    stats::init(app_handle);
 
     // Note: Shortcuts are NOT initialized here.
     // The frontend is responsible for calling the `initialize_shortcuts` command
@@ -707,6 +709,7 @@ pub fn run(cli_args: CliArgs) {
 
     let specta_builder = Builder::<tauri::Wry>::new()
         .commands(collect_commands![
+            stats::get_dictation_totals,
             shortcut::change_binding,
             shortcut::reset_binding,
             shortcut::change_shortcut_activation_setting,
