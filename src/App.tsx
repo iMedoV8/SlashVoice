@@ -24,7 +24,11 @@ import {
   clearOnboardingProgress,
   type OnboardingStep as OnboardingPreviewStep,
 } from "./components/onboarding/onboardingStore";
-import { DebugSettings, ModelsSettings } from "./components/settings";
+import {
+  DebugSettings,
+  HomeSettings,
+  ModelsSettings,
+} from "./components/settings";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { FileDropOverlay } from "./components/FileDropOverlay";
 import { Sidebar, SidebarSection, SECTIONS_CONFIG } from "./components/Sidebar";
@@ -52,6 +56,9 @@ const renderSettingsContent = (
   onRunModelMigration: () => void,
   onSectionChange: (section: SidebarSection) => void,
 ) => {
+  if (section === "home") {
+    return <HomeSettings onNavigate={onSectionChange} />;
+  }
   if (section === "models") {
     return (
       <ModelsSettings onChangeLanguages={() => onSectionChange("general")} />
@@ -83,8 +90,7 @@ function App() {
   // is still on disk: they must update it before the app can transcribe.
   const [migrationModelId, setMigrationModelId] = useState<string | null>(null);
   // Direction C opens on History (specs/008-own-look).
-  const [currentSection, setCurrentSection] =
-    useState<SidebarSection>("history");
+  const [currentSection, setCurrentSection] = useState<SidebarSection>("home");
   const showHistory = useCallback(() => setCurrentSection("history"), []);
   const { settings, updateSetting } = useSettings();
   const direction = getLanguageDirection(i18n.language);

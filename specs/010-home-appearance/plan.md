@@ -51,7 +51,8 @@ src/components/settings/home/HomeSettings.tsx (new)
     shortcut tried  = dictations > 0
     words added     = custom words not empty
     model fits      = the model in use hears every spoken language (the Models page's own check)
-  What's new   the "## What's new" section of .github/release-notes.md, bundled at build time; no network
+  What's new   the installed version's note in src/content/release-notes/ (bundled at build time, the
+               folder the after-update window already reads), in English and Arabic; no network
   Recent       the last three History entries, "All history"
 
 src/components/settings/ThemeSelector.tsx   -> picture cards (SegmentedControl replaced)
@@ -61,7 +62,9 @@ src/components/Sidebar.tsx, App.tsx         -> home first; opens on home
 
 Time saved = words ÷ 40 minutes − seconds ÷ 60, never below zero. Files count toward words only.
 
-Why release notes are bundled, not fetched: Home must not make a network request (`RULES.md` §3: nothing leaves the device unless chosen). The release workflow already publishes `.github/release-notes.md`; a `## What's new` section in it becomes both the release page's and Home's.
+Why release notes are bundled, not fetched: Home must not make a network request (`RULES.md` §3: nothing leaves the device unless chosen).
+
+Changed while building (2026-11-18): the plan first put the notes in a `## What's new` section of `.github/release-notes.md`. The app already bundles per-version notes in `src/content/release-notes/<version>.md` and shows them after an update; Home reads the same files, and `<version>.ar.md` adds the Arabic. The GitHub release page is not fed from these files yet.
 
 ## Rules touched
 

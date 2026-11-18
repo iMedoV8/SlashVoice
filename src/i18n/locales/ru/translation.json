@@ -21,7 +21,8 @@
     "debug": "Отладка",
     "about": "О программе",
     "words": "Words",
-    "label": "Pages"
+    "label": "Pages",
+    "home": "Home"
   },
   "onboarding": {
     "customModelDescription": "Официально не поддерживается",
@@ -938,6 +939,34 @@
         "title": "Your words",
         "description": "Names you added by hand."
       }
+    },
+    "home": {
+      "totals": "What dictation has done",
+      "words": "words dictated",
+      "dictations": "dictations",
+      "speed": "words a minute",
+      "saved": "saved",
+      "notYet": "—",
+      "hoursMinutes": "{{hours}} h {{minutes}} min",
+      "minutes": "{{minutes}} min",
+      "wordsHow": "{{spoken}} spoken, {{files}} from transcribed files",
+      "speedHow": "Words ÷ minutes of recording. Shown after a minute of speech.",
+      "savedHow": "The time these words take to type at {{wpm}} words a minute, minus the time spent speaking.",
+      "howCounted": "Counted on this computer since {{date}}. Time saved compares with typing at {{wpm}} words a minute.",
+      "gettingStarted": "Getting started",
+      "hide": "Hide",
+      "done": "Done",
+      "steps": {
+        "tryShortcut": "Try your shortcut",
+        "addNames": "Add the names you use",
+        "pickModelFor": "Pick a model for {{languages}}",
+        "pickModel": "Pick a model for your languages"
+      },
+      "whatsNew": "What's new",
+      "releaseNotes": "Release notes",
+      "recent": "Recent",
+      "allHistory": "All history",
+      "noRecent": "Your dictations will appear here."
     }
   },
   "footer": {

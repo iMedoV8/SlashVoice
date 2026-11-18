@@ -22,8 +22,11 @@ const imports = (source: string, what: string) =>
   new RegExp(`import[^;]*\\b${what}\\b[^;]*from`).test(source);
 
 describe("the frame", () => {
-  test("the pages are History and Words, then the settings, then About", () => {
+  // Home first and opened on: founder, 2026-11-18 (specs/010-home-appearance),
+  // replacing direction C's "opens on History".
+  test("the pages are Home, History and Words, then the settings, then About", () => {
     expect(sectionOrder()).toEqual([
+      "home",
       "history",
       "words",
       "general",
@@ -35,8 +38,8 @@ describe("the frame", () => {
     ]);
   });
 
-  test("the window opens on History", () => {
-    expect(app).toMatch(/useState<SidebarSection>\(\s*"history"\s*\)/);
+  test("the window opens on Home", () => {
+    expect(app).toMatch(/useState<SidebarSection>\(\s*"home"\s*\)/);
   });
 
   test("the sidebar starts with the logo, then the status line", () => {

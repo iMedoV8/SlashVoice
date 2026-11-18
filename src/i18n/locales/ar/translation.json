@@ -21,7 +21,8 @@
     "debug": "تصحيح الأخطاء",
     "about": "حول",
     "words": "الكلمات",
-    "label": "الصفحات"
+    "label": "الصفحات",
+    "home": "الرئيسية"
   },
   "onboarding": {
     "customModelDescription": "غير مدعوم رسميًا",
@@ -938,6 +939,34 @@
         "title": "كلماتك",
         "description": "أسماء أضفتها بنفسك."
       }
+    },
+    "home": {
+      "totals": "ما أنجزه الإملاء",
+      "words": "كلمة أمليتها",
+      "dictations": "إملاء",
+      "speed": "كلمة في الدقيقة",
+      "saved": "وفّرتها",
+      "notYet": "—",
+      "hoursMinutes": "{{hours}} س {{minutes}} د",
+      "minutes": "{{minutes}} د",
+      "wordsHow": "{{spoken}} منطوقة، و{{files}} من ملفات مفرّغة",
+      "speedHow": "الكلمات ÷ دقائق التسجيل. تظهر بعد دقيقة من الكلام.",
+      "savedHow": "الوقت الذي تستغرقه كتابة هذه الكلمات بسرعة {{wpm}} كلمة في الدقيقة، ناقص وقت الكلام.",
+      "howCounted": "تُحسب على هذا الكمبيوتر منذ {{date}}. الوقت الموفَّر مقارنةً بالكتابة بسرعة {{wpm}} كلمة في الدقيقة.",
+      "gettingStarted": "البداية",
+      "hide": "إخفاء",
+      "done": "تم",
+      "steps": {
+        "tryShortcut": "جرّب الاختصار",
+        "addNames": "أضف الأسماء التي تستخدمها",
+        "pickModelFor": "اختر نموذجًا يسمع {{languages}}",
+        "pickModel": "اختر نموذجًا للغاتك"
+      },
+      "whatsNew": "الجديد",
+      "releaseNotes": "ملاحظات الإصدار",
+      "recent": "الأحدث",
+      "allHistory": "السجل كاملًا",
+      "noRecent": "ستظهر إملاءاتك هنا."
     }
   },
   "footer": {

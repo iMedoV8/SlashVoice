@@ -6,6 +6,7 @@ import {
   Box,
   FlaskConical,
   History,
+  House,
   Info,
   PenLine,
   SlidersHorizontal,
@@ -23,6 +24,7 @@ import {
   PostProcessingSettings,
   ModelsSettings,
   WordsSettings,
+  HomeSettings,
 } from "./settings";
 
 export type SidebarSection = keyof typeof SECTIONS_CONFIG;
@@ -45,9 +47,16 @@ interface SectionConfig {
   place: "log" | "settings" | "foot";
 }
 
-// Direction C (still 1): History and Words first, then the settings, About at
-// the foot with the version.
+// Direction C (still 1), with Home first (founder, 2026-11-18): Home, History
+// and Words, then the settings, About at the foot with the version.
 export const SECTIONS_CONFIG = {
+  home: {
+    labelKey: "sidebar.home",
+    icon: House,
+    component: HomeSettings,
+    enabled: () => true,
+    place: "log",
+  },
   history: {
     labelKey: "sidebar.history",
     icon: History,
