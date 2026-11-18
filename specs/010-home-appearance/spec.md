@@ -57,7 +57,7 @@ On General, Appearance shows the theme as three small pictures of the window (Sy
 
 - **FR-001**: Home is the first page and the page the app opens on.
 - **FR-002**: The app keeps running totals on this computer: dictations, words, and seconds of recording. Only these counts are kept: no text, no app names, no times of day.
-- **FR-003**: Totals count from the version that adds them; earlier dictations are not counted, except that the entries still in History may seed them once.
+- **FR-003**: Totals count from the version that adds them; earlier dictations are not counted. (History cannot seed them: it keeps no recording lengths, and only the last few entries.)
 - **FR-004**: Time saved uses an assumed typing speed of 40 words a minute, which Home states.
 - **FR-005**: Theme and recording pill on General are shown as pictures and change the existing settings (`theme`, `overlay_style`); no new setting.
 - **FR-006**: The "Overlay" menu leaves Advanced; overlay position stays, beside the pill pictures.
