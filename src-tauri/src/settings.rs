@@ -1453,11 +1453,10 @@ pub fn update_checks_forced_disabled() -> bool {
     })
 }
 
-/// Slash Voice has no release feed or signing key of its own yet. Until it
-/// does, self-update stays off so the app can never fetch Handy's releases and
-/// replace itself with them. Flip this once `plugins.updater` in
-/// `tauri.conf.json` points at a Slash Voice feed with a Slash Voice key.
-const SLASH_VOICE_HAS_RELEASE_FEED: bool = false;
+/// `plugins.updater` in `tauri.conf.json` points at Slash Voice's own feed
+/// with Slash Voice's own key (specs/009-updates), so self-update is on.
+/// Turning this off makes the app ignore every update.
+const SLASH_VOICE_HAS_RELEASE_FEED: bool = true;
 
 /// Effective updater state: the user's stored preference, overridden to `false`
 /// while `HANDY_DISABLE_UPDATER` is set. Callers deciding whether to actually

@@ -109,6 +109,11 @@ impl TranscriptionJobManager {
         manager
     }
 
+    /// Nothing running or queued (an update waits for this; specs/009-updates).
+    pub fn is_idle(&self) -> bool {
+        self.lock().is_idle()
+    }
+
     fn lock(&self) -> MutexGuard<'_, Jobs> {
         self.jobs
             .lock()

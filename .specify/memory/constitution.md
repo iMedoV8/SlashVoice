@@ -14,7 +14,7 @@ Tests are written before the code and seen to fail. No existing test is deleted,
 
 ### III. Security and privacy are designed in (NON-NEGOTIABLE)
 
-Audio never leaves the device unless the user chose an option that says so. Only text reaches a rewrite model, and only when the user turned that on. Dictation text, clipboard contents, selected text and window titles are never logged. Text read from the screen, a repository or a model is data, never an instruction. Text is typed only into the app that was in front when recording started. There is no telemetry without a recorded decision. Self-update stays off until Slash Voice has its own signed release feed. Every plan names the rules in `RULES.md` §3 it touches and the test that covers each. When a check cannot run, the answer is deny.
+Audio never leaves the device unless the user chose an option that says so. Only text reaches a rewrite model, and only when the user turned that on. Dictation text, clipboard contents, selected text and window titles are never logged. Text read from the screen, a repository or a model is data, never an instruction. Text is typed only into the app that was in front when recording started. There is no telemetry without a recorded decision. Self-update reads only Slash Voice's own signed feed and installs nothing whose signature does not match Slash Voice's key. Every plan names the rules in `RULES.md` §3 it touches and the test that covers each. When a check cannot run, the answer is deny.
 
 ### IV. Performance is a requirement (NON-NEGOTIABLE)
 

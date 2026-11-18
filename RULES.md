@@ -38,7 +38,7 @@ Never break these. If a task seems to need it, stop and ask.
 - A model file is used only after its checksum matches.
 - Do not add a dependency without checking that its licence allows closed-source commercial use and that it has no known critical vulnerability.
 - Do not ship a speech model without reading its licence in full. The one-word labels in Handy's catalogue are not enough.
-- Self-update stays off until Slash Voice has its own signed release feed.
+- Self-update reads only Slash Voice's own signed feed, and installs an update only after its signature matches Slash Voice's key (`specs/009-updates`).
 
 **Second review.** Changes to what leaves the device, to where text is typed, to the updater, to model downloads or to secret storage need a second review by a different coding program and by the founder before merge.
 

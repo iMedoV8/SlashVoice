@@ -36,7 +36,7 @@ A local dictation app that knows it is talking to a coding agent. Other tools re
 - Planned, not built: learning from corrections, technical vocabulary built from the user's own history and projects, repo-aware names, voice slash commands, point-and-speak, rewrite in the user's style, live preview, spoken agent status.
 - **Arabic mixed with English is part of the product from the start**, not a later addition. Which speech model serves it is not decided; it is to be measured on the founder's own recordings.
 - Audio stays on the device unless the user chooses an option that says otherwise. Only text may be sent to a rewrite model, and only when turned on.
-- Self-update is off. The builds are not signed with a paid certificate.
+- The app updates itself from Slash Voice's own signed releases (from 0.2.0). Mac builds are signed with a free, self-made certificate, so macOS keeps its permissions across updates; neither system's builds carry a paid certificate, so both warn on the first install.
 - Built on a renamed copy of Handy (MIT). Handy's name, logo, icon and mascot never appear in the app. Handy is credited in the README; its licence, with its copyright notice, ships inside the app (founder, 2026-11-18).
 - Open source under the MIT licence (founder, 2026-11-15).
 - Open: the licences of the speech models, where models are hosted, and pricing.

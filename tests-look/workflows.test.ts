@@ -48,8 +48,18 @@ describe("the release workflow", () => {
     );
   });
 
-  test("names no secret", () => {
-    expect(release()).not.toMatch(/secrets\./);
+  // Since specs/009-updates (founder, 2026-11-18): the four signing secrets,
+  // and no other.
+  test("names only the four signing secrets", () => {
+    const named = new Set(
+      [...release().matchAll(/secrets\.(\w+)/g)].map((m) => m[1]),
+    );
+    expect([...named].sort()).toEqual([
+      "APPLE_CERTIFICATE",
+      "APPLE_CERTIFICATE_PASSWORD",
+      "TAURI_SIGNING_PRIVATE_KEY",
+      "TAURI_SIGNING_PRIVATE_KEY_PASSWORD",
+    ]);
   });
 
   test("only the release job may write, and only when started by hand", () => {
@@ -63,22 +73,31 @@ describe("the release workflow", () => {
     );
   });
 
-  test("creates the release as a draft and a pre-release", () => {
+  // A draft until the founder publishes it; an ordinary release, because the
+  // update feed's "latest" address skips pre-releases (specs/009-updates, R4).
+  test("creates the release as a draft, not a pre-release", () => {
     const create = release().match(
       /gh release create[^\n]*(\n\s+[^\n]*)*/,
     )?.[0];
     expect(create).toContain("--draft");
-    expect(create).toContain("--prerelease");
+    expect(create).not.toContain("--prerelease");
   });
 
   test("never replaces the files of a published release", () => {
     expect(job(release(), "release")).toMatch(/isDraft/);
   });
 
-  test("produces no updater files and signs with no stored key", () => {
+  // Since specs/009-updates: update files are built and signed, but only
+  // with the founder's keys, only when started by hand, and never with
+  // Windows (Azure) signing, which this project does not have.
+  test("signs update files only when started by hand, with no Azure key", () => {
     const conf = JSON.parse(read("src-tauri/tauri.conf.json"));
-    expect(conf.bundle.createUpdaterArtifacts).toBe(false);
-    expect(release()).not.toMatch(/TAURI_SIGNING|APPLE_CERTIFICATE|AZURE_/);
+    expect(conf.bundle.createUpdaterArtifacts).toBe(true);
+    expect(release()).not.toMatch(/AZURE_/);
+    for (const line of release().split("\n")) {
+      if (/secrets\./.test(line))
+        expect(line).toContain("github.event_name == 'workflow_dispatch'");
+    }
   });
 });
 

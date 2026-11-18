@@ -8,6 +8,8 @@ import { SettingContainer } from "../../ui/SettingContainer";
 import { PathDisplay } from "../../ui/PathDisplay";
 import { AppDataDirectory } from "../AppDataDirectory";
 import { ShowWhatsNewOnUpdate } from "../ShowWhatsNewOnUpdate";
+import { UpdateChecksToggle } from "../UpdateChecksToggle";
+import { UpdateNotice } from "../../UpdateNotice";
 import { LogDirectory } from "../debug";
 
 /**
@@ -18,7 +20,8 @@ import { LogDirectory } from "../debug";
 export const AboutSettings: React.FC = () => {
   const { t } = useTranslation();
   const [version, setVersion] = useState("");
-  // Self-update is off until Slash Voice has its own signed feed (AGENTS.md).
+  // Locked when update checks are forced off (HANDY_DISABLE_UPDATER, or a
+  // build that cannot update itself).
   const [updatesLocked, setUpdatesLocked] = useState(false);
 
   useEffect(() => {
@@ -82,6 +85,8 @@ export const AboutSettings: React.FC = () => {
       </SettingsGroup>
 
       <SettingsGroup title={t("settings.about.updates")}>
+        <UpdateNotice variant="row" />
+        <UpdateChecksToggle descriptionMode="tooltip" grouped={true} />
         <ShowWhatsNewOnUpdate descriptionMode="tooltip" grouped={true} />
       </SettingsGroup>
     </div>

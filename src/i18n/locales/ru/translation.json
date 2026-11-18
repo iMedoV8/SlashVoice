@@ -1041,5 +1041,12 @@
     "noModel": "No model yet",
     "hold": "Hold",
     "press": "Press"
+  },
+  "updates": {
+    "ready": "Version {{version}} is ready",
+    "restart": "Restart",
+    "busy": "Finish the dictation first, then restart.",
+    "unverified": "An update could not be verified, so it was not installed.",
+    "installFailed": "The update could not be installed. The app keeps working."
   }
 }

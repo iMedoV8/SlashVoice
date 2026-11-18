@@ -31,6 +31,7 @@ mod transcription_coordinator;
 mod transcription_hook;
 mod tray;
 mod tray_i18n;
+mod updates;
 mod utils;
 pub mod webkit_renderer;
 
@@ -54,7 +55,7 @@ use tauri::image::Image;
 pub use transcription_coordinator::TranscriptionCoordinator;
 
 use tauri::tray::TrayIconBuilder;
-use tauri::{AppHandle, Emitter, Listener, Manager};
+use tauri::{AppHandle, Listener, Manager};
 use tauri_plugin_autostart::MacosLauncher;
 use tauri_plugin_log::{Builder as LogBuilder, RotationStrategy, Target, TargetKind};
 
@@ -302,11 +303,8 @@ fn initialize_core_logic(app_handle: &AppHandle) {
                 show_main_window(app);
             }
             "check_updates" => {
-                let settings = settings::get_settings(app);
-                if settings::update_checks_effectively_enabled(&settings) {
-                    show_main_window(app);
-                    let _ = app.emit("check-for-updates", ());
-                }
+                // Slash Voice's own updater checks in the background.
+                updates::check_now(app);
             }
             "copy_last_transcript" => {
                 tray::copy_last_transcript(app);
@@ -403,12 +401,8 @@ fn initialize_core_logic(app_handle: &AppHandle) {
 #[tauri::command]
 #[specta::specta]
 fn trigger_update_check(app: AppHandle) -> Result<(), String> {
-    let settings = settings::get_settings(&app);
-    if !settings::update_checks_effectively_enabled(&settings) {
-        return Ok(());
-    }
-    app.emit("check-for-updates", ())
-        .map_err(|e| e.to_string())?;
+    // Slash Voice's own updater; it re-reads the setting itself.
+    updates::check_now(&app);
     Ok(())
 }
 
@@ -781,6 +775,8 @@ pub fn run(cli_args: CliArgs) {
             secure_input::get_secure_input_status,
             secure_input::run_keyboard_diagnostic,
             trigger_update_check,
+            updates::get_update_state,
+            updates::restart_to_update,
             show_main_window_command,
             commands::cancel_operation,
             commands::is_portable,
@@ -1123,6 +1119,9 @@ pub fn run(cli_args: CliArgs) {
 
             initialize_core_logic(&app_handle);
 
+            // Slash Voice's own updates (specs/009-updates).
+            updates::start(&app_handle);
+
             // Secure Input monitor (macOS): detects stuck secure input that
             // silently blocks keyed shortcuts, warns the user, and activates
             // the Carbon fallback. See secure_input.rs and issue #1578.
@@ -1229,6 +1228,11 @@ pub fn run(cli_args: CliArgs) {
                 tray::recreate_tray_icon(app);
             }
             show_main_window(app);
+        }
+        // Slash Voice: a waiting update is installed as the app quits
+        // (specs/009-updates). Nothing happens if none waits.
+        tauri::RunEvent::Exit => {
+            updates::install_on_quit(app);
         }
         // No transcription teardown on exit: transcribe.cpp runs only in the
         // worker process, which exits by itself as soon as this process's end
