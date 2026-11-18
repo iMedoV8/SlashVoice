@@ -410,6 +410,10 @@
         "sound": {
           "title": "Sound"
         }
+      },
+      "appearance": {
+        "pill": "Recording pill",
+        "pillPosition": "Pill position"
       }
     },
     "models": {

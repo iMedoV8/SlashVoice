@@ -77,6 +77,8 @@ describe("the accent", () => {
     "src/components/icons/HandyTextLogo.tsx",
     // The recording pill's dot and spinner (founder, 2026-11-16); held to those two below.
     "src/overlay/RecordingOverlay.css",
+    // A chosen picture card is a selected radio; its pill picture shows the pill's dot (still 10, approved 2026-11-18).
+    "src/components/ui/PictureCards.tsx",
   ]);
 
   test("is used only where the brand allows it", () => {

@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { SegmentedControl } from "../ui/SegmentedControl";
+import { PictureCards, ThemePicture } from "../ui/PictureCards";
 import { SettingContainer } from "../ui/SettingContainer";
 import { useSettings } from "@/hooks/useSettings";
 import { applyTheme, THEME_OPTIONS } from "@/lib/utils/theme";
@@ -21,6 +21,7 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = React.memo(
     const themeOptions = THEME_OPTIONS.map((value) => ({
       value,
       label: t(`theme.options.${value}`),
+      picture: <ThemePicture theme={value} />,
     }));
 
     const handleThemeChange = (theme: Theme) => {
@@ -34,8 +35,9 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = React.memo(
         description={t("theme.description")}
         descriptionMode={descriptionMode}
         grouped={grouped}
+        layout="stacked"
       >
-        <SegmentedControl
+        <PictureCards
           label={t("theme.title")}
           options={themeOptions}
           value={currentTheme}

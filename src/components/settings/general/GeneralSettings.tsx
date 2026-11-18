@@ -15,6 +15,7 @@ import { ModelLanguageRows } from "./ModelSettingsCard";
 import { PreferredLanguages } from "../PreferredLanguages";
 import { ChineseScriptSetting } from "../ChineseScript";
 import { ThemeSelector } from "../ThemeSelector";
+import { ShowOverlay } from "../ShowOverlay";
 import { AppLanguageSelector } from "../AppLanguageSelector";
 import { isChinese } from "@/lib/utils/languageSuggestions";
 
@@ -40,6 +41,7 @@ export const GeneralSettings: React.FC = () => {
       </SettingsGroup>
       <SettingsGroup title={t("settings.general.groups.appearance.title")}>
         <ThemeSelector descriptionMode="tooltip" grouped={true} />
+        <ShowOverlay descriptionMode="tooltip" grouped={true} />
         <AppLanguageSelector descriptionMode="tooltip" grouped={true} />
       </SettingsGroup>
       <SettingsGroup

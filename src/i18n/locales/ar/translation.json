@@ -410,6 +410,10 @@
         "sound": {
           "title": "الصوت"
         }
+      },
+      "appearance": {
+        "pill": "شارة التسجيل",
+        "pillPosition": "موضع الشارة"
       }
     },
     "models": {

@@ -37,7 +37,7 @@ describe("Home", () => {
 
   test("what's new is read from the notes built into the app", () => {
     expect(home()).toMatch(/from\s+"[./]*\/whats-new\/releaseNotes"/);
-    const notes = readdirSync(join(ROOT, "src/content/release-notes"));
+    const notes = readdirSync(join(ROOT, "src/content/whats-new"));
     expect(notes.some((n) => /^\d+\.\d+\.\d+\.md$/.test(n))).toBe(true);
     expect(notes.some((n) => /^\d+\.\d+\.\d+\.ar\.md$/.test(n))).toBe(true);
   });
@@ -55,13 +55,69 @@ describe("Home", () => {
   });
 });
 
+describe("Appearance as pictures", () => {
+  const CARDS = "src/components/ui/PictureCards.tsx";
+  const cards = () => (existsSync(join(ROOT, CARDS)) ? read(CARDS) : "");
+  const theme = read("src/components/settings/ThemeSelector.tsx");
+  const pill = read("src/components/settings/ShowOverlay.tsx");
+  const imports = (source: string, what: string) =>
+    new RegExp(`import[^;]*\\b${what}\\b[^;]*from`).test(source);
+
+  test("the theme is three picture cards over the same setting", () => {
+    expect(imports(theme, "PictureCards")).toBe(true);
+    expect(imports(theme, "SegmentedControl")).toBe(false);
+    expect(theme).toMatch(/updateSetting\("theme"/);
+  });
+
+  test("the recording pill is three picture cards over the same setting", () => {
+    expect(imports(pill, "PictureCards")).toBe(true);
+    expect(imports(pill, "Dropdown")).toBe(false);
+    expect(pill).toMatch(/updateSetting\("overlay_style"/);
+    // Live, Minimal, None, in that order (still 10).
+    const order = ["live", "minimal", "none"].map((v) =>
+      pill.indexOf(`value: "${v}"`),
+    );
+    expect(order.every((i) => i > 0)).toBe(true);
+    expect([...order].sort((a, b) => a - b)).toEqual(order);
+  });
+
+  test("the pill's position stays a plain choice beside it", () => {
+    expect(imports(pill, "SegmentedControl")).toBe(true);
+    expect(pill).toMatch(/updateSetting\("overlay_position"/);
+  });
+
+  test("the pill's controls are on General, not Advanced", () => {
+    const general = read("src/components/settings/general/GeneralSettings.tsx");
+    const advanced = read(
+      "src/components/settings/advanced/AdvancedSettings.tsx",
+    );
+    expect(general).toMatch(/<ShowOverlay\b/);
+    expect(advanced).not.toMatch(/<ShowOverlay\b/);
+  });
+
+  test("the cards are a radio group, usable by keyboard, mirrored in Arabic", () => {
+    const c = cards();
+    expect(c).toMatch(/role="radiogroup"/);
+    expect(c).toMatch(/role="radio"/);
+    expect(c).toMatch(/aria-checked/);
+    expect(c).toMatch(/ArrowRight/);
+    expect(c).toMatch(/ArrowLeft/);
+    expect(c).toMatch(/rtl/);
+  });
+});
+
 describe("text", () => {
   const en = JSON.parse(read("src/i18n/locales/en/translation.json"));
   const ar = JSON.parse(read("src/i18n/locales/ar/translation.json"));
   const has = (tree: any, key: string) =>
     key.split(".").reduce((node, k) => node?.[k], tree) !== undefined;
 
-  const NEW_PARTS = [HOME, "src/components/settings/ThemeSelector.tsx"];
+  const NEW_PARTS = [
+    HOME,
+    "src/components/settings/ThemeSelector.tsx",
+    "src/components/settings/ShowOverlay.tsx",
+    "src/components/ui/PictureCards.tsx",
+  ];
 
   test("every key Home and the cards use is in English and in Arabic", () => {
     const missing: string[] = [];

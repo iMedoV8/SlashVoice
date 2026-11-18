@@ -18,7 +18,7 @@ interface FindReleaseNoteOptions {
 }
 
 const releaseNoteModules = import.meta.glob<string>(
-  "../../content/release-notes/*.md",
+  "../../content/whats-new/*.md",
   {
     eager: true,
     import: "default",
@@ -41,7 +41,7 @@ const translated = new Map<string, Map<string, string>>();
 // `0.2.0.md` is the note in English; `0.2.0.ar.md` the same note in Arabic.
 for (const [path, markdown] of Object.entries(releaseNoteModules)) {
   const match = path.match(
-    /release-notes\/(\d+\.\d+\.\d+)(?:\.([a-z]{2}(?:-[A-Za-z]{2})?))?\.md$/,
+    /whats-new\/(\d+\.\d+\.\d+)(?:\.([a-z]{2}(?:-[A-Za-z]{2})?))?\.md$/,
   );
   if (!match) continue;
 

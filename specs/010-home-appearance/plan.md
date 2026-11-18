@@ -51,8 +51,8 @@ src/components/settings/home/HomeSettings.tsx (new)
     shortcut tried  = dictations > 0
     words added     = custom words not empty
     model fits      = the model in use hears every spoken language (the Models page's own check)
-  What's new   the installed version's note in src/content/release-notes/ (bundled at build time, the
-               folder the after-update window already reads), in English and Arabic; no network
+  What's new   the installed version's note in src/content/whats-new/ (bundled at build time; the
+               after-update window reads the same files), in English and Arabic; no network
   Recent       the last three History entries, "All history"
 
 src/components/settings/ThemeSelector.tsx   -> picture cards (SegmentedControl replaced)
@@ -64,7 +64,7 @@ Time saved = words ÷ 40 minutes − seconds ÷ 60, never below zero. Files coun
 
 Why release notes are bundled, not fetched: Home must not make a network request (`RULES.md` §3: nothing leaves the device unless chosen).
 
-Changed while building (2026-11-18): the plan first put the notes in a `## What's new` section of `.github/release-notes.md`. The app already bundles per-version notes in `src/content/release-notes/<version>.md` and shows them after an update; Home reads the same files, and `<version>.ar.md` adds the Arabic. The GitHub release page is not fed from these files yet.
+Changed while building (2026-11-18): the plan first put the notes in a `## What's new` section of `.github/release-notes.md`. The app already had a mechanism for bundled per-version notes, shown after an update. Home uses it, with our notes in `src/content/whats-new/<version>.md` and `<version>.ar.md` for Arabic (Handy's old folder `src/content/release-notes/` stays empty, as `tests-look/public.test.ts` requires). The GitHub release page is not fed from these files yet.
 
 ## Rules touched
 

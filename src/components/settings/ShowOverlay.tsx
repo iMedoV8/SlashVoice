@@ -1,6 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Dropdown } from "../ui/Dropdown";
+import { PictureCards, PillPicture } from "../ui/PictureCards";
+import { SegmentedControl } from "../ui/SegmentedControl";
 import { SettingContainer } from "../ui/SettingContainer";
 import { useSettings } from "../../hooks/useSettings";
 import type { OverlayPosition, OverlayStyle } from "@/bindings";
@@ -10,27 +11,36 @@ interface ShowOverlayProps {
   grouped?: boolean;
 }
 
+/**
+ * The recording pill on General (still 10): Live, Minimal and None as small
+ * pictures of our own pill, and where it sits as a plain choice beside them.
+ */
 export const ShowOverlay: React.FC<ShowOverlayProps> = React.memo(
   ({ descriptionMode = "tooltip", grouped = false }) => {
     const { t } = useTranslation();
     const { getSetting, updateSetting, isUpdating } = useSettings();
 
+    const styles: OverlayStyle[] = ["live", "minimal", "none"];
     const styleOptions = [
       {
-        value: "none",
-        label: t("settings.advanced.overlay.style.options.none"),
+        value: "live",
+        label: t("settings.advanced.overlay.style.options.live"),
       },
       {
         value: "minimal",
         label: t("settings.advanced.overlay.style.options.minimal"),
       },
       {
-        value: "live",
-        label: t("settings.advanced.overlay.style.options.live"),
+        value: "none",
+        label: t("settings.advanced.overlay.style.options.none"),
       },
-    ];
+    ].map((o, i) => ({
+      ...o,
+      value: styles[i],
+      picture: <PillPicture style={styles[i]} />,
+    }));
 
-    const positionOptions = [
+    const positionOptions: { value: OverlayPosition; label: string }[] = [
       {
         value: "bottom",
         label: t("settings.advanced.overlay.position.options.bottom"),
@@ -51,34 +61,33 @@ export const ShowOverlay: React.FC<ShowOverlayProps> = React.memo(
     return (
       <>
         <SettingContainer
-          title={t("settings.advanced.overlay.style.title")}
+          title={t("settings.general.appearance.pill")}
           description={t("settings.advanced.overlay.style.description")}
           descriptionMode={descriptionMode}
           grouped={grouped}
+          layout="stacked"
         >
-          <Dropdown
+          <PictureCards
+            label={t("settings.general.appearance.pill")}
             options={styleOptions}
-            selectedValue={selectedStyle}
-            onSelect={(value) =>
-              updateSetting("overlay_style", value as OverlayStyle)
-            }
+            value={selectedStyle}
+            onChange={(value) => updateSetting("overlay_style", value)}
             disabled={isUpdating("overlay_style")}
           />
         </SettingContainer>
 
         {selectedStyle !== "none" && (
           <SettingContainer
-            title={t("settings.advanced.overlay.position.title")}
+            title={t("settings.general.appearance.pillPosition")}
             description={t("settings.advanced.overlay.position.description")}
             descriptionMode={descriptionMode}
             grouped={grouped}
           >
-            <Dropdown
+            <SegmentedControl
+              label={t("settings.general.appearance.pillPosition")}
               options={positionOptions}
-              selectedValue={selectedPosition}
-              onSelect={(value) =>
-                updateSetting("overlay_position", value as OverlayPosition)
-              }
+              value={selectedPosition}
+              onChange={(value) => updateSetting("overlay_position", value)}
               disabled={isUpdating("overlay_position")}
             />
           </SettingContainer>

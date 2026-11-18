@@ -11,12 +11,12 @@
 
 - [x] T003 Look checks: Home first in the sidebar and the page the app opens on; Home's numbers come from `getDictationTotals` (speed shown from 60 s, 40 words a minute named); What's new read from the bundled release notes; new text in English and Arabic
 - [x] T004 `HomeSettings.tsx` to still 9, dark, light and Arabic; sidebar and App
-- [x] T005 Notes for 0.2.0 in `src/content/release-notes/` (English and Arabic), the notes the app already bundles (see the plan)
+- [x] T005 Notes for 0.2.0 in `src/content/whats-new/` (English and Arabic), the notes the app already bundles (see the plan)
 
 ## Phase 3: Appearance
 
-- [ ] T006 Look checks: theme and pill are picture cards that set `theme` and `overlay_style`; the overlay controls are on General, not Advanced; cards are radio groups usable by keyboard
-- [ ] T007 Theme cards and pill cards to still 10; position switch; Advanced loses the overlay rows
+- [x] T006 Look checks: theme and pill are picture cards that set `theme` and `overlay_style`; the overlay controls are on General, not Advanced; cards are radio groups usable by keyboard
+- [x] T007 Theme cards and pill cards to still 10; position switch; Advanced loses the overlay rows
 
 ## Phase 4: Finish
 
