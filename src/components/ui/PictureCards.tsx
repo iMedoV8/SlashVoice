@@ -36,7 +36,7 @@ export function PictureCards<T extends string>({
     <div
       role="radiogroup"
       aria-label={label}
-      className="grid grid-cols-[repeat(3,minmax(0,116px))] gap-[14px]"
+      className="grid grid-cols-[repeat(3,minmax(0,116px))] gap-[14px] pt-[2px] pb-[8px]"
     >
       {options.map((option, i) => {
         const checked = option.value === value;

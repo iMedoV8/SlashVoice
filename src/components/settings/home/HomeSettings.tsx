@@ -88,10 +88,7 @@ const Stat: React.FC<{ value: string; label: string; title?: string }> = ({
     title={title}
     className="min-w-0 border-line ps-5 first:ps-0 [&:not(:first-child)]:border-s"
   >
-    <div
-      dir="ltr"
-      className="truncate text-[26px] leading-[1.15] font-semibold tracking-[-0.01em] text-text tabular-nums rtl:text-right"
-    >
+    <div className="truncate text-[24px] leading-[1.15] font-semibold tracking-[-0.02em] whitespace-nowrap text-text">
       {value}
     </div>
     <div className="mt-1 truncate text-[12.5px] text-ink-2">{label}</div>
@@ -214,7 +211,7 @@ export const HomeSettings: React.FC<{
         aria-label={t("settings.home.totals")}
         className="border-b border-line pt-5 pb-5"
       >
-        <div className="grid grid-cols-4 gap-5">
+        <div className="grid grid-cols-[repeat(3,minmax(0,1fr))_minmax(0,1.3fr)] gap-5">
           <Stat
             value={counts ? number.format(counts.allWords) : zero}
             label={t("settings.home.words")}
