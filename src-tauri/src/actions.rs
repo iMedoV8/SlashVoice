@@ -518,11 +518,12 @@ impl ShortcutAction for TranscribeAction {
         let start_time = Instant::now();
         debug!("TranscribeAction::start called for binding: {}", binding_id);
 
-        // Slash Voice: an update is being installed and the app is about to
-        // close (specs/009-updates); start nothing that would be lost.
-        if crate::updates::installing() {
+        // Slash Voice: register this start with the update gate, and start
+        // nothing while an update installs (specs/009-updates). The guard is
+        // held until this function ends, after the tray marks it busy.
+        let Some(_update_gate) = crate::updates::begin_start() else {
             return;
-        }
+        };
 
         // Load model in the background
         let tm = app.state::<Arc<TranscriptionManager>>();

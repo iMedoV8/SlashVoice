@@ -53,7 +53,7 @@ An update is installed only when it cannot cut off something the user is doing. 
 **Acceptance Scenarios**:
 
 1. **Given** a fetched update, **When** the user is recording or a transcription is running, **Then** nothing restarts.
-2. **Given** a fetched update, **When** it is offered, **Then** the sidebar's foot shows "Version N is ready" with a Restart button; pressing it installs the update and reopens the app. If the user never presses it, the update is installed the next time the app is quit (founder, 2026-11-18).
+2. **Given** a fetched update, **When** it is offered, **Then** the sidebar's foot shows "Version N is ready" with a Restart button; pressing it installs the update and reopens the app. If the user never presses it, on a Mac the update is installed the next time the app is quit (founder, 2026-11-18). On Windows it waits for Restart, because the Windows installer reopens the app when it finishes and a quit must not do that (found in the second review; to be confirmed by the founder).
 3. **Given** an update is waiting, **When** the user opens the window, **Then** the sidebar's foot and the About page say which version is ready.
 
 ---

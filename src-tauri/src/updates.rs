@@ -7,7 +7,7 @@
 //! from the cached file, right before it is installed.
 
 use std::path::{Path, PathBuf};
-use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 use std::sync::Mutex;
 use std::time::Duration;
 
@@ -29,19 +29,85 @@ pub const UPDATE_PUBKEY: &str = "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyB
 
 const FIRST_CHECK_AFTER: Duration = Duration::from_secs(30);
 const CHECK_EVERY: Duration = Duration::from_secs(6 * 60 * 60);
-/// After claiming the install, how long work that had just started has to
-/// show itself as busy.
-const SETTLE: Duration = Duration::from_millis(300);
+/// The longest an install waits for a dictation that is starting to finish
+/// starting; then it gives up and stays idle.
+const START_WAIT: Duration = Duration::from_secs(5);
 
-/// Set while an update is being installed. New dictations and file jobs
-/// check it and do not start (specs/009-updates, FR-006).
-static INSTALLING: AtomicBool = AtomicBool::new(false);
+/// Keeps an install and the start of a dictation apart (specs/009-updates,
+/// FR-006). A dictation registers as starting, then checks `installing`; an
+/// install sets `installing`, then waits for `starting` to reach zero. With
+/// sequentially consistent order, either the dictation sees the install and
+/// stops, or the install sees the dictation and waits until it is busy.
+pub struct Gate {
+    installing: AtomicBool,
+    starting: AtomicUsize,
+}
+
+impl Gate {
+    pub const fn new() -> Self {
+        Self {
+            installing: AtomicBool::new(false),
+            starting: AtomicUsize::new(0),
+        }
+    }
+
+    pub fn installing(&self) -> bool {
+        self.installing.load(Ordering::SeqCst)
+    }
+
+    /// For a dictation about to start: `None` while an install runs. Keep the
+    /// guard until the dictation has marked itself busy.
+    pub fn begin_start(&self) -> Option<StartGuard<'_>> {
+        self.starting.fetch_add(1, Ordering::SeqCst);
+        let guard = StartGuard(self);
+        if self.installing() {
+            return None; // the guard's drop undoes the count
+        }
+        Some(guard)
+    }
+
+    /// For an install: claims the gate and waits for starts in progress.
+    /// `false` if another install holds it or a start does not finish in time.
+    pub fn claim_install(&self, wait: Duration) -> bool {
+        if self.installing.swap(true, Ordering::SeqCst) {
+            return false;
+        }
+        let deadline = std::time::Instant::now() + wait;
+        while self.starting.load(Ordering::SeqCst) > 0 {
+            if std::time::Instant::now() >= deadline {
+                self.release();
+                return false;
+            }
+            std::thread::sleep(Duration::from_millis(5));
+        }
+        true
+    }
+
+    pub fn release(&self) {
+        self.installing.store(false, Ordering::SeqCst);
+    }
+}
+
+pub struct StartGuard<'a>(&'a Gate);
+
+impl Drop for StartGuard<'_> {
+    fn drop(&mut self) {
+        self.0.starting.fetch_sub(1, Ordering::SeqCst);
+    }
+}
+
+static GATE: Gate = Gate::new();
 /// Set while a check or download runs, so only one runs at a time.
 static CHECKING: AtomicBool = AtomicBool::new(false);
 
 /// Whether an update is being installed; nothing new may start.
 pub fn installing() -> bool {
-    INSTALLING.load(Ordering::SeqCst)
+    GATE.installing()
+}
+
+/// Called at the start of a dictation; see [`Gate::begin_start`].
+pub fn begin_start() -> Option<StartGuard<'static>> {
+    GATE.begin_start()
 }
 
 /// Whether this build may update itself at all: never a development build,
@@ -268,12 +334,17 @@ async fn check_inner(app: &AppHandle) {
     }
     drop(bytes); // the waiting update lives on disk, not in memory
     let version = update.version.clone();
-    if installing() {
-        let _ = std::fs::remove_file(&file);
-        return;
-    }
     if let Some(state) = app.try_state::<UpdateState>() {
-        *lock(&state) = Some(Ready { update, file });
+        // Published under the state lock, which an install also takes, and
+        // never while one runs.
+        let mut slot = lock(&state);
+        if installing() {
+            drop(slot);
+            let _ = std::fs::remove_file(&file);
+            return;
+        }
+        *slot = Some(Ready { update, file });
+        drop(slot);
         info!("Update {version} is ready");
         let _ = app.emit("update-ready", UpdateReady { version });
     }
@@ -289,15 +360,14 @@ pub enum InstallError {
 
 /// Installs the waiting update. `restart` reopens the app afterwards.
 fn install(app: &AppHandle, restart: bool) -> Result<(), InstallError> {
-    // Claim the install first, so no new dictation or file job starts, then
-    // give work that had just started time to show itself.
-    if INSTALLING.swap(true, Ordering::SeqCst) {
+    // Claim the gate first, so no new dictation or file job starts, and wait
+    // for a dictation that is starting to mark itself busy.
+    if !GATE.claim_install(START_WAIT) {
         return Err(InstallError::Busy);
     }
-    std::thread::sleep(SETTLE);
     let result = install_claimed(app, restart);
     if result.is_err() {
-        INSTALLING.store(false, Ordering::SeqCst);
+        GATE.release();
     }
     result
 }
@@ -313,6 +383,8 @@ fn install_claimed(app: &AppHandle, restart: bool) -> Result<(), InstallError> {
         Err(e) => {
             warn!("Could not read the waiting update: {e}");
             let _ = app.emit("update-failed", UpdateFailure::Install);
+            // Kept, so Restart can try again.
+            *lock(&state) = Some(ready);
             return Err(InstallError::Failed);
         }
     };
@@ -451,11 +523,58 @@ mod tests {
     }
 
     #[test]
-    fn an_install_in_progress_refuses_a_second_and_blocks_new_work() {
-        assert!(!installing());
-        INSTALLING.store(true, Ordering::SeqCst);
-        assert!(installing());
-        INSTALLING.store(false, Ordering::SeqCst);
+    fn a_dictation_cannot_start_once_an_install_has_claimed_the_gate() {
+        let gate = Gate::new();
+        assert!(gate.claim_install(Duration::from_millis(10)));
+        assert!(gate.begin_start().is_none());
+        // A second install is refused while the first holds the gate.
+        assert!(!gate.claim_install(Duration::from_millis(10)));
+        gate.release();
+        assert!(gate.begin_start().is_some());
+    }
+
+    #[test]
+    fn an_install_waits_for_a_dictation_that_is_starting() {
+        use std::sync::Arc;
+        let gate = Arc::new(Gate::new());
+        let starting = gate.begin_start().map(|g| std::mem::forget(g));
+        assert!(starting.is_some());
+        // The start is still in progress: the install must not claim.
+        assert!(!gate.claim_install(Duration::from_millis(50)));
+        assert!(!gate.installing(), "a timed-out claim releases the gate");
+        // The start finishes (its guard drops); now the install may proceed.
+        gate.starting.fetch_sub(1, Ordering::SeqCst);
+        assert!(gate.claim_install(Duration::from_millis(50)));
+    }
+
+    #[test]
+    fn a_dictation_and_an_install_racing_never_overlap() {
+        use std::sync::atomic::AtomicBool;
+        use std::sync::{Arc, Barrier};
+        for _ in 0..500 {
+            let gate = Arc::new(Gate::new());
+            // True while a dictation that passed the gate is still active.
+            let active = Arc::new(AtomicBool::new(false));
+            let barrier = Arc::new(Barrier::new(2));
+            let (g, a, b) = (Arc::clone(&gate), Arc::clone(&active), Arc::clone(&barrier));
+            let starter = std::thread::spawn(move || {
+                b.wait();
+                if let Some(guard) = g.begin_start() {
+                    a.store(true, Ordering::SeqCst);
+                    std::thread::sleep(Duration::from_micros(200));
+                    a.store(false, Ordering::SeqCst);
+                    drop(guard);
+                }
+            });
+            barrier.wait();
+            if gate.claim_install(Duration::from_millis(500)) {
+                assert!(
+                    !active.load(Ordering::SeqCst),
+                    "an install claimed while a started dictation was active"
+                );
+            }
+            starter.join().unwrap();
+        }
     }
 
     #[test]
